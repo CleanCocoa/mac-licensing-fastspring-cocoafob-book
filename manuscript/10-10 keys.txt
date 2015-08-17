@@ -1,0 +1,82 @@
+<!--ct: TODO say "license code", not "license key"-->
+
+# Keys
+
+CocoaFob licensing works with pairs of private--public keys much like you use for encryption of files and e-mail, for example.
+
+Your app will ship with the private key embedded in the app bundle. Customers will buy your application via FastSpring, where the public key is used to generate a new license code.
+
+FastSpring will take care of that during the checkout process. This is part of the "order fulfillment" step.
+
+## Generating Keys
+
+We'r going to generate a private key and extract a public key from it using OpenSSL. I encourage you to do this for your app and keep the results tucked away somewhere safe.
+
+So you may recognize the values, I will print my results here.
+
+<!--ct: TODO check: is this a warning box?-->
+
+W> You should not, under no circumstances, re-use the keys printed in this book. That'd be as good as having no licensing protection at all because everyone would be able to generate license keys with these SSL keys.
+
+First, generate DSA parameters:
+
+    openssl dsaparam -out dsaparam.pem 512
+
+The result for the sample app is this:
+
+    -----BEGIN DSA PARAMETERS-----
+    MIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTCnmUlYMp4m7MrVC2/YybX
+    EQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbEDKaw6oJ9THk1i4LuTAkAG
+    RPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBUHpWZUm8bGMQevt38PiSZ
+    ZwU0hCAJ6pd09eeTP983
+    -----END DSA PARAMETERS-----
+
+Second, generate an unencrypted DSA private key:
+
+    openssl gendsa -out privkey.pem dsaparam.pem
+
+The private key will be stored at FastSpring for license key generation.
+
+Again, the resulting contents:
+
+    -----BEGIN DSA PRIVATE KEY-----
+    MIH4AgEAAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTCnmUlYMp4m7MrVC2/
+    YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbEDKaw6oJ9THk1i4LuT
+    AkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBUHpWZUm8bGMQevt38
+    PiSZZwU0hCAJ6pd09eeTP983AkB+yDfp+53KPSk5dHxhoBm6kTBKsYkxonpPlBrF
+    JTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlfUpIgAhUA3+1tmyNHMc+1
+    J5OHnK/HHpfy3KA=
+    -----END DSA PRIVATE KEY-----
+    
+Last, extract the public key from the private key:
+
+    openssl dsa -in privkey.pem -pubout -out pubkey.pem
+
+The public key is bundled with the app to verify license codes.
+
+Which results in:
+
+    -----BEGIN PUBLIC KEY-----
+    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
+    nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
+    Kaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU
+    HpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh
+    oBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf
+    UpIg
+    -----END PUBLIC KEY-----
+
+Don't share the private key with anyone. Make sure you don't lose it, either: it cannot be replicated.
+
+## What if you lose one or both keys?
+
+When you use your private key, generating a new private key will result in a mess: every existing license will be invalid when checked with a new key.
+
+Your app will bundle with the public key. As long as you don't lose it's source code, you'll be able to ship updates to existing customers. You will not be able to create new licenses if, say, you delete the old one at FastSpring and don't have a local copy.
+
+License codes generated with a new private key won't match with the old public key.
+
+At best, you can keep the existing code for checking licenses around if the old public key is still available in your source. You'll have to add a second instance with a new public key to support new customers, though.
+
+Losing both keys is going to be a pretty hard blow for your business. This entails you lose the source code for your app, too, or at least the parts dedicated to licensing. You will need to migrate existing users to new license codes in that case. That's quite a hassle for both sides.
+
+Now that you know just how important it is to secure these codes, do everything in your might to do so.

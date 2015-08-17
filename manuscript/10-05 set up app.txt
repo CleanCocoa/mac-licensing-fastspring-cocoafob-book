@@ -1,0 +1,12 @@
+## Setting Up Your App for Sale in FastSpring
+
+![Springboard showing the newly created product](images/10-100-app-created.png)
+
+![Choose CocoaFob-based license generation from the fulfillment options](images/10-101-generate-license.png)
+
+![The license generation setup form](images/10-102-license-form.png)
+
+* FastSpring's product settings are all up to you
+    * only important for the store front
+* CocoaFob product name should not change, though
+    * it's used in the license generator and in your app's validator

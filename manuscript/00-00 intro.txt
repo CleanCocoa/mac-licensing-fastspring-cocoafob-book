@@ -1,0 +1,31 @@
+# What this book is about
+
+* you want to release a Mac app outside the Mac App Store
+    * use your own license code generator
+* set up FastSpring as the store and license code generator
+* add license verification to your existing app
+* add a time-based trial
+* use the embedded store to increase conversion
+
+## Getting a few technical terms straight up front
+
+We'll be talking about "keys" and "codes" a lot. To remedy confusion, here's a list of technical terms which are going to be important.
+
+FastSpring
+: Store front
+
+CocoaFob
+: Set algorithms, available as Open Source scripts, to generate and verify license codes 
+: https://github.com/glebd/cocoafob
+
+Private Key
+: OpenSSL-generated hash you should keep private
+
+Public Key
+: OpenSSL-generated hash used for 3rd parties to encrypt data which can be decrypted using the private key
+
+License Code
+: The string of characters your customers will receive after they buy your app
+
+License Code Verification
+: The process in your app: user enters a code, the app verifies it's validity. Verified license codes result in unlocking the application.

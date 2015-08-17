@@ -1,0 +1,7 @@
+Activation via URL
+
+
+> To embed a license URL in a fulfillment email template, use the following format ("myapp" is the URL handler specific to your application):
+>
+>     myapp://#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}/#{orderItem.fulfillment.license.outcome.licenses[0]}
+>
