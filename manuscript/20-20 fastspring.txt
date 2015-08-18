@@ -1,0 +1,82 @@
+## Use an Embedded Web Store for Purchases
+
+<!--ct: TODO add embedded store screenshot-->
+
+If you want to let users buy the app from within the app via the _Embedded Web Store_, you'll have to import FastSpring's SDK.
+
+This is additional work, although not very much. Why would you want to do it?
+
+* It is said that embedded stores increase conversion from trial users to paying customers.
+* Buying a license from within the app can immediately unlock it. Your application obtains the license from the embedded store.
+
+
+### Enable the Embedded Store in SpringBoard
+
+(Refer to [the docs][doc] for the most up to date instructions.)
+
+The Embedded Web Store will need a different style. The [FastSpring SDK on GitHub][github] contains a folder called "FsprgEmbeddedStoreStyle". Put the CSS, the XHTML, and the PayPal folder into a Zip file. Alternatively, you can use the prepared Zip from the sample code. We'll need that in a moment.
+
+Log into your SpringBoard. From there, apply the following configurations:
+
+![20 102 Enable Web Store](images/20-102-enable-web-store.png)
+![20 103 Create Style](images/20-103-create-style.png)
+
+* _Store Settings_ / _Advanced_: pick "Property List XML" to enable Web Store requests.
+* _Styles_: create a new style. Upload the Zip file you just prepared. 
+    * Then _Edit Conditions_ of the style and add an "Order Environment Condition" with the value "FS Embedded" so the default store won't change appearance. 
+    * _Activate_ the style afterwards.
+* _Store Testing_: select "Simulate Embedded" under _Optional Parameters_ and check out the differences. The embedded style looks much cleaner.
+
+![The default FastSpring style to the left, the embedded style to the right.](images/20-104-stores-comparison.png)
+
+Now everything should be ready to roll from FastSpring's side.
+
+[doc]: https://support.fastspring.com/entries/234307-Embedded-Web-Store-SDK
+[github]: https://github.com/FastSpring/FsprgEmbeddedStoreMac#how-to-embed-it
+
+### Embed FastSpring Library
+
+You can use CocoaPods or get the source from GitHub:
+
+* CocoaPods: <http://cocoapods.org/?q=fsprgembeddedstoremac>
+* GitHub: <https://github.com/FastSpring/FsprgEmbeddedStoreMac#how-to-embed-it>
+
+I use GitHub for the samples to keep the project set-up simple.
+
+From `FsprgEmbeddedStoreMac/FsprgEmbeddedStore/`, add all the files except the "Test" folder to your project. That will be:
+
+* `FsprgEmbeddedStore.h`
+* `FsprgEmbeddedStoreController.h`
+* `FsprgEmbeddedStoreController.m`
+* `FsprgEmbeddedStoreDelegate.h`
+* `FsprgOrderDocumentRepresentation.h`
+* `FsprgOrderDocumentRepresentation.m`
+* `FsprgOrderView.h`
+* `FsprgOrderView.m`
+* `FsprgStoreParameters.h`
+* `FsprgStoreParameters.m`
+* `Model/FsprgFileDownload.h`
+* `Model/FsprgFileDownload.m`
+* `Model/FsprgFulfillment.h`
+* `Model/FsprgFulfillment.m`
+* `Model/FsprgLicense.h`
+* `Model/FsprgLicense.m`
+* `Model/FsprgOrder.h`
+* `Model/FsprgOrder.m`
+* `Model/FsprgOrderItem.h`
+* `Model/FsprgOrderItem.m`
+
+Disable ARC for the following files in "Compiler Sources" under the app target's "Build Phases" pane. Add the `-fno-objc-arc` flag to all FastSpring-related `.m` files in the list.
+
+![ARC disabled for the FastSpring files and CocoaFob files which cause build errors otherwise.](images/20-101-arc-disabled-fastspring-cocoafob.png)
+
+Now the test target will not find the header files by default, though.
+
+Go to the test target settings and select the "Build Setting" pane. Use the search to get to "User Header Search Paths". In the test target's column, which is probably the second column you can edit, double-click the table cell and drag the `FsprgEmbeddedStore` folder in there (that's the one where we picked the files from).
+
+In the example project setup, this resolves to: `"$(SRCROOT)/../External/FsprgEmbeddedStoreMac/FsprgEmbeddedStore"`.
+
+Make sure to select "recursive" from the options.
+
+Both the app and test target should build again.
+

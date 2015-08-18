@@ -1,0 +1,31 @@
+## Embedding CocoaFob
+
+As of Swift 1.2, you still have to use the Objective-C code of the library.
+
+Include the following files from the `objc` folder:
+
+* `CFobError.h`
+* `CFobError.m`
+* `CFobLicGenerator.h`
+* `CFobLicGenerator.m`
+* `CFobLicVerifier.h`
+* `CFobLicVerifier.m`
+* `decoder.c`
+* `decoder.h`
+* `encoder.c`
+* `encoder.h`
+* `NSData+PECrypt.h`
+* `NSData+PECrypt.m`
+* `NSString-Base64Extensions.h`
+* `NSString-Base64Extensions.m`
+* `NSString+PECrypt.h`
+* `NSString+PECrypt.m`
+* `URLCommand.h`
+* `URLCommand.m`
+
+In order to compile the pre-Automatic Reference Counting code, a few files have to have ARC disabled.
+
+In your app target's settings, go to "Build Phases", select "Compile Sources", and disable ARC on `NSString+PECrypt.m` and `NSString-Base64Extensions.m`. To do so, double click in the "Compiler Flags" column to the right and enter `-fno-objc-arc` as the compiler flag.
+
+![Disable ARC with this flag.](images/20-100-disable-arc.png)
+
