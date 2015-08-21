@@ -29,6 +29,12 @@ Log into your SpringBoard. From there, apply the following configurations:
 
 ![The default FastSpring style to the left, the embedded style to the right.](images/20-104-stores-comparison.png)
 
+Next, add a test user to test purchases during development.
+
+The _Account_ Page is the calculator button to the right in your SpringBoard. There, navigate to _Users_ (in the sidebar). Add a new user with the "Limited API User" role. You'll receive a password via e-mail.
+
+Keep the e-mail you used for the user and its password handy as you'll likely need it often.
+
 Now everything should be ready to roll from FastSpring's side.
 
 [doc]: https://support.fastspring.com/entries/234307-Embedded-Web-Store-SDK
@@ -79,4 +85,65 @@ In the example project setup, this resolves to: `"$(SRCROOT)/../External/FsprgEm
 Make sure to select "recursive" from the options.
 
 Both the app and test target should build again.
+
+## Implement the Embedded Web Store Protocol
+
+Nearly all of the work will be done in a class which implements `FsprgEmbeddedStoreDelegate`. This protocol has four required methods, only two of which are interesting for most of us:
+
+* `didReceiveOrder(order: FsprgOrder!)`  
+
+    Here, we'll handle automatically unlocking the app after a purchase.
+* `viewWithFrame(frame: NSRect, forOrder order: FsprgOrder!) -> NSView!`
+    
+    Return a custom view to display the order confirmation. This will usually be a thank-you with the license details.
+* `didLoadStore(url: NSURL!)`
+* `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
+
+### Web Store View
+
+### Order Confirmation View
+
+### Unlock the App After Purchases
+
+In `didReceiveOrder(order: FsprgOrder!)`, you'll be able to obtain all license details from `order`. To unlock the app, we need the license code and the licensee's name.
+
+Because your users could buy a different product, more than a single product, or multiple licenses for the same product, we need to check some parameters.
+
+`order.orderItems` contains `FsprgOrderItem`s. Check the item's `productName` to start with the name of the app. If it matches, you've got a paying customer for this particular application.
+
+`FsprgOrderItem` contains `license() -> FsprgLicense`. We can obtain the licensee's name via its `licenseName()` and the license code via `firstLicenseCode()`. With these values, we can build an instance of our own `License` object. The store's job is finished.
+
+In code, there's a lot of implicit unwrapped optionals to steer around. It looks messier than it actually is.
+
+Let me walk you through the process to explain the array transformations:
+
+    func didReceiveOrder(order: FsprgOrder!) {
+        
+        // Thanks Obj-C bridging without nullability annotations:
+        // implicit unwrapped optionals are not safe
+        if !hasValue(order) {
+            return
+        }
+        
+        if let items = order.orderItems() as? [FsprgOrderItem],
+            license = items
+                .filter(orderItemIsForThisApp)
+                .map(licenseFromOrderItem) // -> [License?]
+                .filter(hasValue)          // keep non-nil
+                .map({ $0! })              // -> [License]
+                .first {
+            
+            storeDelegate?.store(self, didPurchaseLicense: license)
+        }
+    }
+
+`orderItems()` returns `[AnyObject]!`; we can try to cast the whole array or enumerate the items and cast each on its own. I think this is cleaner, although less lenient if FastSpring should add objects of a different kind.
+
+`license` will be of the value type `License`. To get there from an `FsprgOrderItem`, I apply quite a few array transformations:
+
+1. Filter all order items for this which are about this app, comparing the `productName` as stated above.
+2. From the order items which apply, create a `License` instance using the process explained above. This may fail, so we end up with an array of optionals, `[License?]`, which sucks.
+3. Filter all elements in the `[License?]` array so only non-nil values are left.
+4. Now it's safe to force-unwrap the remaining optionals to get back an array of licenses, `[License]`.
+5. Take the first element (if any) and pass it to the delegate.
 
