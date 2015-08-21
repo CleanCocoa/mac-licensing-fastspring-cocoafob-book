@@ -1,0 +1,34 @@
+## In-App Purchases
+
+I didn't know about in-app purchases before Apple's App Stores made them popular, but I guess the underlying principle is well-aged already.
+
+In-app purchases are very popular in modern "games". I put the term in quotes because I don't want to put the cool video games from my childhood into the same category as the stupefying but addicting money sinks that are so popular nowadays. It all started with FarmVille on Facebook, didn't it? In such games, you are lured into addicting gameplay until you reach a certain level where you wouldn't be able to advance if you didn't pay for in-game currency or other kinds of consumables.
+
+Did you know that some of the underlying algorithms not only make players stagnate, but lose what they've earned, too? There's [a great talk](https://www.youtube.com/watch?v=us6OPbYtKBM) about this by Puzzle Clubhouse's Jesse Schell at D.I.C.E. SUMMIT 2013.
+
+Anyway, I don't consider these to be games. User joy is not their topmost priority. They're not designed to be challenging and rewarding for the player. They are designed to be impossible without taking money on a periodical basis.
+
+_But_ there's in-app purchases in productivity apps and other non-"game" category apps nowadays, too. I don't know about abuse on that front, so we're still pretty safe to consider this as an option.
+
+FastSpring allows you to implement these using the embedded store SDK. You just have to think outside the box a bit.
+
+Among the better received in-app purchases in non-game apps are _contents_, not features, [as Stuart K. Hall's experience indicates](http://stuartkhall.com/posts/an-app-store-experiment-part-3). That'd be a new set of videos and instructions for your workout app, for example. Make sure to read [Part 4](http://stuartkhall.com/posts/an-app-store-experiment-part-4) of his series, also, where his numbers indicate that users, once hooked, don't want to pick single options but simply _unlock everything_.
+
+In fact, in the Mac App Store and iTunes App Store (iOS), since there's no app demos, in-app purchases are used to unlock "pro" features. Where traditionally shareware offered full features for a limited time of, say, 30 days, nowadays users can download an app for free and unlock the full feature set for a price.
+
+Offering a trial, be it a time- or feature-limited one, with the use of the embedded store SDK of FastSpring, can already be considered an in-app purchase. Only it's _the app itself_ customers receive.
+
+You could add consumables or paid add-ons to your app in a similar way you added "the app" as a product:
+
+* In-app purchases have to be distinct products in your FastSpring account. They are just like your real app, only they aren't.
+* You may want to hide them from the real web store and limit visibility to within the app.
+* On order completion, you then have to add another condition: instead of checking the order item's `productName` for the name of the app, you check if it's a supported in-app purchase. If it is, you unlock some feature in your application.
+
+Apple's App Stores are very convenient to implement this, since the in-app purchases are linked to the customer's Apple ID.
+
+Rolling a custom solution, you have to enable your users to unlock already paid-for add-ons when they install the app on another machine, say. That means you'd end up providing another license code to them.
+
+If you develop an online game or something else with a web-based account under your control, you could instead change account details to represent already purchased items. A user buys 100 credits for your poker app? Store the credits in your online account database so the credits don't get lost, for example.
+
+Overall, the process of implementing in-app purchases is very similar to regular license purchases. You only have to be a bit more creative with the product set-up and handling of the order after completion.
+
