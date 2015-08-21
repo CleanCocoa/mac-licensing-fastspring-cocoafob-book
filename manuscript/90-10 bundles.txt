@@ -1,0 +1,24 @@
+## How to Sell Bundles on FastSpring
+
+FastSpring offers an amazing service to handle bundle payment processing. If your fellow developers are from different countries, FastSpring handling the payments can spare you a lot of the headache.
+
+The mechanism behind that is called [split pay][spay] and is used for affiliates, too, for example.
+
+Basically, all participants register at FastSpring and provide their bank account details. One becomes the host of the bundle. All participant's products have to find their way into the host's store -- including order fulfillment for license code generation. Then the host sets up a [product bundle][bundle] with all the bundle products and a bundle price. 
+
+![90 100 Add Product Bundle](images/90-100-add-product-bundle.png)
+
+While the host adds each product to the bundle, it's important to set the products to "No-Price / Zero-priced option" so only the bundle price counts.
+
+The bundle participants have to sign up at the host's store as [the docs][spay] indicate, via the store-specific payee URL: `http://www.fastspring.com/signup_payee.php?ci=companyid`
+
+Once the payee has been approved by FastSpring in a manual review process, you can set up split pay rules for them. Common parameters include: begin date, end date, split percent, then filtered by site, origin of the link, coupon used, product bought. The last option is what you're after: select the bundle from the list.
+
+<!--ct: TODO can you edit this list later?-->
+
+Also consider setting up [notifications][notif] for each order. Ask bundle participants if they'd like to be notified instantly or if they prefered a list of customers at the end of the bundle sale.
+
+
+[spay]: https://support.fastspring.com/entries/21140696-Setting-Up-Affiliates-and-Split-Pays
+[bundle]: https://support.fastspring.com/entries/234319
+[notif]: https://support.fastspring.com/entries/400864-Configuring-Notifications-for-Split-Account-Partners
