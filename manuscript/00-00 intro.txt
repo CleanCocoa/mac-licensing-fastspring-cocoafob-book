@@ -1,31 +1,44 @@
 # What this book is about
 
-* you want to release a Mac app outside the Mac App Store
-    * use your own license code generator
-* set up FastSpring as the store and license code generator
-* add license verification to your existing app
-* add a time-based trial
-* use the embedded store to increase conversion
+So you want to release a Mac app outside the Mac App Store.
+
+That's cool, because you will earn more per sale -- most store fronts on the market will take a cut between 6 and 10% only, as opposed to the 30% Apple takes.
+
+On the other hand, Apple's App Stores are a very important marketplace where people discover new things. It's a place where some "go shopping."
+
+Also, you have to take care of everything else: app updates are one thing, copy protection another. Usually, you'd implement some kind of license code verification.
+
+In this book, you'll learn how to set up FastSpring as the store where people buy your software and obtain license codes automatically with every purchase.
+
+You'll also learn how to add license code verification to your app to unlock new features or end a time-based trial. After reading this book, you'll be able to quickly add license code verification to an existing app and keep out users who don't pay. You'll even be able to offer a store front from right within your application using FastSpring's _Embedded Store SDK_ which may increase the conversion from demo users to paid customers. 
+
+There's even a part about implementing time-based trials in your app. These are the de facto standard to limit functionality of what was used to be called shareware. Keeping track of time is another functionality you have to add to your app but which can integrate into the existing license mechanism nicely.
+
+Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start. Users have to pay to unlock the full potential of the app. We won't cover that in much detail, because implementing this is similar to keeping non-paying users out. 
+
 
 ## Getting a few technical terms straight up front
 
 We'll be talking about "keys" and "codes" a lot. To remedy confusion, here's a list of technical terms which are going to be important.
 
 FastSpring
-: Store front
+: That's your e-commerce solution. It's your store front and product management system.
 
 CocoaFob
-: Set algorithms, available as Open Source scripts, to generate and verify license codes 
-: https://github.com/glebd/cocoafob
-
-Private Key
-: OpenSSL-generated hash you should keep private
+: A set of algorithms, available as Open Source scripts, to generate and verify license codes. It's supported by FastSpring and very easy to implement.
+: Source is available at: <https://github.com/glebd/cocoafob>
 
 Public Key
-: OpenSSL-generated hash used for 3rd parties to encrypt data which can be decrypted using the private key
+: OpenSSL-generated hash used for 3rd parties to decrypt data. Used for e-mail to tell recipients it was really you who sent the mail. Used for license code verification in our case.
+
+Private Key
+: OpenSSL-generated hash you have to, well, keep private. It's needed for encrypting data. Should be kept private because you can infer the public key from it.
 
 License Code
-: The string of characters your customers will receive after they buy your app
+: The string of characters your customers will receive after they buy your app. 
+: CocoaFob-generated license codes should look familiar, like this: `GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A`
 
 License Code Verification
-: The process in your app: user enters a code, the app verifies it's validity. Verified license codes result in unlocking the application.
+: The process you have to implement in your app: the user enters a license code, the app uses the public key to decrypt the information from it, then it verifies if the information matches some internal criteria. 
+: Verified license codes result in unlocking the application, providing additional features, or ending a time-based trial.
+ 
