@@ -2,6 +2,7 @@
 
 10-00 fastspring.txt
 10-05 set up app.txt
+10-07 set up cocoafob.txt
 10-10 keys.txt
 
 20-00 verify app license.txt
