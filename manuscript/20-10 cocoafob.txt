@@ -44,6 +44,7 @@ We will take the public key and put it into the app. Not as a file, but as a str
 
 Recall the public key:
 
+{linenos=off}
     -----BEGIN PUBLIC KEY-----
     MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
     nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
