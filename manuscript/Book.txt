@@ -9,8 +9,6 @@
 20-10 cocoafob.txt
 20-15 license window.txt
 20-20 fastspring embedded store.txt
-20-30 email activation.txt
-20-40 process framework.txt
 
 90-00 appendix.txt
 90-10 bundles.txt
