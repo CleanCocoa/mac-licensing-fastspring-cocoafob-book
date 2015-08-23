@@ -1,6 +1,6 @@
 ## Use an Embedded Web Store for Purchases
 
-<!--ct: TODO add embedded store screenshot-->
+![The resulting Embedded Web Store within the app](images/20-110-web-store.png)
 
 If you want to let users buy the app from within the app via the _Embedded Web Store_, you'll have to import FastSpring's SDK.
 
@@ -99,9 +99,44 @@ Nearly all of the work will be done in a class which implements `FsprgEmbeddedSt
 * `didLoadStore(url: NSURL!)`
 * `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
 
-### Web Store View
+
 
 ### Order Confirmation View
+
+It's cool that FastSpring offers showing a custom view after purchases within the store view. It often doesn't look as good because the underlying web view has a white background by default. But you can make a lot from that.
+
+Keeping things clean, I prefer a custom view subclass:
+
+    public class OrderConfirmationView: NSView {
+        @IBOutlet public var licenseCodeTextField: NSTextField!
+    
+        public func displayLicenseCode(licenseCode: String) {
+            licenseCodeTextField.stringValue = licenseCode
+        }
+    }
+    
+It's easy to populate its text field:
+
+    func viewWithFrame(frame: NSRect, forOrder order: FsprgOrder!) -> NSView! {
+        if let orderConfirmationView = orderConfirmationView,
+            license = licenseFromOrder(order) {
+            
+            orderConfirmationView.displayLicenseCode(license.licenseCode)
+            return orderConfirmationView
+        }
+        
+        return nil
+    }
+
+The result looks like this:
+
+![Our simple view](images/20-301-thankyou.png)
+
+As I said, it's not very pretty. FastSpring's SDK doesn't use Auto Layout, so things look a little bit off by default.
+
+I prefer to leave this alone, return `nil`, close the store window, and show a custom window in `didReceiveOrder(_:)`. There's no need to use all of FastSpring's hooks.
+
+So let's take a look at the more important `didReceiveOrder(_:)` method.
 
 ### Unlock the App After Purchases
 
@@ -125,6 +160,12 @@ Let me walk you through the process to explain the array transformations:
             return
         }
         
+        if let license = licenseFromOrder(order) {
+            storeDelegate?.store(self, didPurchaseLicense: license)
+        }
+    }
+    
+    private func licenseFromOrder(order: FsprgOrder) -> License? {
         if let items = order.orderItems() as? [FsprgOrderItem],
             license = items
                 .filter(orderItemIsForThisApp)
@@ -132,9 +173,32 @@ Let me walk you through the process to explain the array transformations:
                 .filter(hasValue)          // keep non-nil
                 .map({ $0! })              // -> [License]
                 .first {
-            
-            storeDelegate?.store(self, didPurchaseLicense: license)
+        
+            return license
         }
+    
+        return nil
+    }
+    
+    private func orderItemIsForThisApp(orderItem: FsprgOrderItem) -> Bool {
+        let appName = storeInfo.productName
+    
+        if let productName = orderItem.productName() {
+            return productName.hasPrefix(appName)
+        }
+    
+        return false
+    }
+
+    private func licenseFromOrderItem(orderItem: FsprgOrderItem) -> License? {
+        if let orderLicense = orderItem.license(),
+            name = orderLicense.licenseName(),
+            licenseCode = orderLicense.firstLicenseCode() {
+            
+            return License(name: name, licenseCode: licenseCode)
+        }
+    
+        return nil
     }
 
 `orderItems()` returns `[AnyObject]!`; we can try to cast the whole array or enumerate the items and cast each on its own. I think this is cleaner, although less lenient if FastSpring should add objects of a different kind.
@@ -145,5 +209,10 @@ Let me walk you through the process to explain the array transformations:
 2. From the order items which apply, create a `License` instance using the process explained above. This may fail, so we end up with an array of optionals, `[License?]`, which sucks.
 3. Filter all elements in the `[License?]` array so only non-nil values are left.
 4. Now it's safe to force-unwrap the remaining optionals to get back an array of licenses, `[License]`.
-5. Take the first element (if any) and pass it to the delegate.
+5. Finally, take the first element (if any) and pass it to the delegate.
 
+![Acorn's very sexy registration confirmation window. It's a good idea to go the extra mile and make this pretty](images/20-300-acorn.png)
+
+The delegate may present a window like Acorn's and give back joy and express gratitude to the app's customer. Whatever, it's not the business of the object implementing `FsprgEmbeddedStoreDelegate`.
+
+And thus processing orders from within the app is complete.

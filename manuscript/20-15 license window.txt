@@ -1,0 +1,147 @@
+## Obtain License Information from the User
+
+![The license information window](images/20-050-license-window.png)
+
+With the `LicenseVerifier` service object we are able to know if license information work. Your application will need to provide a form for the user to provide this information in the first place, though.
+
+Most commonly, there'll be a "License Product ..." main menu item where users can enter and review their license information. Some applications utilize a preference pane for that purpose. It's up to you where you place it. For the _NewApp_ sample application, I chose a dedicated license window.
+
+Creating a window like the one pictured above is very easy in Xcode. You can even use Cocoa Bindings to populate the form fields with values from `NSUserDefaults` where the sample app stores license information.
+
+Be wary about using Cocoa Bindings, though: changes to the text fields' contents are stored immediately. The user can change values later and even without pressing the button invalidate the license info. You have to check that upon launch at least.
+
+Even better, don't use Cocoa Bindings in a shipping application. Instead, use the traditional round-trip through view controllers. Store valid information only, and use an instance of `LicenseVerifier` to ensure that.
+
+### Window and Event Handler Architecture
+
+So you can use the code for your real-world application, I didn't just throw together working components but constructed clean and pluggable components.
+
+![LicenseWindowController and related objects](images/20-200-licensewindowcontroller.png)
+
+`LicenseWindowController` is created through the Nib. It handles pressing the "Buy Now" button and delegates to a `purchaseEventHandler` implementing its `HandlesPurchases` protocol. We'll display a store in the `PurchaseLicense` service object which implements the protocol.
+
+`ExistingLicenseViewController` handles form input and reacts to the "Register" action. It's owned by `LicenseWindowController`. It delegates license verification through its `HandlesRegistering` protocol to the `RegisterApplication` service.
+
+We focus on `ExistingLicenseViewController` here to handle user input and look at `PurchaseLicense` later.
+
+    public protocol HandlesRegistering: class {
+        func register(name: String, licenseCode: String)
+    }
+
+    public class ExistingLicenseViewController: NSViewController {
+        @IBOutlet public weak var licenseeTextField: NSTextField!
+        @IBOutlet public weak var licenseCodeTextField: NSTextField!
+    
+        public var eventHandler: HandlesRegistering?
+    
+        @IBAction public func register(sender: AnyObject) {
+            if let eventHandler = eventHandler {
+                let name = licenseeTextField.stringValue
+                let licenseCode = licenseCodeTextField.stringValue
+            
+                eventHandler.register(name, licenseCode: licenseCode)
+            }
+        }
+        
+        public func displayEmptyForm() {
+            licenseeTextField.stringValue = ""
+            licenseCodeTextField.stringValue = ""
+        }
+
+        public func displayLicense(license: License) {
+            licenseeTextField.stringValue = license.name
+            licenseCodeTextField.stringValue = license.key
+        }
+    }
+
+That's a pretty simplistic approach. This is what view controllers ought to do: react to user input and delegate to other objects as soon as possible.
+
+This kind of approach to implementing view controllers makes them easily testable. In fact, the sample code contains more than 50 tests with quite a few regarding Nib loading and view controller interaction.
+
+### Register the Application and Representing License Information
+
+It is apparent that `RegisterApplication`, which implements the `HandlesRegistering` protocol, is way more interesting.
+
+
+    public class RegisterApplication: HandlesRegistering {
+        let licenseVerifier: LicenseVerifier
+        let licenseWriter: LicenseWriter
+        let changeBroadcaster: LicenseChangeBroadcaster
+    
+        public convenience init() {
+            self.init(licenseVerifier: LicenseVerifier(), 
+                licenseWriter: LicenseWriter(), 
+                changeBroadcaster: LicenseChangeBroadcaster())
+        }
+    
+        public init(licenseVerifier: LicenseVerifier, 
+                licenseWriter: LicenseWriter, 
+                changeBroadcaster: LicenseChangeBroadcaster) {
+            self.licenseVerifier = licenseVerifier
+            self.licenseWriter = licenseWriter
+            self.changeBroadcaster = changeBroadcaster
+        }
+    
+        public func register(name: String, licenseCode: String) {
+            if !licenseVerifier.licenseCodeIsValid(licenseCode, forName: name) {
+                displayLicenseCodeError()
+                return
+            }
+        
+            let licenseInformation = LicenseInformation.Registered(
+                License(name: name, key: licenseCode))
+        
+            licenseWriter.storeLicenseCode(licenseCode, forName: name)
+            changeBroadcaster.broadcast(licenseInformation)
+        }
+    
+        func displayLicenseCodeError() {
+            Alerts.invalidLicenseCodeAlert()?.runModal()
+        }
+    }
+
+You know `LicenseVerifier` already. `LicenseWriter` is a simple class which stores the license information into user defaults.
+
+Attempting to register and unlock the app fails if `LicenseVerifier` doesn't succeed for any of the reasons we got to know already, most commonly because name and license code don't work out.
+
+The `RegisterApplication` service object then creates the proper license information and stores it so the app stays unlocked on subsequent starts.
+
+The `LicenseChangeBroadcaster` wraps constructing a notification from the `LicenseInformation` enum and its associated `License` value object and sending it to a `NSNotificationCenter`.
+
+The value objects we use behind the scenes are, simplified:
+
+    struct License {
+        let name: String
+        let licenseCode: String
+    }
+    
+    enum LicenseInformation {
+        case Unregistered
+        case Registered(License)
+    }
+
+That's all there is to representing if a user has unlocked the app already.
+
+The notification `LicenseChangeBroadcaster` fires can be consumed by any interested service object in your app to change display values or unlock features.
+
+In the sample application, which does not allow using the main application interface until the app is unlocked, `AppDelegate` is the gatekeeper. It subscribes to these events and unlocks the main app:
+
+    func licenseDidChange(notification: NSNotification) {
+        if let userInfo = notification.userInfo, 
+            licenseInformation = LicenseInformation.fromUserInfo(userInfo) {
+            
+            switch licenseInformation {
+            case .Registered(_):
+                displayThankYouAlert()
+                unlockApp()
+                
+            case .Unregistered:
+                // If you support un-registering, handle it here
+                return
+            }
+        }
+    }
+
+With this and the view controller--event handler architecture from above, we're able to display the license info form, register the app, and unlock features without tight coupling.
+
+In fact, you can put this code inside your own application, change a few parameters, and simply have to react to the license change event somewhere. That's all there is in terms of the most basic copy protection.
