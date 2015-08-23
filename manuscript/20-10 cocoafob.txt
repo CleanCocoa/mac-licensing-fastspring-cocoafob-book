@@ -1,6 +1,6 @@
 ## Embedding CocoaFob
 
-As of Swift 1.2, you still have to use the Objective-C code of the library.
+As of Swift 1.2, you still have to use the Objective-C code of the library. For Swift 2.0 and above, there's [native code available on GitHub][ccfobswift].
 
 Include the following files from the `objc` folder:
 
@@ -23,9 +23,68 @@ Include the following files from the `objc` folder:
 * `URLCommand.h`
 * `URLCommand.m`
 
-In order to compile the pre-Automatic Reference Counting code, a few files have to have ARC disabled.
+Drag & drop them into your project in Xcode. Since these are Objective-C files, Xcode will ask you if you want to have a bridging header if you have a Swift project, which I assume. Say "yes". Add `CFobLicGenerator.h` and `CFobLicVerifier.h` to the bridging header Xcode will have created for you.
+
+In order to compile the code from an age before Automatic Reference Counting was the standard, a few files have to have ARC disabled.
+
+![Disable ARC with this flag.](images/20-100-disable-arc.png)
 
 In your app target's settings, go to "Build Phases", select "Compile Sources", and disable ARC on `NSString+PECrypt.m` and `NSString-Base64Extensions.m`. To do so, double click in the "Compiler Flags" column to the right and enter `-fno-objc-arc` as the compiler flag.
 
-![Disable ARC with this flag.](images/20-100-disable-arc.png)
+Your code should now compile again and the necessary CocoaFob classes should be availabe to your Swift project.
+
+[ccfobswift]: https://github.com/glebd/cocoafob/tree/master/swift
+
+
+## License Verifier
+
+As I mentioned already, the public key is used by your app to decrypt the license code and extract license information from it. 
+
+We will take the public key and put it into the app. Not as a file, but as a string -- hard coded.
+
+Recall the public key:
+
+    -----BEGIN PUBLIC KEY-----
+    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
+    nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
+    Kaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU
+    HpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh
+    oBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf
+    UpIg
+    -----END PUBLIC KEY-----
+
+It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key.
+
+First, preserving newlines, the complete string will contain:
+
+    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
+
+Note the trailing newline character.
+
+Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string into chunks. The obfuscation process could look like this:
+
+    func publicKey() -> String {
+        
+        var parts = [String]()
+        parts.append("MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtV")
+        parts.append("G14BUE1I5Q")
+        parts.append("aGesaf9PTC\nnmUlYMp4m7M")
+        parts.append("rVC2/YybXE")
+        parts.append("QlaILBZBmyw+A4Kps2k/T12q")
+        parts.append("L8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4Lu")
+        parts.append("TAkAG")
+        parts.append("RPr6HheNNnH9GQZGjCuv")
+        parts.append("6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZU")
+        parts.append("m8bGMQevt38P")
+        parts.append("iSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk")
+        parts.append("5dH")
+        parts.append("xh\noBm6kTBKsYk")
+        parts.append("xonpPlBrFJTJeyvZInHIKrd0N8Du")
+        parts.append("i3XKDtqrLWPIQcM0mWOj")
+        parts.append("YHUlf\nUpIg\n")
+    
+        let partialPublicKey = "".join(parts)
+    
+        return CFobLicVerifier.completePublicKeyPEM(partialPublicKey)
+    }
 

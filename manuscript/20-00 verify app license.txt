@@ -1,52 +1,13 @@
 # Verify License Codes in Your App
 
-## License Verifier
+![The "Enter a License" window of _New App_.](images/20-050-license-window.png)
 
-We will take the public key and put it into the app.
+According to the license template `#{product},#{name}` the license code is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
 
-Recall the public key:
+A license code is invalid when checked against that template if it satisfies at least one of the following criteria:
 
-    -----BEGIN PUBLIC KEY-----
-    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
-    nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
-    Kaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU
-    HpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh
-    oBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf
-    UpIg
-    -----END PUBLIC KEY-----
+* It's not actually a string encrypted by a private key matching the public key known to the app.
+* The extracted application name doesn't match or is missing.
+* The extracted licensee name doesn't match the name the user provides or is missing.
 
-It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key.
-
-First, preserving newlines, the complete string will contain:
-
-    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
-
-Note the trailing newline character.
-
-Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string up chunks. The obfuscation process could look like this:
-
-    func publicKey() -> String {
-        
-        var parts = [String]()
-        parts.append("MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtV")
-        parts.append("G14BUE1I5Q")
-        parts.append("aGesaf9PTC\nnmUlYMp4m7M")
-        parts.append("rVC2/YybXE")
-        parts.append("QlaILBZBmyw+A4Kps2k/T12q")
-        parts.append("L8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4Lu")
-        parts.append("TAkAG")
-        parts.append("RPr6HheNNnH9GQZGjCuv")
-        parts.append("6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZU")
-        parts.append("m8bGMQevt38P")
-        parts.append("iSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk")
-        parts.append("5dH")
-        parts.append("xh\noBm6kTBKsYk")
-        parts.append("xonpPlBrFJTJeyvZInHIKrd0N8Du")
-        parts.append("i3XKDtqrLWPIQcM0mWOj")
-        parts.append("YHUlf\nUpIg\n")
-    
-        let partialPublicKey = "".join(parts)
-    
-        return CFobLicVerifier.completePublicKeyPEM(partialPublicKey)
-    }
-
+We need to embed the CocoaFob algorithms and create an interface like the one pictured above to actually consume license information in the app.

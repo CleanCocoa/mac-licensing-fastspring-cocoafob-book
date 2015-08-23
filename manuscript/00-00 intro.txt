@@ -1,4 +1,4 @@
-# What this book is about
+# What This Book is About
 
 So you want to release a Mac app outside the Mac App Store.
 
@@ -16,8 +16,9 @@ There's even a part about implementing time-based trials in your app. These are 
 
 Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start. Users have to pay to unlock the full potential of the app. We won't cover that in much detail, because implementing this is similar to keeping non-paying users out. 
 
+The sample code will be written in the latest stable version of Swift. Both the CocoaFob code and FastSpring's SDK are available in Objective-C, so you only have to re-write the implementation inside the app.
 
-## Getting a few technical terms straight up front
+## Getting a few Technical Terms Straight up Front
 
 We'll be talking about "keys" and "codes" a lot. To remedy confusion, here's a list of technical terms which are going to be important.
 
