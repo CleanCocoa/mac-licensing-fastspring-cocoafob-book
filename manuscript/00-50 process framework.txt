@@ -1,0 +1,23 @@
+## Licensing Is All About a Big State Change
+
+Copy protection of applications through licensing is all about handling transitions from unactivated to activated. Since there's going to be quite a bit of code involved in implementing this, it pays off to do it in a clean way and represent app state expressively.
+
+With Swift, it's trivial to represent the state as an enum with an associated value:
+    
+    enum LicenseInformation {
+        case Unregistered
+        case Registered(License)
+    }
+
+That's the foundation of everything we're going to do: giving the application a means to find out which state it's in at the moment, and handle transitions.
+
+It's up to you how you define the associated `License` type. I like licenses to be based on license code and licensee name, so in our sample apps the type will look like this, basically:
+
+    struct License {
+        let name: String
+        let licenseCode: String
+    }
+
+In a later chapter, we will expand `LicenseInformation` to recognize trial mode, which equals unregistered without blocking the app, from plainly unregistered. Even when I think hard, I cannot come up with a fourth case, so that's going to be it.
+
+We will start with setting up the app. Then we'll implement a simple license check in the app's startup routine which determines if it is allowed to run. Last, we're going to add a trial mode as a soft alternative.

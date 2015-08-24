@@ -1,4 +1,0 @@
-## Licensing Process
-
-* handle transitions from unactivated to activated
-* represent state in an expressive way
