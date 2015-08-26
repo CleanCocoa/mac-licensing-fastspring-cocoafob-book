@@ -1,0 +1,61 @@
+## Check for License During Application Launch
+
+Obtaining the current state of the app depends on whether a valid license is present.
+
+I mentioned `LicenseProvider` already. It's responsible for reading a `License` from `NSUserDefaults`.
+
+If a `License` is present, this indicates that the application is not `.Unregistered` anymore but `.Registered(_)`.
+
+Using `LicenseProvider`, we can add `LicenseInformationProvider` which wraps the result in the `LicenseInformation` enum:
+
+    public class LicenseInformationProvider {
+        let licenseProvider: LicenseProvider
+    
+        public init(licenseProvider: LicenseProvider) {
+            self.licenseProvider = licenseProvider
+        }
+    
+        public var currentLicenseInformation: LicenseInformation {
+            if let license = self.license() {
+                return .Registered(license)
+            }
+        
+            return .Unregistered
+        }
+    
+        func license() -> License? {
+            return licenseProvider.currentLicense
+        }
+    }
+
+That's pretty simple. Once `LicenseInformationProvider` is set up, its `currentLicenseInformation` computed property can be used throughout the application to obtain the information needed. It's not caching the value, so the result will always be fresh.
+
+`AppDelegate` is a good place to start implementing the initial check upon launch:
+
+    var currentLicenseInformation: LicenseInformation {
+        return licenseInfoProvider.currentLicenseInformation
+    }
+    
+    func launchAppOrShowLicenseWindow() {
+        
+        switch currentLicenseInformation {
+        case .Unregistered:
+            showRegisterApp()
+            
+        case let .Registered(license):
+            
+            if licenseIsInvalid(license) {
+                displayInvalidLicenseAlert()
+                showRegisterApp()
+                return
+            }
+            
+            unlockApp()
+        }
+    }
+
+Only unlock the app if `LicenseInformationProvider` returns `.Registered(_)` with a valid license. `AppDelegate` owns the `LicenseVerifier` anyway, so this is a good place to put that check.
+
+I pondered if `LicenseInformationProvider` should do the check instead, but discarded that option. There'd be no way to perform the check and display an alert without blurring its border. `AppDelegate` can show an alert just fine.
+
+In your application, you should put the details into another object to keep your `AppDelegate` slim. I sometimes set up a few foundational objects in an object of type `AppDependencies`. Breaking up objects makes them easier to test and reason about.

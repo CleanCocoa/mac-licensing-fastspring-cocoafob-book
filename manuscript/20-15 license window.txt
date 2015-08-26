@@ -100,7 +100,7 @@ It is apparent that `RegisterApplication`, which implements the `HandlesRegister
         }
     }
 
-You know `LicenseVerifier` already. `LicenseWriter` is a simple class which stores the license information into user defaults.
+You know `LicenseVerifier` already. `LicenseWriter` is a simple class which stores the license information into user defaults while another object of type `LicenseProvider` would be responsible for reading these values out again.
 
 Attempting to register and unlock the app fails if `LicenseVerifier` doesn't succeed for any of the reasons we got to know already, most commonly because name and license code don't work out.
 

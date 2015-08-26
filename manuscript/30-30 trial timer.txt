@@ -1,0 +1,211 @@
+## Ending a Trial
+
+We can read and store trial information. We can create a new `TrialPeriod` on first launch. Now all this information has to find its way into the licensing process: is the user registered, can she use the app fully because the trial period is still active, or is the trial up and she shouldn't be able to launch the program any more?
+
+When the user uses a MacBook and never restarts the operating system or quits the software, the app should still be aware of the passage of time. As soon as the trial is up _while the app runs_, something should happen.
+
+### Blocking on Launch
+
+`LicenseInformationProvider` is responsible for figuring that out. Since `TrialProvider` is working, we can combine their forces.
+
+    public class LicenseInformationProvider {
+        let trialProvider: TrialProvider
+        let licenseProvider: LicenseProvider
+        let clock: KnowsTimeAndDate
+    
+        public init(trialProvider: TrialProvider, 
+            licenseProvider: LicenseProvider, 
+            clock: KnowsTimeAndDate) {
+                
+            self.trialProvider = trialProvider
+            self.licenseProvider = licenseProvider
+            self.clock = clock
+        }
+    
+        public var currentLicenseInformation: LicenseInformation {
+            if let license = self.license() {
+                return .Registered(license)
+            }
+        
+            if let trial = self.trial() where !trial.ended {
+                return .OnTrial(trial.trialPeriod)
+            }
+        
+            return .TrialUp
+        }
+        
+        // ...
+    }
+    
+Figuring out if the trial period is past is very easy because `TrialPeriod` provides an answer to the question with the help of a clock already. I combined `TrialPeriod` and the clock into a simple `Trial` value object.
+
+That's only a few lines of additional code compared to the `LicenseInformationProvider` implementation without trial.
+
+With that, the app is able to figure out what to do upon launch:
+
+    func launchAppOrShowLicenseWindow() {
+        switch currentLicenseInformation {
+        case .TrialUp:
+            showRegisterApp()
+            
+        case let .OnTrial(trialPeriod):
+            let trialDaysLeft = trialPeriod.daysLeft(clock)
+            displayTrialDaysLeftAlert(trialDaysLeft)
+            
+            unlockApp()
+            
+        case let .Registered(license):
+            if licenseIsInvalid(license) {
+                displayInvalidLicenseAlert()
+                showRegisterApp()
+                return
+            }
+            
+            unlockApp()
+        }
+    }
+
+Conceptually, the app hasn't changed a lot to get here. Sure, there's a second set of information needed during start-up and there's a third case to consider. But it still boils down to blocking the app and showing alerts.
+
+Things are different when the trial passes while the app is running.
+
+### While Running the App
+
+The ultimate goal of this step is to use the `LicenseChangeBroadcaster` to fire a change notification for the `.TrialUp` case.
+
+A timer has to fire when the `TrialPeriod`'s `endDate` has arrived.
+
+In the _Word Counter_, my own big application for Mac, I figured out how to use `NSTimer` for this. `NSTimer` can be set with a fire date, but behind the scenes, it only calculates the amount of ticks (or nanoseconds) that have to pass until the fire date is reached. When the Mac goes to sleep, no ticks will reach the `NSTimer` instance. For that object, no time will have passed if you close the lid of your MacBook overnight. I created an absolute timer to remedy that problem. That isn't fun to write or test, though.
+
+Thanks to Grand Central Dispatch, there's a better alternative which is equally ennerving to test but way easier to setup.
+
+We don't need a repeating timer. We just need a single event to occur when `endDate` has arrived. `dispatch_after(when: dispatch_time_t, queue: dispatch_queue_t, block: dispatch_block_t)` can do that.
+
+To obtain a `dispatch_time_t`, there is the free function `dispatch_walltime`. The "walltime" indicates that not the relative time measured in ticks by CPU activity count, but the clock's absolute time.
+
+Pass `nil` for the first parameter and use the `endDate` to calculate a delay in nanoseconds and you're all set:
+
+    let interval = Int64(endDate.timeIntervalSinceNow)
+    let delay = interval * Int64(NSEC_PER_SEC)
+
+    dispatch_after(dispatch_walltime(nil, delay), dispatch_get_main_queue()) {
+        // ...
+    }
+
+This will execute when the target time has arrived and the app is still running.
+
+But if the user registers the app in the meantime, the trial timer should be canceled. That's not built-in. I end up with a solution based on [Evgenii Rtishchev's code](https://github.com/katleta3000/CancelBlocks):
+
+    typealias CancelableDispatchBlock = (cancel: Bool) -> Void
+
+    func cancelBlock(block: CancelableDispatchBlock?) {
+    
+        if hasValue(block) {
+            block!(cancel: true)
+        }
+    }
+
+    func dispatchCancelableBlockAtDate(date: NSDate, 
+        block: dispatch_block_t) -> CancelableDispatchBlock? {
+    
+        // Use two pointers for the same block handle to make 
+        // the block reference itself.
+        var cancelableBlock: CancelableDispatchBlock? = nil
+        let delayBlock: CancelableDispatchBlock = { cancel in
+        
+            if !cancel {
+                dispatch_async(dispatch_get_main_queue(), block)
+            }
+        
+            cancelableBlock = nil
+        }
+    
+        cancelableBlock = delayBlock
+    
+        let interval = Int64(date.timeIntervalSinceNow)
+        let delay = interval * Int64(NSEC_PER_SEC)
+
+        dispatch_after(dispatch_walltime(nil, delay), dispatch_get_main_queue()) {
+    
+            if hasValue(cancelableBlock) {
+                cancelableBlock!(cancel: false)
+            }
+        }
+    
+        return cancelableBlock
+    }
+
+The actual flow is a bit confusing, so let me walk you through it:
+
+* A `CancelableDispatchBlock` is a wrapper around a regular `() -> Void` block.
+* `CancelableDispatchBlock` takes a boolean parameter called `cancel`; if it's `true`, the contained block should not execute. 
+* Either way, if the `CancelableDispatchBlock` is run, it invalidates itself. It cannot be run twice.
+* An anonymous block is put on the actual dispatch queue at the scheduled time: it checks if the `CancelableDispatchBlock` still exists and executes it. Else it simply does nothing.
+
+This remedies the problem that a block, once dispatched for execution, cannot be canceled. It works because blocks retain variables of their context if these are used inside the block.
+
+These free functions provide a way to create multiple `CancelableDispatchBlock`s in your app. If you know you need only one, you can simply use the fact to your advantage that blocks retain context variables and put the cancellation toggle into an object:
+
+    class WalltimeTimer {
+        private var _cancel = false
+        private var _didSchedule = false
+    
+        func cancel() {
+            _cancel = true
+        }
+    
+        func schedule(fireDate: NSDate) {
+            
+            if _didSchedule { return }
+            
+            let interval = Int64(fireDate.timeIntervalSinceNow)
+            let delay = interval * Int64(NSEC_PER_SEC)
+
+            dispatch_after(dispatch_walltime(nil, delay), 
+                dispatch_get_main_queue()) {
+            
+                if _cancel { return }
+            
+                // do something, like firing the real event
+            }
+            
+            _didSchedule = true
+        }
+    }
+
+It looks way less weird, I admit.
+
+Now that the timer is taken care of and the license change event can be fired, the `AppDelegate`, which is the observer of these events, can finally react:
+
+    func licenseDidChange(notification: NSNotification) {
+        if let userInfo = notification.userInfo, 
+            licenseInformation = LicenseInformation.fromUserInfo(userInfo) {
+            
+            switch licenseInformation {
+            case .OnTrial(_):
+                // Change to this state is possible if you support unregistering
+                // and the trial isn't up, yet.
+                return
+                
+            case .Registered(_):
+                displayThankYouAlert()
+                stopTrialTimer()
+                unlockApp()
+                
+            case .TrialUp:
+                displayTrialUpAlert()
+                lockApp()
+                showRegisterApp()
+            }
+        }
+    }
+
+### Wrapping Up
+
+That's all there is to adding a trial:
+
+* Read and write `TrialPeriod` someplace safe.
+* Check for `TrialPeriod`'s `endDate` during launch.
+    * If it doesn't exist, create it with the current time as starting date and the trial duration as a means to compute `endDate`.
+    * If it exists, show a notice how many trial days are left. If the trial period has passed, don't unlock the app.
+* Install a timer to fire `.TrialUp` when the `endDate` is reached. Should the user register in the meantime, make it so the timer doesn't fire the event.

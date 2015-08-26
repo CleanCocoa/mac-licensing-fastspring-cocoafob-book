@@ -11,6 +11,11 @@
 20-15 license window.txt
 20-20 fastspring embedded store.txt
 
+30-00 trial.txt
+30-10 trial information i-o.txt
+30-20 time.txt
+30-30 trial timer.txt
+
 90-00 appendix.txt
 90-10 bundles.txt
 90-20 in-app purchases.txt

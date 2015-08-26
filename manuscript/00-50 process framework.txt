@@ -5,8 +5,16 @@ Copy protection of applications through licensing is all about handling transiti
 With Swift, it's trivial to represent the state as an enum with an associated value:
     
     enum LicenseInformation {
-        case Unregistered
         case Registered(License)
+        case Unregistered
+    }
+
+Or, if you want to support a time-based trial:
+
+    enum LicenseInformation {
+        case Registered(License)
+        case OnTrial(TrialPeriod)
+        case TrialUp
     }
 
 That's the foundation of everything we're going to do: giving the application a means to find out which state it's in at the moment, and handle transitions.

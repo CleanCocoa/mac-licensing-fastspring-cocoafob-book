@@ -1,0 +1,54 @@
+## Trial Information I/O
+
+You have to store the `TrialPeriod` somewhere. The sample app will put trial information into the `NSUserDefaults`.
+
+The user defaults is a pretty bad place for a shipping app if you worry about users trying to avoid to pay for your software since savvy users can manipulate the values via command line.
+
+    $ defaults read de.christiantietze.MyNewApp
+    {
+        "trial_ending" = "2015-08-30 09:17:25 +0000";
+        "trial_starting" = "2015-08-25 09:17:25 +0000";
+    }
+
+Better put it someplace safer if you're concerned about this.
+
+Keep in mind though that it likely won't pay off to make it harder for cheap users to extend the trial or hack the license mechanism. Every hour you spend on copy protection against a handful of people is an hour you won't spend improving the app for paying customers.
+
+We used `NSUserDefaults` for storage of license information already. I wrote `TrialProvider` and `TrialWriter` in a similar way, mostly replacing the defaults keys.
+
+    public class TrialProvider {
+        public init() { }
+    
+        lazy var userDefaults: NSUserDefaults = UserDefaults.standardUserDefaults()
+
+        public var currentTrialPeriod: TrialPeriod? {   
+            if let startDate = userDefaults.objectForKey("\(TrialPeriod.UserDefaultsKeys.StartDate)") as? NSDate,
+                endDate = userDefaults.objectForKey("\(TrialPeriod.UserDefaultsKeys.EndDate)") as? NSDate {
+                
+                return TrialPeriod(startDate: startDate, endDate: endDate)
+            }
+        
+            return .None
+        }
+    }
+    
+    public class TrialWriter {
+        public init() { }
+    
+        lazy var userDefaults: NSUserDefaults = UserDefaults.standardUserDefaults()
+    
+        public func storeTrial(trialPeriod: TrialPeriod) {
+            userDefaults.setObject(trialPeriod.startDate, forKey: TrialPeriod.UserDefaultsKeys.StartDate.rawValue)
+            userDefaults.setObject(trialPeriod.endDate, forKey: TrialPeriod.UserDefaultsKeys.EndDate.rawValue)
+        }
+    }
+
+    extension TrialPeriod {
+        public enum UserDefaultsKeys: String, Printable {
+            case StartDate = "trial_starting"
+            case EndDate = "trial_ending"
+        
+            public var description: String { return rawValue }
+        }
+    }
+    
