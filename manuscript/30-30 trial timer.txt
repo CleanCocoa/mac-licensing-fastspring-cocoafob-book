@@ -77,7 +77,7 @@ A timer has to fire when the `TrialPeriod`'s `endDate` has arrived.
 
 In the _Word Counter_, my own big application for Mac, I figured out how to use `NSTimer` for this. `NSTimer` can be set with a fire date, but behind the scenes, it only calculates the amount of ticks (or nanoseconds) that have to pass until the fire date is reached. When the Mac goes to sleep, no ticks will reach the `NSTimer` instance. For that object, no time will have passed if you close the lid of your MacBook overnight. I created an absolute timer to remedy that problem. That isn't fun to write or test, though.
 
-Thanks to Grand Central Dispatch, there's a better alternative which is equally ennerving to test but way easier to setup.
+Thanks to Grand Central Dispatch, there's a better alternative which is equally unnerving to test but way easier to setup.
 
 We don't need a repeating timer. We just need a single event to occur when `endDate` has arrived. `dispatch_after(when: dispatch_time_t, queue: dispatch_queue_t, block: dispatch_block_t)` can do that.
 

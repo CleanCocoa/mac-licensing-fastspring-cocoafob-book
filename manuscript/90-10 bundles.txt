@@ -16,7 +16,7 @@ Once the payee has been approved by FastSpring in a manual review process, you c
 
 <!--ct: TODO can you edit this list later?-->
 
-Also consider setting up [notifications][notif] for each order. Ask bundle participants if they'd like to be notified instantly or if they prefered a list of customers at the end of the bundle sale.
+Also consider setting up [notifications][notif] for each order. Ask bundle participants if they'd like to be notified instantly or if they preferred a list of customers at the end of the bundle sale.
 
 
 [spay]: https://support.fastspring.com/entries/21140696-Setting-Up-Affiliates-and-Split-Pays

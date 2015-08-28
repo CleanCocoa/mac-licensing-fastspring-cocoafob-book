@@ -31,7 +31,7 @@ In order to compile the code from an age before Automatic Reference Counting was
 
 In your app target's settings, go to "Build Phases", select "Compile Sources", and disable ARC on `NSString+PECrypt.m` and `NSString-Base64Extensions.m`. To do so, double click in the "Compiler Flags" column to the right and enter `-fno-objc-arc` as the compiler flag.
 
-Your code should now compile again and the necessary CocoaFob classes should be availabe to your Swift project.
+Your code should now compile again and the necessary CocoaFob classes should be available to your Swift project.
 
 [ccfobswift]: https://github.com/glebd/cocoafob/tree/master/swift
 
@@ -167,7 +167,7 @@ This time, the error pointer will not be populated with programmer errors. `veri
     	CFobErrorCodeNoName = -5,
     };
 
-`verifyRegCode` considers the license source template results to be the "name", wheras we talk about licensee's name and product name all the time. The combination of both, according to the license template we set up in FastSpring, is what CocoaFob needs for decrypting and verifying.
+`verifyRegCode` considers the license source template results to be the "name", whereas we talk about licensee's name and product name all the time. The combination of both, according to the license template we set up in FastSpring, is what CocoaFob needs for decrypting and verifying.
 
 Conversely, if that's empty or `nil`, `CFobErrorCodeNoName` will be raised. If this value is encrypted with a private key which doesn't match the built-in public key of the app, another error code will be used. And so on. 
 
