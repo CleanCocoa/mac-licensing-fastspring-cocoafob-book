@@ -1,0 +1,8 @@
+{icon=gift}
+G> ## Get Free Stuff from My Lab
+G>
+G> Sign up for my very low-volume newsletter to get a private preview of my upcoming programming books, be invited to software betas, and get priority access to my online courses:
+G>
+G> <http://christiantietze.de/newsletter>
+G> 
+G> I'll keep you in the loop of other awesome projects I'm working on, too.
