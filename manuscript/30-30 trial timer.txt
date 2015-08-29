@@ -125,7 +125,8 @@ But if the user registers the app in the meantime, the trial timer should be can
         let interval = Int64(date.timeIntervalSinceNow)
         let delay = interval * Int64(NSEC_PER_SEC)
 
-        dispatch_after(dispatch_walltime(nil, delay), dispatch_get_main_queue()) {
+        dispatch_after(dispatch_walltime(nil, delay), 
+            dispatch_get_main_queue()) {
     
             if hasValue(cancelableBlock) {
                 cancelableBlock!(cancel: false)

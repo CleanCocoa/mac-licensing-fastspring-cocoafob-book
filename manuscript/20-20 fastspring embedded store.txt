@@ -80,7 +80,10 @@ Now the test target will not find the header files by default, though.
 
 Go to the test target settings and select the "Build Setting" pane. Use the search to get to "User Header Search Paths". In the test target's column, which is probably the second column you can edit, double-click the table cell and drag the `FsprgEmbeddedStore` folder in there (that's the one where we picked the files from).
 
-In the example project setup, this resolves to: `"$(SRCROOT)/../External/FsprgEmbeddedStoreMac/FsprgEmbeddedStore"`.
+In the example project setup, this resolves to:
+
+{linenos=off}
+    "$(SRCROOT)/../External/FsprgEmbeddedStoreMac/FsprgEmbeddedStore"
 
 Make sure to select "recursive" from the options.
 

@@ -19,11 +19,16 @@ We used `NSUserDefaults` for storage of license information already. I wrote `Tr
     public class TrialProvider {
         public init() { }
     
-        lazy var userDefaults: NSUserDefaults = UserDefaults.standardUserDefaults()
+        lazy var userDefaults: NSUserDefaults = 
+            UserDefaults.standardUserDefaults()
 
         public var currentTrialPeriod: TrialPeriod? {   
-            if let startDate = userDefaults.objectForKey("\(TrialPeriod.UserDefaultsKeys.StartDate)") as? NSDate,
-                endDate = userDefaults.objectForKey("\(TrialPeriod.UserDefaultsKeys.EndDate)") as? NSDate {
+            if let startDate = userDefaults
+                    .objectForKey("\(TrialPeriod.UserDefaultsKeys.StartDate)") 
+                    as? NSDate,
+                endDate = userDefaults
+                    .objectForKey("\(TrialPeriod.UserDefaultsKeys.EndDate)") 
+                    as? NSDate {
                 
                 return TrialPeriod(startDate: startDate, endDate: endDate)
             }
@@ -35,11 +40,14 @@ We used `NSUserDefaults` for storage of license information already. I wrote `Tr
     public class TrialWriter {
         public init() { }
     
-        lazy var userDefaults: NSUserDefaults = UserDefaults.standardUserDefaults()
+        lazy var userDefaults: NSUserDefaults = 
+            UserDefaults.standardUserDefaults()
     
         public func storeTrial(trialPeriod: TrialPeriod) {
-            userDefaults.setObject(trialPeriod.startDate, forKey: TrialPeriod.UserDefaultsKeys.StartDate.rawValue)
-            userDefaults.setObject(trialPeriod.endDate, forKey: TrialPeriod.UserDefaultsKeys.EndDate.rawValue)
+            userDefaults.setObject(trialPeriod.startDate, 
+                forKey: TrialPeriod.UserDefaultsKeys.StartDate.rawValue)
+            userDefaults.setObject(trialPeriod.endDate, 
+                forKey: TrialPeriod.UserDefaultsKeys.EndDate.rawValue)
         }
     }
 
