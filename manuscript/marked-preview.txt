@@ -1,8 +1,0 @@
-<<[00-00 intro.txt]
-
-<<[10-00 fastspring.txt]
-<<[10-05 set up app.txt]
-<<[10-10 keys.txt]
-
-<<[20-00 app license.txt]
-<<[20-10 email activation.txt]
