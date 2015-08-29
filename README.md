@@ -1,9 +1,9 @@
-# Release a Mac App Outside the App Store 
-## With FastSpring and CocoaFob
+# Make Money Outside the Mac App Store
+## How to Sell Your Mac App with FastSpring, Secure It With License Codes Against Piracy, and Offer Time-Based Trial Downloads
 
-This is the manuscript of the book "[Release a Mac App Outside the App Store with FastSpring and CocoaFob][book]".
+This is the manuscript of the book "[Make Money Outside the Mac App Store (With FastSpring)][book]".
 
-[book]: https://leanpub.com/mac-app-licensing-fastspring-cocoafob/
+[book]: https://leanpub.com/sell-mac-app-fastspring-cocoafob-license-trial
 
 ## License
 
