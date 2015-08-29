@@ -1,9 +1,115 @@
-<!--ct: TODO write chapter-->
+## Order Confirmation Mail and App Activation via E-Mail
 
-Activation via URL
+The embedded store integration I have shown you takes care of automatically activating an application.
 
+But you can take it a step further, still, and provide an activation link in a custom order confirmation mail. Users will be able to activate the application with a single click using custom URL schemes.
 
-> To embed a license URL in a fulfillment email template, use the following format ("myapp" is the URL handler specific to your application):
->
->     myapp://#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}/#{orderItem.fulfillment.license.outcome.licenses[0]}
->
+### Pick a URL Scheme
+
+![](images/90-200-urlscheme-form.png)
+
+To make a link into the app work, register a custom URL Scheme. You find the settings under your app target's settings at "Info".
+
+You can leave the identifier blank. I use `mynewapp` as the scheme, so we're going to use `mynewapp://` as the protocol later on.
+
+A URL is composed of multiple parts. We may easily recognize the host, path, and query. There are various options to set up the URL handler. The most basic expected URL would be something along the lines of:
+
+{linenos=off}
+    mynewapp://activate/...
+    mynewapp://activate?licenseCode=...
+    mynewapp://license/activate?licenseCode=...
+
+Substitute `...` with the actual code. I favor the third option, because there, you have the following components:
+
+* `mynewapp` as `NSURL.scheme`
+* `license` as `NSURL.host`
+* `/activate` as `NSURL.path`
+* `licenseCode=...` as `NSURL.query`
+
+Although that's the variant which stays truest to thinking in terms of HTTP resources, it's overly complicated if your app doesn't support anything else.
+
+We could stick with the very basic first form. CocoaFob license codes don't contain special characters. We're safe to assume they qualify as URL path components according to the specs. We need the licensee's name, too, though. That's why query parameters are better suited from a pragmatical point of view.
+
+The following URL should activate the sample app for John Appleseed: <mynewapp://activate?name=Sm9obiBBcHBsZXNlZWQ=&licenseCode=GAWQE-F9AVT-7EYL9-K8EWK-SLPLJ-RBYTQ-FSS76-CUH98-A9KCN-TQP93-ZPLPS-SGDYF-L2A39-NSVLA-NE799-A>
+
+The name parameter is base64-encoded so we don't run into problems with special characters, accents, whitespace, and what not. FastSpring supports that and I think this makes it easier to deal with data in URL query strings.
+
+### Handle Activation Within the App
+
+In code, I make the following changes:
+
+* Add `URLQueryRegistration` type. Instances take a `NSURL`, extract the query portion, and delegate parsing to `URLQueryLicenseParser`. The result is passed on to an object which conforms to `HandlesRegistering`. This will be the `RegisterApplication` service which we already use for manual registering.
+* `URLQueryLicenseParser` splits the whole query string which begins right after the `?` in the URL into key--value-pairs suited for a dictionary. It then decodes the name and returns a well-known `License` value object.
+* Add URL scheme registration and handling of the event to `AppDelegate`.
+
+The code to get from URL to license is nothing special.
+
+Setting up the URL handler involves a new part of Foundation, though, so let's look at the code:
+
+    func registerForURLScheme() {
+    
+        NSAppleEventManager.sharedAppleEventManager()
+            .setEventHandler(self, 
+                andSelector: Selector("handleGetUrlEvent:withReplyEvent:"), 
+                forEventClass: AEEventClass(kInternetEventClass), 
+                andEventID: AEEventID(kAEGetURL))
+    }
+
+    func handleGetUrlEvent(event: NSAppleEventDescriptor, 
+        withReplyEvent: NSAppleEventDescriptor) {
+    
+        let eventObject = event
+                .paramDescriptorForKeyword(AEKeyword(keyDirectObject))
+                
+        if let urlString = eventObject?.stringValue, 
+            url = NSURL(string: urlString) {
+        
+            // If you support multiple actions, here'd be the place to 
+            // delegate to a router object instead.
+        
+            URLQueryRegistration(registrationHandler: registerApplication)
+                .registerFromURL(url)
+        }
+    }
+
+I find `NSAppleEventManager`-related code to look quite messy. The so-called "keywords" used by `NSAppleEventDescriptor` are global constants which don't adhere to any naming convention Apple uses otherwise, like enums. The event manager's parameter values are sometimes prefixed with `AE`, sometimes not.
+
+Because there's no real application and thus no real infrastructure set up in the sample projects, I put this into `AppDelegate`, too. In a shipping application, you should put event handling someplace else. Registering the handler in `AppDelegate` can work just fine, though.
+
+Now we need FastSpring to generate the links.
+
+### Set Up Confirmation E-Mail in SpringBoard
+
+Customers will already receive their invoice via e-mail. There's no way to touch that. You can send a customized letter right afterwards, though, including license codes.
+
+Go to your SpringBoard, select your product, and add a new fulfillment action. Select the first option for e-mail.
+
+The subject is set to something like: "Your #{orderItem.display} Delivery Information". Obviously, there's a template string included, which will expand to "New App", "Word Counter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
+
+Set the the e-mail body to something along these lines:
+
+> \#{order.customer.fullName},
+> 
+> thanks so much for buying #{orderItem.display}!
+> 
+> Here you find your license information for later reference:
+> 
+> License Name: #{orderItem.fulfillment.license.licenseName}
+> License Key: #{orderItem.fulfillment.license.licenses.list}
+> 
+> To activate the app automatically, run it and simply click this link: mynewapp://activate?name=#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}&licenseCode=#{orderItem.fulfillment.license.outcome.licenses[0]}
+> 
+> Thanks again for your support. Please drop me a line and tell me what you think of the application.
+> 
+> -- <<Your Name Here>>
+
+There are a lot of template variables used. 
+
+* The license is embedded in the `fulfullment` group, as you can see. If the user bought a dozen licenses, all will be printed inside the e-mail using `license.licenses.list`. 
+* Only the first one will be used to generate the activation e-mail using `license.outcome.licenses[0]`.
+* The licensee's name is encoded using `util.string.base64()`.
+
+Save the fulfillment action.
+
+If you perform a test purchase from your SpringBoard afterwards, you should receive a new kind of e-mail from now on with license info and the activation link.
+
