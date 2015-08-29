@@ -22,12 +22,12 @@ W> You should not, under no circumstances, re-use the keys printed in this book.
 
 First, generate some DSA parameters:
 
-{linenos=off}
+{linenos=off,lang="text"}
     openssl dsaparam -out dsaparam.pem 512
 
 The result for the sample app is this:
 
-{linenos=off}
+{linenos=off,lang="text"}
     -----BEGIN DSA PARAMETERS-----
     MIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTCnmUlYMp4m7MrVC2/YybX
     EQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbEDKaw6oJ9THk1i4LuTAkAG
@@ -37,14 +37,14 @@ The result for the sample app is this:
 
 Second, generate a DSA private key:
 
-{linenos=off}
+{linenos=off,lang="text"}
     openssl gendsa -out privkey.pem dsaparam.pem
 
 The private key will be stored at FastSpring for license code generation.
 
 Again, the resulting contents:
 
-{linenos=off}
+{linenos=off,lang="text"}
     -----BEGIN DSA PRIVATE KEY-----
     MIH4AgEAAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTCnmUlYMp4m7MrVC2/
     YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbEDKaw6oJ9THk1i4LuT
@@ -58,14 +58,14 @@ Put the private key into the "DSA Private Key" field to finish configuring Cocoa
 
 Last, extract the public key from the private key:
 
-{linenos=off}
+{linenos=off,lang="text"}
     openssl dsa -in privkey.pem -pubout -out pubkey.pem
 
 The public key is bundled with the app to verify license codes.
 
 Which results in:
 
-{linenos=off}
+{linenos=off,lang="text"}
     -----BEGIN PUBLIC KEY-----
     MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
     nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED

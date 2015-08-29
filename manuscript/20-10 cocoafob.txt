@@ -44,7 +44,7 @@ We will take the public key and put it into the app. Not as a file, but as a str
 
 Recall the public key:
 
-{linenos=off}
+{linenos=off,lang="text"}
     -----BEGIN PUBLIC KEY-----
     MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
     nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
@@ -58,7 +58,7 @@ It is said to increase the difficulty of obtaining the public key from your app'
 
 First, preserving newlines, the complete string will contain (line wraps are due to book page limits and indicated by the trailing `\`):
 
-{linenos=off}
+{linenos=off,lang="text"}
     MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
 
 Note the trailing newline character.

@@ -82,7 +82,7 @@ Go to the test target settings and select the "Build Setting" pane. Use the sear
 
 In the example project setup, this resolves to:
 
-{linenos=off}
+{linenos=off,lang="text"}
     "$(SRCROOT)/../External/FsprgEmbeddedStoreMac/FsprgEmbeddedStore"
 
 Make sure to select "recursive" from the options.

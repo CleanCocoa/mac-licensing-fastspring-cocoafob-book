@@ -14,7 +14,7 @@ You can leave the identifier blank. I use `mynewapp` as the scheme, so we're goi
 
 A URL is composed of multiple parts. We may easily recognize the host, path, and query. There are various options to set up the URL handler. The most basic expected URL would be something along the lines of:
 
-{linenos=off}
+{linenos=off,lang="text"}
     mynewapp://activate/...
     mynewapp://activate?licenseCode=...
     mynewapp://license/activate?licenseCode=...
@@ -32,7 +32,7 @@ We could stick with the very basic first form. CocoaFob license codes don't cont
 
 The following URL should activate the sample app for John Appleseed (newlines added for print only, but copy & paste into a browser should still work):
 
-{linenos=off}
+{linenos=off,lang="text"}
     mynewapp://activate?name=Sm9obiBBcHBsZXNlZWQ=
     &licenseCode=GAWQE-F9AVT-7EYL9-K8EWK-SLPLJ-RBYTQ-FSS76-CUH98
     -A9KCN-TQP93-ZPLPS-SGDYF-L2A39-NSVLA-NE799-A
@@ -93,6 +93,7 @@ The subject is set to something like: "Your #{orderItem.display} Delivery Inform
 
 Set the the e-mail body to something along these lines:
 
+{linenos=off,lang="text"}
     #{order.customer.fullName},
     
     thanks so much for buying #{orderItem.display}!
@@ -107,6 +108,8 @@ Set the the e-mail body to something along these lines:
     Thanks again for your support. Please drop me a line and tell me what you think of the application.
     
     -- <<Your Name Here>>
+
+(Since long lines cannot be preserved in print, you can find a plain text template in the code repository below "FastSpring assets" to copy & paste into the form.)
 
 There are a quite a few template variables used. 
 
