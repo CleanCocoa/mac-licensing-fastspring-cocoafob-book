@@ -1,4 +1,4 @@
-# Set up your app for sale on FastSpring
+# Set up Your App for Sale on FastSpring
 
 Head to FastSpring's [sign-up page](http://www.fastspring.com/sign-up) if you don't have an account already. This may take a little while even for the awesome people at FastSpring to set up manually for you.
 
