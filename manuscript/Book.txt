@@ -1,6 +1,7 @@
 00-00 intro.txt
 00-50 process framework.txt
 newsletter.txt
+00-99 code download.txt
 book-list.txt
 
 10-00 fastspring.txt
@@ -11,6 +12,7 @@ book-list.txt
 20-00 verify app license.txt
 20-10 cocoafob.txt
 20-15 license window.txt
+20-17 license check startup.txt
 20-20 fastspring embedded store.txt
 
 30-00 trial.txt
@@ -20,6 +22,7 @@ book-list.txt
 
 90-00 appendix.txt
 newsletter.txt
-book-list.txt
 90-10 bundles.txt
 90-20 in-app purchases.txt
+90-30 email activation.txt
+book-list.txt
