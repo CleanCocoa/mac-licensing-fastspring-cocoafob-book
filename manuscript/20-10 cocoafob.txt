@@ -2,7 +2,7 @@
 
 As of Swift 1.2, you still have to use the Objective-C code of the library. For Swift 2.0 and above, there's [native code available on GitHub][ccfobswift].
 
-Include the following files from the `objc` folder:
+Include the following files from the `objc` folder to follow along the sample code:
 
 * `CFobError.h`
 * `CFobError.m`
@@ -181,3 +181,5 @@ So that is all you need to do:
 * combine both into a "registration name" according to the license template,
 * take a license code string,
 * pass the license code and registration name to `CFobLicVerifier` to obtain the result.
+
+You can find all of the files necessary to use  in the "License" group in the [sample projects](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob).
