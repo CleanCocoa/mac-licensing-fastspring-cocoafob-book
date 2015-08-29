@@ -1,0 +1,10 @@
+{icon=book}
+G> ## Books by Me
+G>
+G> Clean Cocoa is my mission: bringing you the best coding practices to create working applications for Mac and iOS.
+G>
+G> To that end, I've written the following books which you might want to check out:
+G>
+G> * [Exploring Mac App Development Strategies](https://leanpub.com/develop-mac-apps-clean-architecture-swift)
+G> * [Creating Multi-Process Mac Applications](https://leanpub.com/create-multi-process-mac-apps)
+G> * [Make Money Outside the Mac App Store](http://leanpub.com/sell-mac-app-fastspring-cocoafob-license-trial)

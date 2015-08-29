@@ -1,5 +1,6 @@
 00-00 intro.txt
 00-50 process framework.txt
+book-list.txt
 
 10-00 fastspring.txt
 10-05 set up app.txt
@@ -17,5 +18,6 @@
 30-30 trial timer.txt
 
 90-00 appendix.txt
+book-list.txt
 90-10 bundles.txt
 90-20 in-app purchases.txt
