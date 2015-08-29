@@ -6,7 +6,7 @@ The mechanism behind that is called [split pay][spay] and is used for affiliates
 
 Basically, all participants register at FastSpring and provide their bank account details. One becomes the host of the bundle. All participant's products have to find their way into the host's store -- including order fulfillment for license code generation. Then the host sets up a [product bundle][bundle] with all the bundle products and a bundle price. 
 
-![90 100 Add Product Bundle](images/90-100-add-product-bundle.png)
+![Creating a product bundle](images/90-100-add-product-bundle.png)
 
 While the host adds each product to the bundle, it's important to set the products to "No-Price / Zero-priced option" so only the bundle price counts.
 

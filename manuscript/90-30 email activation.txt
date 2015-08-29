@@ -30,7 +30,7 @@ Although that's the variant which stays truest to thinking in terms of HTTP reso
 
 We could stick with the very basic first form. CocoaFob license codes don't contain special characters. We're safe to assume they qualify as URL path components according to the specs. We need the licensee's name, too, though. That's why query parameters are better suited from a pragmatical point of view.
 
-The following URL should activate the sample app for John Appleseed: <mynewapp://activate?name=Sm9obiBBcHBsZXNlZWQ=&licenseCode=GAWQE-F9AVT-7EYL9-K8EWK-SLPLJ-RBYTQ-FSS76-CUH98-A9KCN-TQP93-ZPLPS-SGDYF-L2A39-NSVLA-NE799-A>
+The following URL should activate the sample app for John Appleseed: `mynewapp://activate?name=Sm9obiBBcHBsZXNlZWQ=&licenseCode=GAWQE-F9AVT-7EYL9-K8EWK-SLPLJ-RBYTQ-FSS76-CUH98-A9KCN-TQP93-ZPLPS-SGDYF-L2A39-NSVLA-NE799-A`
 
 The name parameter is base64-encoded so we don't run into problems with special characters, accents, whitespace, and what not. FastSpring supports that and I think this makes it easier to deal with data in URL query strings.
 

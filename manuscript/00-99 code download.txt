@@ -15,20 +15,25 @@ Once your product is set up with FastSpring, you need to add the details to `Fas
 
 ## Project Organization
 
+As the project navigator reveals, I have taken quite an effort to structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
+
 {float=left}
 ![`Trial-Expire-While-Running` files](images/00-050-code-org.png)
-
-As the project navigator will reveal, I have taken quite an effort to structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
 
 The root folder of the project contains the obligatory `AppDelegate`, an `Alerts` vendor, and two major use case objects: `RegisterApplication` and `PurchaseLicense`, both responsible for what it says on the tin.
 
 There are six major groups in the time-trial enabled sample app:
 
-1. **Shared**: Extensions of Swift's standary library which provide useful features; also including a `NSUserDefaults` wrapper used extensively during tests.
-2. **Trial**: Contains infrastructure to store and read trial information and install the trial timer.
-3. **License**: Contains similar infrastructure and an event broadcaster to notify interested objects in your app about license changes.
-4. **License Parsing from URL Scheme**: As we will cover briefly in the appendix, these service objects help to provide activation of your app via e-mail.
-5. **FastSpring Store Integration**: Wrapper around the Embedded Store SDK by provided FastSpring to handle order confirmations and provide a clean integration into existing apps.
-6. **User Interface**: Contains window controllers for the store window and the license information window.
+**Shared**: Extensions of Swift's standary library which provide useful features; also including a `NSUserDefaults` wrapper used extensively during tests.
+
+**Trial**: Contains infrastructure to store and read trial information and install the trial timer.
+
+**License**: Contains similar infrastructure and an event broadcaster to notify interested objects in your app about license changes.
+
+**License Parsing from URL Scheme**: As we will cover briefly in the appendix, these service objects help to provide activation of your app via e-mail.
+
+**FastSpring Store Integration**: Wrapper around the Embedded Store SDK by provided FastSpring to handle order confirmations and provide a clean integration into existing apps.
+
+**User Interface**: Contains window controllers for the store window and the license information window.
 
 You can drag & drop all of these files (except `AppDelegate`, `MainMenu.xib`, and `Images.xcassets` of course) into your existing project, adjust a few parameters, extend your own `AppDelegate`, and that's it. No additional action required.
