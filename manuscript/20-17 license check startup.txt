@@ -40,22 +40,21 @@ That's pretty simple. Once `LicenseInformationProvider` is set up, its `currentL
         
         switch currentLicenseInformation {
         case .Unregistered:
+            if licenseIsInvalid() {
+                displayInvalidLicenseAlert()
+            }
+            
             showRegisterApp()
             
         case let .Registered(license):
-            
-            if licenseIsInvalid(license) {
-                displayInvalidLicenseAlert()
-                showRegisterApp()
-                return
-            }
-            
             unlockApp()
         }
     }
 
-Only unlock the app if `LicenseInformationProvider` returns `.Registered(_)` with a valid license. `AppDelegate` owns the `LicenseVerifier` anyway, so this is a good place to put that check.
+Only unlock the app if `LicenseInformationProvider` returns `.Registered(_)` with a valid license.
 
-I pondered if `LicenseInformationProvider` should do the check instead, but discarded that option. There'd be no way to perform the check and display an alert without blurring its border. `AppDelegate` can show an alert just fine.
+`LicenseInformationProvider` should do the check so no invalid license information leak by obtaining `currentLicenseInformation`. Better keep the invariant protected. 
+
+If you want to display there was a problem with the stored license, you have to do some extra work, though: check if `LicenseProvider` returns a `License` value even though the app is unregistered and display an alert.
 
 In your application, you should put the details into another object to keep your `AppDelegate` slim. I sometimes set up a few foundational objects in an object of type `AppDependencies`. Breaking up objects makes them easier to test and reason about.

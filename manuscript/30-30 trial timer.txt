@@ -6,7 +6,7 @@ When the user uses a MacBook and never restarts the operating system or quits th
 
 ### Blocking on Launch
 
-`LicenseInformationProvider` is responsible for figuring that out. Since `TrialProvider` is working, we can combine their forces.
+`LicenseInformationProvider` is responsible for figuring out which state the app is in at any given moment. Since `TrialProvider` is working, we can combine their forces.
 
     public class LicenseInformationProvider {
         let trialProvider: TrialProvider
@@ -22,20 +22,31 @@ When the user uses a MacBook and never restarts the operating system or quits th
             self.clock = clock
         }
     
+        public lazy var licenseVerifier: LicenseVerifier = LicenseVerifier()
+    
         public var currentLicenseInformation: LicenseInformation {
-            if let license = self.license() {
+            if let license = self.license() 
+                where license.isValid(licenseVerifier) {
+                    
                 return .Registered(license)
             }
         
-            if let trial = self.trial() where !trial.ended {
+            if let trial = self.trial() where trial.isActive {
                 return .OnTrial(trial.trialPeriod)
             }
         
             return .TrialUp
         }
-        
-        // ...
+    
+        func license() -> License? {
+            return licenseProvider.currentLicense
+        }
+    
+        func trial() -> Trial? {
+            return trialProvider.currentTrialWithClock(clock)
+        }
     }
+    
     
 Figuring out if the trial period is past is very easy because `TrialPeriod` provides an answer to the question with the help of a clock already. I combined `TrialPeriod` and the clock into a simple `Trial` value object.
 
@@ -55,12 +66,7 @@ With that, the app is able to figure out what to do upon launch:
             unlockApp()
             
         case let .Registered(license):
-            if licenseIsInvalid(license) {
-                displayInvalidLicenseAlert()
-                showRegisterApp()
-                return
-            }
-            
+            stopTrialTimer()
             unlockApp()
         }
     }
