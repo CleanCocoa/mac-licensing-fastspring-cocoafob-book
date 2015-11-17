@@ -21,6 +21,8 @@ book-list.txt
 30-20 time.txt
 30-30 trial timer.txt
 
+40-00 parting words.txt
+
 90-00 appendix.txt
 newsletter.txt
 90-10 bundles.txt

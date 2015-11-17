@@ -1,0 +1,14 @@
+# Parting Words
+
+We accomplished quite a lot in this book. We added the infrastructure to read and write license and trial information and transition the app as a whole into different states: registered, on trial, unregistered. As far as making features accessible, the resulting apps are secured.
+
+Of course every app can be cracked. License verification keys can be changed, or `licenseIsValid(_:)->Bool` can be replaced with a stub that always returns true. I am no security expert, neither am I a hacker. I wouldn't know how to do that. But I think it's not worth to worry too much about it. There's no opportunity like making 10x your current revenue just by securing your app. The opportunity to increase your revenue lies elsewhere: in great feature additions, in new software projects, in excellent customer support.
+
+What you've learned in this book is a big part of selling your software outside the Mac App Store. When you add the license verification and have your FastSpring account set up, you're ready to put your app out there for sale _today._ Congratulations!
+
+Once you get traction, it becomes easier to promote and sell your products. Until then you'll have to hustle, to find people who believe in your product, and you have to continue to make it better. Every over-night success has a long history. 
+
+Persevere. And get high quality feedback from a Mastermind group of helpful people to adjust your current course if needed. Sole developers and "solopreneurs" in general tend to be overly optimistic in their success. It's possible to "make it" on the internet nowadays. But you still have to be clever enough to take the right steps. Stupid mistakes and missed opportunities can put you back month after month.
+
+Again: congratulations for taking this first step towards your own freedom as a creative professional. You're awesome!
+
