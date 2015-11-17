@@ -216,3 +216,5 @@ That's all there is to adding a trial:
     * If it doesn't exist, create it with the current time as starting date and the trial duration as a means to compute `endDate`.
     * If it exists, show a notice how many trial days are left. If the trial period has passed, don't unlock the app.
 * Install a timer to fire `.TrialUp` when the `endDate` is reached. Should the user register in the meantime, make it so the timer doesn't fire the event.
+
+Adding a working `TrialTimer` is only part of the challenge. Adding a third `LicenseInformation` state changes the face of the app far more.

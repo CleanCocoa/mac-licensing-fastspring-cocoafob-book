@@ -23,12 +23,10 @@ We used `NSUserDefaults` for storage of license information already. I wrote `Tr
             UserDefaults.standardUserDefaults()
 
         public var currentTrialPeriod: TrialPeriod? {   
-            if let startDate = userDefaults
-                    .objectForKey("\(TrialPeriod.UserDefaultsKeys.StartDate)") 
-                    as? NSDate,
-                endDate = userDefaults
-                    .objectForKey("\(TrialPeriod.UserDefaultsKeys.EndDate)") 
-                    as? NSDate {
+            if let startDate = userDefaults.objectForKey(
+                    "\(TrialPeriod.UserDefaultsKeys.StartDate)") as? NSDate,
+                endDate = userDefaults.objectForKey(
+                    "\(TrialPeriod.UserDefaultsKeys.EndDate)") as? NSDate {
                 
                 return TrialPeriod(startDate: startDate, endDate: endDate)
             }
@@ -52,7 +50,7 @@ We used `NSUserDefaults` for storage of license information already. I wrote `Tr
     }
 
     extension TrialPeriod {
-        public enum UserDefaultsKeys: String, Printable {
+        public enum UserDefaultsKeys: String, CustomStringConvertible {
             case StartDate = "trial_starting"
             case EndDate = "trial_ending"
         
