@@ -1,189 +1,24 @@
 ## Embedding CocoaFob
 
-As of Swift 1.2, you still have to use the Objective-C code of the library. For Swift 2.0 and above, there's [native code available on GitHub][ccfobswift].
+For Swift 2 and above, CocoaFob provides a native implementation. If you use Swift 1.2 or Objective-C, refer to [the instructions in the appendix.](#cocoafob-objc)
 
-Include the following files from the `objc` folder to follow along the sample code:
+<!--ct: TODO prüf link-->
 
-* `CFobError.h`
-* `CFobError.m`
-* `CFobLicGenerator.h`
-* `CFobLicGenerator.m`
-* `CFobLicVerifier.h`
-* `CFobLicVerifier.m`
-* `decoder.c`
-* `decoder.h`
-* `encoder.c`
-* `encoder.h`
-* `NSData+PECrypt.h`
-* `NSData+PECrypt.m`
-* `NSString-Base64Extensions.h`
-* `NSString-Base64Extensions.m`
-* `NSString+PECrypt.h`
-* `NSString+PECrypt.m`
-* `URLCommand.h`
-* `URLCommand.m`
+I tend to add GitHub-based projects as submodules to my projects. That's how the [sample code](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob) works, too. I put all of them into an "External" folder. So from the project root of your project, these are the commands you'd have to enter at the command line:
 
-Drag & drop them into your project in Xcode. Since these are Objective-C files, Xcode will ask you if you want to have a bridging header if you have a Swift project, which I assume. Say "yes". Add `CFobLicGenerator.h` and `CFobLicVerifier.h` to the bridging header Xcode will have created for you.
+    $ mkdir External
+    $ cd External/
+    $ git submodule add git://github.com/glebd/cocoafob.git
 
-In order to compile the code from an age before Automatic Reference Counting was the standard, a few files have to have ARC disabled.
+Note that we won't pull code for the `CommandLine` dependency since we're not going to use the Swift command line utility to generate keys.
 
-![Disable ARC with this flag.](images/20-100-disable-arc.png)
+Alternatively, you can [download the code from GitHub](https://github.com/glebd/cocoafob/tree/master/swift/CocoaFob) and add the files manually.
 
-In your app target's settings, go to "Build Phases", select "Compile Sources", and disable ARC on `NSString+PECrypt.m` and `NSString-Base64Extensions.m`. To do so, double click in the "Compiler Flags" column to the right and enter `-fno-objc-arc` as the compiler flag.
+You're going to need the following files from the `swift/CocoaFob` subfolder:
 
-Your code should now compile again and the necessary CocoaFob classes should be available to your Swift project.
+* `CFUtil.swift`
+* `CocoaFobError.swift`
+* `CocoaFobLicVerifier.swift`
+* `CocoaFobStringExt.swift`
 
-[ccfobswift]: https://github.com/glebd/cocoafob/tree/master/swift
-
-
-## License Verifier
-
-As I mentioned already, the public key is used by your app to decrypt the license code and extract license information from it. 
-
-We will take the public key and put it into the app. Not as a file, but as a string -- hard coded.
-
-Recall the public key:
-
-{linenos=off,lang="text"}
-    -----BEGIN PUBLIC KEY-----
-    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
-    nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
-    Kaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU
-    HpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh
-    oBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf
-    UpIg
-    -----END PUBLIC KEY-----
-
-It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key.
-
-First, preserving newlines, the complete string will contain (line wraps are due to book page limits and indicated by the trailing `\`):
-
-{linenos=off,lang="text"}
-    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
-
-Note the trailing newline character.
-
-Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string into chunks. The obfuscation process could look like this:
-
-    func publicKey() -> String {
-        
-        var parts = [String]()
-        parts.append("MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtV")
-        parts.append("G14BUE1I5Q")
-        parts.append("aGesaf9PTC\nnmUlYMp4m7M")
-        parts.append("rVC2/YybXE")
-        parts.append("QlaILBZBmyw+A4Kps2k/T12q")
-        parts.append("L8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4Lu")
-        parts.append("TAkAG")
-        parts.append("RPr6HheNNnH9GQZGjCuv")
-        parts.append("6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZU")
-        parts.append("m8bGMQevt38P")
-        parts.append("iSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk")
-        parts.append("5dH")
-        parts.append("xh\noBm6kTBKsYk")
-        parts.append("xonpPlBrFJTJeyvZInHIKrd0N8Du")
-        parts.append("i3XKDtqrLWPIQcM0mWOj")
-        parts.append("YHUlf\nUpIg\n")
-    
-        let partialPublicKey = "".join(parts)
-    
-        return CFobLicVerifier.completePublicKeyPEM(partialPublicKey)
-    }
-
-`completePublicKeyPEM` reformats the string to look like the fully printed key above: with header and footer line. It doesn't actually verify anything yet -- that's why it's a static method on `CFobLicVerifier`, I guess.
-
-Now that we can hope the public key won't be found easily by someone looking at the binary who tries to circumvent the licensing process, we can use the `CFobLicVerifier` to verify license information.
-
-    public class LicenseVerifier {
-    
-        static let AppName = "MyNewApp"
-        let appName: String
-    
-        public convenience init() {
-        
-            self.init(appName: LicenseVerifier.AppName)
-        }
-    
-        // I like to provide an initializer where you can inject the `appName`
-        // because that's useful during tests.
-        public init(appName: String) {
-        
-            self.appName = appName
-        }
-    
-        public func licenseCodeIsValid(licenseCode: String, 
-            forName name: String) -> Bool {
-            // Same format as on FastSpring
-            let registrationName = "\(appName),\(name)"
-            let publicKey = self.publicKey()
-        
-            var error: NSError?
-            if let verifier = verifierWithPublicKey(publicKey, error: &error) {
-            
-                error = nil
-                let verified = verifier.verifyRegCode(licenseCode, 
-                    forName: registrationName, error: &error)
-            
-                if hasValue(error) {
-                    // handle error
-                }
-            
-                return verified
-            } else {
-                // handle optional public key error (programmer error)
-                assertionFailure("CFobLicVerifier could not be constructed")
-            }
-        
-            return false
-        }
-        
-        private func verifierWithPublicKey(publicKey: String, 
-            error errorPointer: NSErrorPointer) -> CFobLicVerifier? {
-    
-            let verifier = CFobLicVerifier()
-            let success = verifier.setPublicKey(publicKey, error: errorPointer)
-    
-            if !success {
-                return nil
-            }
-    
-            return verifier
-        }
-        
-        private func publicKey() -> String {
-            // ... see above ...
-        }
-    }
-
-The only public method `licenseCodeIsValid(_:, forName:)` returns true or false and has two failure points: first, the `CFobLicVerifier` can fail to be constructed because the public key is invalid. That's unlikely if we don't mess up constructing the string. Second, the license information don't match.
-
-If `verifierWithPublicKey(_: error:)` returns `nil`, licensing will fail and `licenseCodeIsValid` will return false, although this is most likely not a user error. If things worked fine during development, this could mean someone messed around with the binary. That's highly unlikely, mind you, but this is one point where you could catch that.
-
-With a working `CFobLicVerifier` instance, the result of `verifyRegCode(_:, forName:, error:)` matters. We could simply return it, but I wanted to encapsulate error handling.
-
-This time, the error pointer will not be populated with programmer errors. `verifyRegCode` will report why the license information couldn't be verified. Look at the predefined `CFobErrorCode`s:
-
-    enum _CFobErrorCode {
-    	CFobErrorCodeInvalidKey = -1,
-    	CFobErrorCodeCouldNotDecode = -2,
-    	CFobErrorCodeSigningFailed = -3,
-    	CFobErrorCodeCouldNotEncode = -4,
-    	CFobErrorCodeNoName = -5,
-    };
-
-`verifyRegCode` considers the license source template results to be the "name", whereas we talk about licensee's name and product name all the time. The combination of both, according to the license template we set up in FastSpring, is what CocoaFob needs for decrypting and verifying.
-
-Conversely, if that's empty or `nil`, `CFobErrorCodeNoName` will be raised. If this value is encrypted with a private key which doesn't match the built-in public key of the app, another error code will be used. And so on. 
-
-This is a good place to initialize presentation of an error message to inform the user.
-
-So that is all you need to do:
-
-* provide the public key,
-* take a licensee name string,
-* take a product name string,
-* combine both into a "registration name" according to the license template,
-* take a license code string,
-* pass the license code and registration name to `CFobLicVerifier` to obtain the result.
-
-You can find all of the files necessary to use  in the "License" group in the [sample projects](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob).
+Add them to your Xcode project. That's everything you need to do to prepare the project.

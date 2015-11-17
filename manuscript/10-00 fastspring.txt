@@ -2,6 +2,8 @@
 
 Head to FastSpring's [sign-up page](http://www.fastspring.com/sign-up) if you don't have an account already. This may take a little while even for the awesome people at FastSpring to set up manually for you.
 
+FastSpring will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to setup next.
+
 If you have an account set-up, great. You may proceed.
 
 If you still wait for your account approval, you may want to skim the following sections to get a feel for the process already. Then take a closer look at implementing license verification in code. You can at least prepare your app while you wait.

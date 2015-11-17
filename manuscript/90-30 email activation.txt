@@ -89,7 +89,7 @@ Customers will already receive their invoice via e-mail. There's no way to touch
 
 Go to your SpringBoard, select your product, and add a new fulfillment action. Select the first option for e-mail.
 
-The subject is set to something like: "Your #{orderItem.display} Delivery Information". Obviously, there's a template string included, which will expand to "New App", "Word Counter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
+The subject is set to something like: "Your #{orderItem.display} Delivery Information". Obviously, there's a template string included, which will expand to "My New App", "Word Counter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
 
 Set the the e-mail body to something along these lines:
 

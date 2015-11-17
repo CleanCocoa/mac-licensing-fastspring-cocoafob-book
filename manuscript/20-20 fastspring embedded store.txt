@@ -74,7 +74,7 @@ From `FsprgEmbeddedStoreMac/FsprgEmbeddedStore/`, add all the files except the "
 
 Disable ARC for the following files in "Compiler Sources" under the app target's "Build Phases" pane. Add the `-fno-objc-arc` flag to all FastSpring-related `.m` files in the list.
 
-![ARC disabled for the FastSpring files and CocoaFob files which cause build errors otherwise.](images/20-101-arc-disabled-fastspring-cocoafob.png)
+![ARC disabled for the FastSpring files files which cause build errors otherwise.](images/20-101-arc-disabled-fastspring-cocoafob.png)
 
 Now the test target will not find the header files by default, though.
 

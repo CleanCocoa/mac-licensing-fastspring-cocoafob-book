@@ -1,24 +1,71 @@
 # What This Book is About
 
-So you want to release a Mac app outside the Mac App Store.
+So you consider releasing a Mac app outside the Mac App Store.
 
-That's cool, because you will earn more per sale -- most store fronts on the market will take a cut between 6 and 10% only, as opposed to the 30% Apple takes.
+I think that's cool, because:
 
-On the other hand, Apple's App Stores are a very important marketplace where people discover new things. It's a place where some "go shopping."
+- You will earn more per sale -- most store fronts on the market will take a cut between 6 and 10% only, as opposed to the 30% Apple takes.
+- You will not be hampered by App Store Sandboxing restrictions: even though Sandboxing is said to be the way to go for the future, releasing a Sandboxed app in the App Store will impose even stricter limitations, like not having access to assistive devices, observing keyboard inputs, or registering Audio drivers.
+- You can publish updates more often and react to bugs quicker. When you release an update, it's live immediately.
+- You can add copy protection to you app. No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](http://www.macworld.com/article/1157018/appstore_licensing.html)
 
-Also, you have to take care of everything else: app updates are one thing, copy protection another. Usually, you'd implement some kind of license code verification.
+Of course the App Store offers cool benefits for you, too:
 
-In this book, you'll learn how to set up FastSpring as the store where people buy your software and obtain license codes automatically with every purchase.
+- Apple's App Stores are a very important marketplace where people discover new things. It's a place where some "go shopping."
+- Releasing an Update equals pushing a binary to the iTunes Connect web service. After is passed the review process (which takes about 7 days at the moment of writing this[^rev]), people can download it from one central place: the App Store application. 
 
-You'll also learn how to add license code verification to your app to unlock new features or end a time-based trial. After reading this book, you'll be able to quickly add license code verification to an existing app and keep out users who don't pay. You'll even be able to offer a store front from right within your application using FastSpring's _Embedded Store SDK_ which may increase the conversion from demo users to paid customers. 
+[^rev]: According to <http://appreviewtimes.com>
 
-There's even a part about implementing time-based trials in your app. These are the de facto standard to limit functionality of what was used to be called shareware. Keeping track of time is another functionality you have to add to your app but which can integrate into the existing license mechanism nicely.
+Distributing via the App Store is just so convenient. Eveyone can see your product and download and update from one central place. On the flip side, you lose more money per transaction and are bound to the strict App Store security policies.
 
-Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start. Users have to pay to unlock the full potential of the app. We won't cover that in much detail, because implementing this is similar to keeping non-paying users out. 
+So when you do everything on your own, you have to take care of app updates and copy protection with a licens keys, for example.
+
+In this book, you'll learn:
+
+- how to set up FastSpring as the store where people buy your software 
+- add automatic license key generation
+- implement license code verification in you app
+- create a time-based trial
+- offer in-app purchases
+
+I also added a quick tutorial on how to roll your own app updates to make this complete.
+
+This book is designed to make your job as developer who sells outside the Mac App Store just as simple as putting apps in it.
+
+After reading this book, you'll be able to quickly add license code verification to an existing app and keep out users who don't pay. You'll even be able to offer a store front from right within your application using FastSpring's _Embedded Store SDK_ which may increase the conversion from demo users to paid customers. All of this is designed to work as a drop-in: you add the files to your project and don't have to worry about the details anymore.
+
+Then there's the part about implementing time-based trials in your app. Time-based trials are the de facto standard to limit functionality of what was used to be called "shareware" in the '90s. Keeping track of time is another functionality you would have to add to your app but which I have taken care of. It integrates into the existing license mechanism nicely.
+
+Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start but potentially running forever. Users have to pay to unlock the full potential of the app. We won't cover that in much detail because it'll turn out that this is essentially an in-app purchase. 
 
 All in all, you only have to take the well-factored sample code of this book and copy the parts you want to use into your awesome app to get started. If your app is already functional, it may take you no more than half an hour to put your app under copy protection and add a time-based trial -- depending on your existing code, of course.
 
 The sample code will be written in the latest stable version of Swift. Both the CocoaFob code and FastSpring's SDK are available in Objective-C, so you only have to re-write the implementation inside the app.
+
+## Why FastSpring?
+
+In short, I picked FastSpring for my apps because of social proof.[^socproof]
+
+[^socproof]: Read about a small [survey from 2009](http://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where F
+
+Compared to other e-commerce solutions, FastSpring is still kind of young. Some obvious competitors to accept payments are:
+
+- Paddle
+- Avangate, e-sellerate, kagi
+- gumroad
+- PayPal
+
+PayPal will handle purchases, and that's it. Gumroad will also offer a simple store widget and lets you upload files.
+
+Kagi and e-sellerate are apt to create a real custom e-store. So is FastSpring. But what sets FastSpring apart is the great customer service: they offer you to take care of the initial store design _for free._
+
+FastSpring pays on time, twice a month, every month. I'm located in Germany, so I expected trouble when receiving payments from a California-based company -- but FastSpring handles payments to the European Union perfectly.
+
+Now Paddle is a different kind of competitor. Paddle centers around developer integration. They offer a simple SDK for trials, in-app purchases, and license verification. I tried them but didn't feel comfortable because of the lack of _control._ I couldn't reliably find out how their stuff is working. There was no way to issue test purchases from within the app to see if the right events are raised.
+
+FastSpring offers a test store front on the web and from within the app if you do in-app purchases. That's very convenient. Although the amount of control you have will make your job as a developer harder at first, once yu nailed it and connect the dots it's dead simple. 
+
+That's what this book is for: get all the obstacles out of your way so you can start using FastSpring in your app today.
 
 ## What You'll Learn in a Nutshell
 
@@ -43,10 +90,12 @@ CocoaFob
 : Source is available at: <https://github.com/glebd/cocoafob>
 
 Public Key
-: OpenSSL-generated hash used for 3rd parties to decrypt data. Used for e-mail to tell recipients it was really you who sent the mail. Used for license code verification in our case.
+: OpenSSL-generated random number used for 3rd parties to verify the data comes from you. Used for e-mail to tell recipients it was really you who sent the mail. Used for license code verification in our case.
 
 Private Key
-: OpenSSL-generated hash you have to, well, keep private. It's needed for encrypting data. Should be kept private because you can infer the public key from it.
+: OpenSSL-generated random number you have to, well, keep private. It's needed to create and sign the license key data. Should be kept private because you can infer the public key from it.[^ortiz] Still, we're going to need to give it to FastSpring for license code generation. So don't re-use this private key for anything else. We'll discuss this further in the next chapter.
+
+[^ortiz]: Thanks to Jorge D. Ortiz Fuentes for corrections of the key descriptions. For encryption/decryption of information, both keys can be used for both actions. But always keep the private key secure.
 
 License Code
 : The string of characters your customers will receive after they buy your app. 

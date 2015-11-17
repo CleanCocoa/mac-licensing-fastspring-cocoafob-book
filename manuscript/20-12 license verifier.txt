@@ -1,0 +1,159 @@
+
+## License Verifier
+
+As I mentioned already, the public key is used by your app to decrypt the license code and extract license information from it. 
+
+We will take the public key and put it into the app. Not as a file, but as a string -- hard coded. Files in your app bundle can be replaced easily, so you better ensure the key is embedded in the binary to raise the bar a bit.
+
+Recall the public key:
+
+{linenos=off,lang="text"}
+    -----BEGIN PUBLIC KEY-----
+    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC
+    nmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED
+    Kaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU
+    HpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh
+    oBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf
+    UpIg
+    -----END PUBLIC KEY-----
+
+It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key to fragment the information and obfuscade the key's representation in the binary.
+
+First, preserving newlines, the complete string will contain (line wraps are due to book page limits and indicated by the trailing `\`):
+
+{linenos=off,lang="text"}
+    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
+
+Note the trailing newline character.
+
+Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string into chunks. The obfuscation process could look like this:
+
+    private func publicKey() -> String {
+        
+        var parts = [String]()
+        parts.append("-----BEGIN DSA PUBLIC KEY-----\n")
+        parts.append("MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtV")
+        parts.append("G14BUE1I5Q")
+        parts.append("aGesaf9PTC\nnmUlYMp4m7M")
+        parts.append("rVC2/YybXE")
+        parts.append("QlaILBZBmyw+A4Kps2k/T12q")
+        parts.append("L8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4Lu")
+        parts.append("TAkAG")
+        parts.append("RPr6HheNNnH9GQZGjCuv")
+        parts.append("6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZU")
+        parts.append("m8bGMQevt38P")
+        parts.append("iSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk")
+        parts.append("5dH")
+        parts.append("xh\noBm6kTBKsYk")
+        parts.append("xonpPlBrFJTJeyvZInHIKrd0N8Du")
+        parts.append("i3XKDtqrLWPIQcM0mWOj")
+        parts.append("YHUlf\nUpIg\n")
+        parts.append("-----END DSA PUBLIC KEY-----\n")
+    
+        let publicKey = parts.joinWithSeparator("")
+        
+        return publicKey
+    }
+
+Now that we can hope the public key won't be found too easily by someone  trying to circumvent the licensing process, we can use the `CFobLicVerifier` to verify license information.
+
+    public class LicenseVerifier {
+        static let AppName = "MyNewApp"
+        let appName: String
+    
+        public convenience init() {
+            self.init(appName: LicenseVerifier.AppName)
+        }
+    
+        public init(appName: String) {
+            self.appName = appName
+        }
+    
+        public func licenseCodeIsValid(licenseCode: String, 
+            forName name: String) -> Bool {
+        
+            // Same format as on FastSpring
+            let registrationName = "\(appName),\(name)"
+            let publicKey = self.publicKey()
+        
+            guard let verifier = verifierWithPublicKey(publicKey) else {
+                assertionFailure("CocoaFobLicenseVerifier cannot be constructed")
+                return false
+            }
+        
+            return verifier.verify(licenseCode, forName: registrationName)
+        }
+    
+        private func verifierWithPublicKey(publicKey: String) 
+            -> CocoaFobLicVerifier? {
+
+            return CocoaFobLicVerifier(publicKeyPEM: publicKey)
+        }
+    
+        private func publicKey() -> String {
+            // ... as above ...
+        }
+    }
+
+The implementation is pretty simple. The construction of a `CocoaFobLicVerifier` can fail when the public key does not satisfy the requirements and is broken. Apart from that, passing on the result of `verify(_:, forName:)` is straigthforward.
+
+So that is all you need to do:
+
+* provide the public key,
+* take a licensee name string,
+* take a product name string,
+* combine both into a "registration name" according to the license template,
+* take a license code string,
+* pass the license code and registration name to `CocoaFobLicVerifier` to obtain the result.
+
+You can find all of the files necessary to use in the "License" group in the [sample projects](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob).
+
+The types I use in these projects are:
+
+* `License`: representation of licensee name and license code.
+* `LicenseProvider`: reads the registration information for example from the app's `NSUserDefaults` dictionary.
+* `LicenseWriter`: counterpart to write the data.
+* `LicenseVerifier`: the object we have just discussed to verify the combination of licensee name, license code, application name, and public key. 
+* `LicenseInformation`: the enum which represents the state of the app as unregistered/registered in the first sample, and on-trial/trial-up/registered in the second. 
+* `LicenseInformationProvider`: exposes `currentLicenseInformation` as a means to determine which state the app is in given the data from `LicenseProvider` and the result from `LicenseVerifier`.
+* `LicenseChangeBroadcaster`: notifies objects of the app about state changes during launch to unlock the app or when the trial is up (only in the second sample project).
+
+All of them are very focused to accomplish a single task. `LicenseProvider` for example reads information from `NSUserDefaults` and constructs `License` value objects:
+
+    public class LicenseProvider {
+        public init() { }
+    
+        lazy var userDefaults: NSUserDefaults = 
+            UserDefaults.standardUserDefaults()
+    
+        public var currentLicense: License? {
+        
+            guard let name = userDefaults.stringForKey(
+                    "\(License.UserDefaultsKeys.Name)"),
+                licenseCode = userDefaults.stringForKey(
+                    "\(License.UserDefaultsKeys.LicenseCode)") else {
+                
+                return .None
+            }
+        
+            return License(name: name, licenseCode: licenseCode)
+        }
+    }
+
+    public struct License {
+        public let name: String
+        public let licenseCode: String
+    
+        public init(name: String, licenseCode: String) {
+            self.name = name
+            self.licenseCode = licenseCode
+        }
+    
+        public enum UserDefaultsKeys: String, CustomStringConvertible {
+            case Name = "licensee"
+            case LicenseCode = "license_code"
+        
+            public var description: String { return rawValue }
+        }
+    }
+    

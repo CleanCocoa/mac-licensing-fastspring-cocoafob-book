@@ -2,22 +2,26 @@
 
 Sign in to your [SpringBoard](https://springboard.fastspring.com/) where you can manage your business things.
 
-![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-050-springboard.png)
-
 After signing in, you have to set up your app for sale. 
 
 That means we will create a new product. FastSpring offers selling of any digital good, be it software, music, e-books, subscriptions -- you name it. FastSpring even allow to configure shipment of CDs, for example. So don't look for the words "application" or "software" when you navigate around your SpringBoard. FastSpring's terminology focuses on the more general term "products".
+
+![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-050-springboard.png)
 
 The SpringBoard is generally divided into the topmost navigation, a larger content section to the left, and a smaller info and action section in a sidebar to the right.
 
 Pick "Create Product" from the _Actions_ sidebar to the right. If you have already prepared an app in the past, skip to the next section where we set up license code generation.
 
-I am going to call the app of this book, well, **"New App"**.
+I am going to call the app of this book, well, **"My New App"**.
 
-I won't set a different display name or customize the URL path. These settings are up to you if you want to experiment with them. Make sure to add a price, though, in order for test checkouts to work. Products without a price don't seem to work there.
+I won't set a different display name or customize the URL path. These settings are up to you if you want to experiment with them.
+
+Make sure to add a price, though, in order for test checkouts to work. Products initially don't have a price attribute. Those without a price don't seem to work when testing checkouts from within the app at all.
 
 Whatever you configure your product to look like, most of it won't matter for our case -- _except the name._ The product name will be used for license code generation and automatic order processing in the app. If all that sounds like mumbo-jumbo to you, don't worry, we'll get there. Just make sure you know your app's name.
 
 ![Springboard showing the recently created product](images/10-100-app-created.png)
 
-You may want to leave the product in "Test" mode until you finished everything. "Active" products are visible on your store. "Test" products are invisible except for you. They work well with test checkouts on the store and from within the app, though. FastSpring is very flexible and you can test the heck out of the store without consequences like being billed for a checkout.
+You may want to leave the product in "Test" mode until you finished everything. "Active" products are visible on your store. "Test" products are invisible except for you. They work well with test checkouts on the store and from within the app, though. 
+
+FastSpring is very flexible and you can test the heck out of the store without consequences like being billed for a checkout. In test checkouts you can try promo codes, verify that product- or time-limited offers work (like 10% off through all November for my *Word Counter* but not for *Move!* app). FastSpring's store customizations are very powerful -- and you can check all of them in advance to going live.

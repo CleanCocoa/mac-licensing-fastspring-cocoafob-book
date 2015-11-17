@@ -4,14 +4,21 @@
 
 You will find license code generation under "Fulfillment Actions" at the bottom.
 
-There's a plethora of actions to chose from. You can send customizable e-mails with the license code (which I recommend), you can sign an e-book with the customer's name as a means to protect the PDF from being copied, or you can ship a volume with the software as a physical object. I find PDF signing pretty cool if you want to sell e-books and worry about file-sharers. Then again there are websites which buy books, sign them with their URL, and give the copy away for free. They probably monetize through ads.
-
-So add a fulfillment action, pick "Generate a License" from the options, and use CocoaFob. Hit "Next".
-
-Pick a name for CocoaFob to use for the licenses. This doesn't have to be the same as your FastSpring product ID or product name (`newapp` or "New App" in my case, respectively).
-
-In fact, you can use the product name field of the license generator to include versioning information or whatever you want to differentiate generated licenses.
+<!--ct: TODO link auf appendix email-->
+There's a plethora of actions to choose from. You can send customizable e-mails with the license code (which I recommend you do), you can sign an e-book with the customer's name as a means to protect the PDF from being copied, or you can ship a volume with the software as a physical object. I find PDF signing pretty cool if you want to sell e-books and worry about file-sharers. Then again there are websites which buy books, sign them with their URL, and give the copy away for free. They probably monetize through ads. So don't expect too much protection from this.
 
 ![The license generation setup form](images/10-102-license-form.png)
 
-We will provide a value for the "DSA Private Key" thing in just a moment.
+Set up license generation:
+
+* Add a fulfillment action, 
+* pick "Generate a License" from the options, and select CocoaFob. 
+* Hit "Next".
+* Pick a name for CocoaFob to use for the licenses. 
+* We will provide a value for the "DSA Private Key" thing in just a moment.
+
+The name doesn't have to be the same as your FastSpring product ID or product name (`newapp` and "My New App" in my case, respectively). It can be an arbitrary string to your liking.  You can use the product name field of the license generator to include versioning information or whatever you want to differentiate generated licenses.
+
+Potential hackers will probably have an easier time scanning your binary for "newapp" or a variant of your app's name than, say, "/g}eJ3U8bG29r+wfcZ;" when they want to crack the license validation. We developers are humans and prefer readable names. But in the end the value of the name field doesn't really matter.
+
+Consider both options. Remember that every action you take also sends a message to your self. Which message do you want to send yourself: being paranoid about being hacked, securing access to your goods, or giving the gift of your app to the world? I personally want to spread my stuff; I'm not worried about people cracking my apps because those who really use it professionally will pay anyway; and I want to teach people that buying and supporting developers matters (in case they didn't know). That's why I don't create freeware applications most of the time. In the end, it's all about your values. Better be honest with yourself.

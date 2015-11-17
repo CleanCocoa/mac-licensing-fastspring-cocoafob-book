@@ -4,19 +4,20 @@ CocoaFob licensing works with pairs of private--public keys much like you use fo
 
 Your app will ship with the public key embedded in the app bundle. Customers will buy your application via FastSpring, where the private key is used to generate a new license code.
 
-The license information is encrypted on FastSpring's server. Your app will decode the information from the license code the customer receives. With the decrypted data, it can start the verification process.
+W> Since you'll be uploading the private key to FastSpring, it won't be _private_ anymore. FastSpring's security problems thus become yours. Make sure you don't use this key for anything else in your life, ever. Create new key pairs for every app you develop. Consequently, don't just use existing private keys and the take five minutes to generate new ones as detailled below.[^ortiz]
 
-FastSpring will take care of all the license code generation during the checkout process. This is part of the "order fulfillment".
+The license information, which consists of a randomized value and the user name, for example, is encrypted on FastSpring's server into a license code. Your app will decode the information from the license code the customer receives. With the decrypted data, it can start the verification process.
 
 First, we need the private key to complete the form. 
 
 Switch to your favorite terminal emulator (or use the default Terminal.app of Mac OS X) to create this key.
 
+[^ortiz]: Again, thanks to Jorge D. Ortiz Fuentes for the heads up and for clarifying the implications.
+
+
 ### Generating Keys in the Terminal
 
-We're going to generate a private key and extract a public key from it using OpenSSL. I encourage you to do this for your app according to this guide and keep the results tucked away somewhere safe. I'll provide the keys used for the awesome "New App" app both here in the book and in the sample code package.
-
-<!--ct: TODO check: is this a warning box?-->
+We're going to generate a private key and extract a public key from it using OpenSSL. I encourage you to do this for your app according to this guide and keep the results tucked away somewhere safe. I'll provide the keys used for the awesome "My New App" app both here in the book and in the sample code package.
 
 W> You should not, under no circumstances, re-use the keys printed in this book. That'd be as good as having no licensing protection at all because everyone would be able to generate license codes with these SSL keys themselves.
 
@@ -79,15 +80,15 @@ Remember: Don't share the _private key_ with anyone. Make sure you don't lose it
 
 ### What if you lose one or both keys?
 
-When you use your private key, generating a new private key will result in a mess: every existing license will be invalid when checked with a new key.
+Your app is bundled with the public key. As long as you don't lose the source code of your app, you'll be able to ship updates to existing customers. The embedded public key will continue to work with license codes generated with the matching private key. When you lose the public key, you can always generate a new one from the private key.
 
-Your app will bundle with the public key. As long as you don't lose it's source code, you'll be able to ship updates to existing customers. You will not be able to create new licenses if, say, you delete the old one at FastSpring and don't have a local copy.
+Thinking about it in object terms, license codes are coupled to private keys, not to public keys. Public keys are coupled to private keys, too. Both license codes and public keys are replacable. The private key is really important, though.
 
-License codes generated with a new private key won't match with the old public key.
+When you loose your private key, generating a new private key will cause some trouble. While existing licenses will still work with the old public key, license codes generated with a new private key will require you add (and not replace) the resulting public key to your app. The old public key will be needed to validate existing customer's license codes.
 
-At best, you can keep the existing code for checking licenses around if the old public key is still available in your source. You'll have to add a second instance with a new public key to support new customers, though.
+In short, when you lose your private key, you cannot re-create it and need to add a similar license code validation mechanism with a new public key _next to the existing one._
 
-Losing both keys is going to be a pretty hard blow for your business. This entails you lose the source code for your app, too, or at least the parts dedicated to licensing. You will need to migrate existing users to new license codes in that case. That's quite a hassle for both sides.
+When you lose both private and public keys for some reason, you cannot continue to support existing licenses, either. Only then will you have to provide new license codes to existing customers to migrate them to the new validator. In every other case it suffices to add a second validation try with new keys.
 
 Now that you know just how important it is to secure these codes, do everything in your power to keep them safe and cozy.
 

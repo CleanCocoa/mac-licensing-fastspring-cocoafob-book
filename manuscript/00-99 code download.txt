@@ -20,11 +20,11 @@ As the project navigator reveals, I have taken quite an effort to structure the 
 {float=left}
 ![`Trial-Expire-While-Running` files](images/00-050-code-org.png)
 
-The root folder of the project contains the obligatory `AppDelegate`, an `Alerts` vendor, and two major use case objects: `RegisterApplication` and `PurchaseLicense`, both responsible for what it says on the tin.
+The root folder of the project contains the obligatory `AppDelegate`, an `Alerts` factory, and two major use case objects: `RegisterApplication` and `PurchaseLicense`, both responsible for what it says on the tin.
 
 There are six major groups in the time-trial enabled sample app:
 
-**Shared**: Extensions of Swift's standary library which provide useful features; also including a `NSUserDefaults` wrapper used extensively during tests.
+**Shared**: Extensions of Swift's standard library which provide useful features; also including a `NSUserDefaults` wrapper used extensively during tests.
 
 **Trial**: Contains infrastructure to store and read trial information and install the trial timer.
 
