@@ -9,12 +9,13 @@ I think that's cool, because:
 - You can publish updates more often and react to bugs quicker. When you release an update, it's live immediately.
 - You can add copy protection to you app. No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](http://www.macworld.com/article/1157018/appstore_licensing.html)
 - You can issue discounts: student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales, you name it. I recently gave away one-time 70% discount coupons to people who had trouble with my product after their problem was solved when I thought they liked the product.
+- You will know your customers and get in touch with them. This saved my behind once already when my app wouldn't update automatically and I wanted to tell my customers how to get the latest version. Same holds true for special offers or upselling existing customers.
 
 D> Or you can issue what Craig Scott of toketaWare calls "good will discounts." There are people who'll pay as long as they think it's a good deal. There are people who are angry if they think your product is too: give them a few percent off to convert them to paying customers. 
 D>
-D>"Quite often your angriest customer can be 'turned' into your most vociferous advocate. I don't like 'giving grease to the squeaky wheel' but it does work!"
+D>The surprise can be very effective: "Quite often your angriest customer can be 'turned' into your most vociferous advocate. I don't like 'giving grease to the squeaky wheel' but it does work!"
 D>
-D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's your product. If you want to do someone a favor and discount it -- do it.
+D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's your product. If you want to do someone a favor and offer her a discount then go ahead and do it.
 
 [^vat]: Say you sell an app for €9.99 in Germany. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- wheras the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
 
@@ -65,6 +66,20 @@ Compared to other e-commerce solutions, FastSpring is still kind of young. Some 
 - PayPal and Stripe
 
 PayPal and Stripe will handle purchases, and that's it. Figuring out VAT yourself is not fun and the time needed to make the store really do its job isn't worth the lower transaction fee.
+
+D> Pieter Omvlee revealed that Bohemian Coding, creators of the infamous Sketch design tool, initially sold via PayPal around 8 years ago. Bohemian Coding moved to FastSpring because of the better features, namely handling VAT automatically. Even though Sketch was sold exclusively on the Mac App Store when Apple opened its doors, after re-introducing FastSpring for volume licenses it turns out their own FastSpring-based store performs better than the Mac App Store.
+D> 
+D> Philip Goward, founder of Smile, calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it.
+D>
+D> If you build a great app targeted at professionals with "pro-pricing" around $100 or above, once you have build an audience for your product the oft-cited discoverability benefit of selling on the Mac App Store becomes miniscule. Having full control over sales and customer service then becomes more important.
+
+* initial trial algorithm stored an NSDate for 30 days in the future; nowadays it involves a server connection
+    * cracking happens by popularity not by price
+* moved to FastSpring for better features
+    * they handle VAT, which is a big plus over manual payment processing
+* jumped on the MAS exclusively when it was new
+* re-introduced FastSpring for volume licenses
+* nowadays make more money selling through FastSpring than the Mac App Store
 
 Gumroad will also offer a simple store widget and lets you upload files. Credit cards work way better here than with PayPal, but not everyone around the world has a credit card in the first place -- and I'm not talking about lesser developed countries: It's quite rare to know someone in Germany in 2015 with a credit card.
 
