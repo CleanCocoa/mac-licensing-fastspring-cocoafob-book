@@ -77,20 +77,13 @@ D> Tyler Hall started his business by selling VirtualHostX via PayPal from 2007-
 D>
 D> Stuff like that still happens to very few people using amazon to sell books or as affiliate partners, for example. I guess this is due to the fact that these companies are so huge and worry about their customers first and foremost -- which is not you. To an e-commerce provider you as the store owner are the primary customer. That's a huge difference.
 
-
-* initial trial algorithm stored an NSDate for 30 days in the future; nowadays it involves a server connection
-    * cracking happens by popularity not by price
-* moved to FastSpring for better features
-    * they handle VAT, which is a big plus over manual payment processing
-* jumped on the MAS exclusively when it was new
-* re-introduced FastSpring for volume licenses
-* nowadays make more money selling through FastSpring than the Mac App Store
-
 Gumroad will also offer a simple store widget and lets you upload files. Credit cards work way better here than with PayPal, but not everyone around the world has a credit card in the first place -- and I'm not talking about lesser developed countries: It's quite rare to know someone in Germany in 2015 with a credit card.
 
 Kagi and e-sellerate are apt to create a real custom e-stores. So is FastSpring. All of these take care of handling VAT for you. But what sets FastSpring apart is the great customer service: they offer you to take care of the initial store design _for free._ They are super responsive, and their dashboard is very powerful.
 
 FastSpring pays on time, twice a month, every month. I'm located in Germany, so I expected trouble when receiving payments from a California-based company -- but FastSpring handles payments to the European Union perfectly. You can even set up your store to accept money via wire transfer or direct deposit next to PayPal and credit cards. Their [list of payment methods](http://www.fastspring.com/payment-methods-and-security) is huge.
+
+D> Ironic Software use Kagi and FastSpring next to each other: having two stores (plus the Mac App Store) surprisingly results in more sales. FastSpring is Tom Andersen's favorite, though, because the backend is so nice to use.
 
 Now Paddle is a different kind of competitor. Paddle centers around developer integration wheras FastSpring is an e-commerce store aware of software developer's needs without centering their service around folks like you and me.
 
