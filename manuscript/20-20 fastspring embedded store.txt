@@ -107,7 +107,7 @@ Nearly all of the work will be done in a class which implements `FsprgEmbeddedSt
 * `didLoadStore(url: NSURL!)`
 * `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
 
-
+D> Tyler Hall creates VirtualHostX and he thinks the embedded store is a pretty awful webview wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store anytime when it can be implemented with native Cocoa controls using a web API.
 
 ### Order Confirmation View
 
