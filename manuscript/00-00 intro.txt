@@ -10,7 +10,11 @@ I think that's cool, because:
 - You can add copy protection to you app. No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](http://www.macworld.com/article/1157018/appstore_licensing.html)
 - You can issue discounts: student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales, you name it. I recently gave away one-time 70% discount coupons to people who had trouble with my product after their problem was solved when I thought they liked the product.
 
-D> Or you can issue what Craig Scott of toketaWare calls "good will discounts." There are people who'll pay as long as they think it's a good deal. There are people who are angry if your product is too expensive in their eyes: give them a discount coupon of a few percent off to convert them to paying customers. Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's your product. If you want to do someone a favor and discount it -- do it.
+D> Or you can issue what Craig Scott of toketaWare calls "good will discounts." There are people who'll pay as long as they think it's a good deal. There are people who are angry if they think your product is too: give them a few percent off to convert them to paying customers. 
+D>
+D>"Quite often your angriest customer can be 'turned' into your most vociferous advocate. I don't like 'giving grease to the squeaky wheel' but it does work!"
+D>
+D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's your product. If you want to do someone a favor and discount it -- do it.
 
 [^vat]: Say you sell an app for €9.99 in Germany. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- wheras the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
 
