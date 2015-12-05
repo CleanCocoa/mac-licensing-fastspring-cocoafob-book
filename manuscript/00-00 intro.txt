@@ -30,6 +30,10 @@ Distributing via the App Store is just so convenient. Eveyone can see your produ
 
 So when you do everything on your own, you have to take care of app updates and copy protection with a licens keys, for example. To figure all that out takes quite some time. I wrote this book to save you the days of research, implementing and testing.
 
+D> Philip Goward, founder of Smile, calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it.
+D>
+D> If you build a great app targeted at professionals with "pro-pricing" around $100 or above, once you have build an audience for your product the oft-cited discoverability benefit of selling on the Mac App Store becomes miniscule. Having full control over sales and customer service then becomes more important.
+
 In this book, you'll learn:
 
 - how to set up FastSpring as the store where people buy your software 
@@ -69,9 +73,10 @@ PayPal and Stripe will handle purchases, and that's it. Figuring out VAT yoursel
 
 D> Pieter Omvlee revealed that Bohemian Coding, creators of the infamous Sketch design tool, initially sold via PayPal around 8 years ago. Bohemian Coding moved to FastSpring because of the better features, namely handling VAT automatically. Even though Sketch was sold exclusively on the Mac App Store when Apple opened its doors, after re-introducing FastSpring for volume licenses it turns out their own FastSpring-based store performs better than the Mac App Store.
 D> 
-D> Philip Goward, founder of Smile, calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it.
+D> Tyler Hall started his business by selling VirtualHostX via PayPal from 2007--2009, too. But he switched once a friend of his was locked out of PayPal due to "suspicious" activity. Imagine your sales going strong, then suddenly your payment processor blocks your account. That equals sudden death or at least prolonged coma for your business.
 D>
-D> If you build a great app targeted at professionals with "pro-pricing" around $100 or above, once you have build an audience for your product the oft-cited discoverability benefit of selling on the Mac App Store becomes miniscule. Having full control over sales and customer service then becomes more important.
+D> Stuff like that still happens to very few people using amazon to sell books or as affiliate partners, for example. I guess this is due to the fact that these companies are so huge and worry about their customers first and foremost -- which is not you. To an e-commerce provider you as the store owner are the primary customer. That's a huge difference.
+
 
 * initial trial algorithm stored an NSDate for 30 days in the future; nowadays it involves a server connection
     * cracking happens by popularity not by price
