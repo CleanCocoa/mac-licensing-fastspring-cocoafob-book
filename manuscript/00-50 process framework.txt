@@ -3,7 +3,7 @@
 Copy protection of applications through licensing is all about handling transitions from unactivated to activated. Since there's going to be quite a bit of code involved in implementing this, it pays off to do it in a clean way and represent app state expressively.
 
 With Swift, it's trivial to represent the state as an enum with an associated value:
-    
+
     enum LicenseInformation {
         case Registered(License)
         case Unregistered

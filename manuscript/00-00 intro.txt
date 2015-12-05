@@ -47,9 +47,11 @@ The sample code will be written in the latest stable version of Swift. I'll upda
 
 ## Why FastSpring?
 
-In short, I picked FastSpring for my apps because of social proof.[^socproof]
+I> I'm not at all affiliated with FastSpring. I love their service and got in touch when I was finishing the book -- and they in turn loved this book. So we collaborate on spreading the word. Not because they pay me (they don't) but because I believe "making it" with Mac apps is possible, and that using FastSpring will help get there.
 
-[^socproof]: Lots of indie teams I respect for years have used FastSpring, so I figured they do a good job. Also, you can read about a small [survey from 2009](http://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where FastSpring scored quite high.
+A few years ago, I picked FastSpring to sell my apps mostly because of social proof. Lots of indie teams I respected for years already used FastSpring, so I figured their service was a good fit and gave it a spin.[^socproof] I still love their service. That's why I wrote this book to help you become independent from Apple's stores.
+
+[^socproof]: Also, you can read about a small [survey from 2009](http://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where FastSpring scored quite high.
 
 Compared to other e-commerce solutions, FastSpring is still kind of young. Some obvious competitors to accept payments are:
 
