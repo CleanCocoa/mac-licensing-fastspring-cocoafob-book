@@ -1,6 +1,10 @@
 # Sample App 2: Adding a Time-Based Trial
 
-Licensing now just works. But to add a time-based trial to your app, you have to change `LicenseInformation` a bit and add a third intermediate state:
+Licensing now just works. But having to buy an app without test-driving it is not very comfortable for your users. Especially if your application costs more than $10, which may be considered to be the threshold of impulse purchases, users will want to find out if your product really is for them.
+
+That's where trials come into play. You offer new users a test drive for a limited time so they can decide if they want to keep using the product. Your trial period should be long enough to make your app part of your user's lives or they will shrug the purchase dialog off too easily.
+
+To add a time-based trial to your app, you have to change `LicenseInformation` a bit and add a third intermediate state:
 
     enum LicenseInformation {
         case Registered(License)

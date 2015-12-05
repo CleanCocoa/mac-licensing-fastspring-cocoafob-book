@@ -8,7 +8,7 @@ Did you know that some of the underlying algorithms not only make players stagna
 
 Anyway, I don't consider these to be games. User joy is not their topmost priority. They're not designed to be challenging and rewarding for the player. They are designed to be impossible without taking money on a periodical basis.
 
-_But_ there's in-app purchases in productivity apps and other non-"game" category apps nowadays, too. I don't know about abuse on that front, so we're still pretty safe to consider this as an option.
+_But_ there's in-app purchases in productivity apps and other non-game category apps nowadays, too. I don't know about abuse on that front, so we're still pretty safe to consider this as an option.
 
 FastSpring allows you to implement these using the embedded store SDK. You just have to think outside the box a bit.
 

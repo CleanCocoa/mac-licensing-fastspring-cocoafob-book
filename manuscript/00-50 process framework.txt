@@ -26,6 +26,4 @@ It's up to you how you define the associated `License` type. I like licenses to 
         let licenseCode: String
     }
 
-In a later chapter, we will expand `LicenseInformation` to recognize trial mode, which equals unregistered without blocking the app, from plainly unregistered. Even when I think hard, I cannot come up with a fourth case, so that's going to be it.
-
-We will start with setting up the app. Then we'll implement a simple license check in the app's startup routine which determines if it is allowed to run. Last, we're going to add a trial mode as a soft alternative.
+We will start with setting up the app in your FastSpring dashboard in the next chapter. Then we'll implement a simple license check in the app's startup routine which determines if it is allowed to run. Last, we're going to add a trial mode as a soft alternative.
