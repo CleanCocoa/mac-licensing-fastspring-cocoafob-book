@@ -2,6 +2,8 @@
 
 So you consider releasing a Mac app outside the Mac App Store.
 
+Fantastic!
+
 I think that's cool, because:
 
 - You will earn more per sale -- most store fronts on the market will take a cut between 6 and 10% only, as opposed to the 30% Apple takes _after taxes_.[^vat]
@@ -17,7 +19,7 @@ D>The surprise can be very effective: "Quite often your angriest customer can be
 D>
 D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's a mindset of suffering. Since the app is your product, if you want to do someone a favor and offer her a discount then go ahead and do it. They'll be thankful for it. In both cases, you may win their hearts, which is good to keep a business running.
 
-[^vat]: Say you sell an app for €9.99 in Germany. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- wheras the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
+[^vat]: Say you sell an app for €9.99 in Germany. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- whereas the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
 
 Of course the App Store offers cool benefits for you, too:
 
@@ -26,7 +28,7 @@ Of course the App Store offers cool benefits for you, too:
 
 [^rev]: According to <http://appreviewtimes.com>
 
-Distributing via the App Store is just so convenient. Eveyone can see your product and download and update from one central place. On the flip side, you lose more money per transaction and are bound to the strict App Store security policies.
+Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. On the flip side, you lose more money per transaction and are bound to the strict App Store security policies.
 
 So when you do everything on your own, you have to take care of app updates and copy protection with a licens keys, for example. To figure all that out takes quite some time. I wrote this book to save you the days of research, implementing and testing.
 
@@ -85,7 +87,7 @@ FastSpring pays on time, twice a month, every month. I'm located in Germany, so 
 
 D> **Ironic Software** use Kagi and FastSpring next to each other: having two stores (plus the Mac App Store) surprisingly results in more sales. FastSpring is Ironic's Tom Andersen's favorite, though, because the backend is so nice to use.
 
-Now Paddle is a different kind of competitor. Paddle centers around developer integration wheras FastSpring is an e-commerce store aware of software developer's needs without centering their service around folks like you and me.
+Now Paddle is a different kind of competitor. Paddle centers around developer integration whereas FastSpring is an e-commerce store aware of software developer's needs without centering their service around folks like you and me.
 
 Paddle offer a simple SDK for trials, in-app purchases, and license verification. Their service seemed to fit perfectly, so I gave it a spin in 2013. I tried the SDK in my first shipping app and learned a lot along the way -- but I didn't feel comfortable because of the lack of _control._ I couldn't reliably find out how their stuff is working. There was no way to issue test purchases from within the app to see if the right events are raised. So in the end I didn't use Paddle at all.
 

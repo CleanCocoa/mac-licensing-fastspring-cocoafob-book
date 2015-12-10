@@ -15,7 +15,7 @@ D> The most interesting advice he gave me to share with you is this: display the
 D> 
 D> I'll certainly have a look at the effect of this change in my own applications. Keep in mind though that having to click through too many dialog boxes on first launch can just as well ruin the initial user experience.
 
-The embedded store SDK provides callbacks to interactions with the FastSpring web store. We're going to upload a different stylesheets so the embedded store looks less ugly. You could even customize it to even better mimick Mac OS X's design, but that'd most likely cause confusion among users because web views just don't behave exactly like regular windows and controls.
+The embedded store SDK provides callbacks to interactions with the FastSpring web store. We're going to upload a different stylesheets so the embedded store looks less ugly. You could even customize it to even better mimic Mac OS X's design, but that'd most likely cause confusion among users because web views just don't behave exactly like regular windows and controls.
 
 We can expect major changes to FastSpring's backend to make working with their service better and interact with an API programmatically in the future. In their new platform, FastSpring provides a client-side JavaScript library backed by RESTful API calls to enable developers to customize many aspects of the shopping and checkout experience.  Native wrappers for these capabilities are planned for 2016, Mike Smith, CTO of FastSpring told me.
 
@@ -113,7 +113,7 @@ Nearly all of the work will be done in a class which implements `FsprgEmbeddedSt
 * `didLoadStore(url: NSURL!)`
 * `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
 
-D> **Tyler Hall** creates VirtualHostX and he thinks the embedded store is a pretty awful webview wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store anytime when it can be implemented with native Cocoa controls using a web API.
+D> **Tyler Hall** creates VirtualHostX and he thinks the embedded store is a pretty awful web-view wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store anytime when it can be implemented with native Cocoa controls using a web API.
 
 ### Order Confirmation View
 
