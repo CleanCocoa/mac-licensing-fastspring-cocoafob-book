@@ -4,8 +4,9 @@
 
 You will find license code generation under "Fulfillment Actions" at the bottom.
 
-<!--ct: TODO link auf appendix email-->
-There's a plethora of actions to choose from. You can send customizable e-mails with the license code (which I recommend you do), you can sign an e-book with the customer's name as a means to protect the PDF from being copied, or you can ship a volume with the software as a physical object. I find PDF signing pretty cool if you want to sell e-books and worry about file-sharers. Then again there are websites which buy books, sign them with their URL, and give the copy away for free. They probably monetize through ads. So don't expect too much protection from this.
+<!-- TODO prüf crosslink-->
+
+There's a plethora of actions to choose from. You can send customizable e-mails with the license code (which I recommend you do, [see the appendix](#email)), you can sign an e-book with the customer's name as a means to protect the PDF from being copied, or you can ship a volume with the software as a physical object. I find PDF signing pretty cool if you want to sell e-books and worry about file-sharers. Then again there are websites which buy books, sign them with their URL, and give the copy away for free. They probably monetize through ads. So don't expect too much protection from this.
 
 ![The license generation setup form](images/10-102-license-form.png)
 

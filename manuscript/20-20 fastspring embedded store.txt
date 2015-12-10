@@ -9,9 +9,10 @@ This is additional work, although not very much. Why would you want to do it?
 * It is said that embedded stores increase conversion from trial users to paying customers.
 * Buying a license from within the app can immediately unlock it. Your application obtains the license from the embedded store.
 
-D> Philip Goward of Smile, the team behind TextExpander and PDFPen, stressed that buying a license within the app lowers the barrier to buy the app. Smile has lots of years of experience, so we better listen.
+D> **Philip Goward of Smile**, the team behind TextExpander and PDFPen, stressed that buying a license within the app lowers the barrier to buy the app. Smile has lots of years of experience, so we better listen.
 D>
 D> The most interesting advice he gave me to share with you is this: display the store window on launch, even on first launch. It converts incredibly well.
+D> 
 D> I'll certainly have a look at the effect of this change in my own applications. Keep in mind though that having to click through too many dialog boxes on first launch can just as well ruin the initial user experience.
 
 
@@ -107,7 +108,7 @@ Nearly all of the work will be done in a class which implements `FsprgEmbeddedSt
 * `didLoadStore(url: NSURL!)`
 * `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
 
-D> Tyler Hall creates VirtualHostX and he thinks the embedded store is a pretty awful webview wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store anytime when it can be implemented with native Cocoa controls using a web API.
+D> **Tyler Hall** creates VirtualHostX and he thinks the embedded store is a pretty awful webview wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store anytime when it can be implemented with native Cocoa controls using a web API.
 
 ### Order Confirmation View
 
