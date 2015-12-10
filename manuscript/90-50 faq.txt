@@ -1,12 +1,14 @@
+{pagebreak}
+
 ## FAQ
 
 ### Do I still have to enroll in the Developer Program?
 
-Absolutely. It's possible to get Xcode and start developing apps for Mac and iOS instantly. But you won't be able to sign your apps. If you don't code-sign the app, most consumer Macs will not run it.
+Absolutely. It's possible to get Xcode and start developing apps for Mac and iOS instantly. But you won't be able to sign your apps. If you don't code-sign the app, most consumer Macs will not be able to run it out of the box.
 
-"Gatekeeper" is supposed to be responsible for keeping the Mac secure. Mac App Store applications are code-signed and run in a sandbox environment so they can do no harm. The apps you're going to sell outside the Mac App Store are signed with a different certificate issued by Apple and they don't have to run in a sandbox. They are potentially more harmful. Unsigned apps are treated like security risks nowadays.
+The service blocking unsigned apps by default called "Gatekeeper" is supposed to be responsible for keeping the Mac secure. Mac App Store applications are code-signed and run in a sandbox environment so they can do no harm. The apps you're going to sell outside the Mac App Store are signed with a different certificate issued by Apple and they don't have to run in a sandbox. They are potentially more harmful. Unsigned apps are treated like security risks nowadays.
 
-So get the certificates once you're ready to ship.
+So get the certificates once you're ready to ship if you don't want to spend money up front.
 
 ### How can I deliver updates?
 
@@ -22,3 +24,12 @@ In short, you'll need:
 
 Using Sparkle is easy once the infrastructure is set up. With Mac OS 10.11 "El Capitan" SSL connections are a must. You can opt-out of the so-called "Application Transport Security" service on a per-app basis, but I don't recommend doing so. SSL certificates are free or very cheap nowadays. 
 
+### Does FastSpring cost me anything if I don't have any sales?
+
+Nope. That's the beauty of this approach for the fearful among us: you don't buy into a service that bills you monthly if you expect to not generate more income. 
+
+Honestly, you should work on your mindset soon to survive the tough ride ahead. Fear is not the best of all motivators.
+
+DevMate, for example, changed their pricing recently to make it easier for solo indie devs to try their service. But as of Dec 2015, once you reach the number of 10,000 active users (people who used the app during the payment period of a month), you will be billed 1 cent per user per month. Even if you don't sell anything anymore from that point onward -- which would be highly unlikely, admitted, but still. That's the price for using their infrastructure and service.
+
+FastSpring take a fee for every transaction. No transaction, no cost.
