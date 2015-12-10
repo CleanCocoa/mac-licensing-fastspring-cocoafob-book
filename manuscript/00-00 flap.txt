@@ -1,3 +1,5 @@
+{frontmatter}
+
 > We appreciate Christian’s efforts in creating a guide that enables Mac developers to sell applications through FastSpring’s award-winning e-commerce platform.  He has provided detailed instructions to help developers configure key elements of their online sales process. The spirit of community captured in his book reflects FastSpring’s mission to connect people globally in the digital economy.  
 > --- Mike Smith, CTO FastSpring, December 2015
 
