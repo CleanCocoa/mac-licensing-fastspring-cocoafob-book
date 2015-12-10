@@ -2,7 +2,9 @@
 
 Copy protection of applications through licensing is all about handling transitions from unactivated to activated. Since there's going to be quite a bit of code involved in implementing this, it pays off to do it in a clean way and represent app state expressively.
 
-With Swift, it's trivial to represent the state as an enum with an associated value:
+The state the app is in is determined at launch, for example. But changes can happen over time when the trial period is up or the user enters a license code to unlock the app. The state representation changes have to be handled by your application: you have to handle transitions.
+
+With Swift, it's trivial to represent the state as an enum with an associated value for convenience:
 
     enum LicenseInformation {
         case Registered(License)
@@ -19,11 +21,15 @@ Or, if you want to support a time-based trial:
 
 That's the foundation of everything we're going to do: giving the application a means to find out which state it's in at the moment, and handle transitions.
 
-It's up to you how you define the associated `License` type. I like licenses to be based on license code and licensee name, so in our sample apps the type will look like this, basically:
+The associated `License` type is based on license code and licensee name for the sample apps of this book:
 
     struct License {
         let name: String
         let licenseCode: String
     }
 
-We will start with setting up the app in your FastSpring dashboard in the next chapter. Then we'll implement a simple license check in the app's startup routine which determines if it is allowed to run. Last, we're going to add a trial mode as a soft alternative.
+You're invited to stick to that and use it as-is in your applications. It's your choice if you want different details to be captured, though. You'll simply have to replace the type with something else and adjust the objects which read and write licenses accordingly.
+
+Here's the battle plan:
+
+We will start with setting up the app in your FastSpring dashboard in the next chapter. Then we'll implement a simple license check in the app's startup routine which determines if the app is allowed to run or if the user only sees the dialog to enter license details. In the last chapter, we're going to add a trial mode to enable users to test drive our software before they decide to buy.
