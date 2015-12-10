@@ -20,4 +20,5 @@ sample-notice.txt
 
 90-00 appendix.txt
 sample-notice.txt
+newpage.txt
 book-list.txt

@@ -1,3 +1,5 @@
+{pagebreak}
+
 ## Order Confirmation Mail and App Activation via E-Mail {#email}
 
 The embedded store integration I have shown you takes care of automatically activating an application.
