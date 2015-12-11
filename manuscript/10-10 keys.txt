@@ -4,7 +4,7 @@ CocoaFob licensing works with pairs of private--public keys much like you use fo
 
 Your app will ship with the public key embedded in the app bundle. Customers will buy your application via FastSpring, where the private key is used to generate a new license code.
 
-W> Since you'll be uploading the private key to FastSpring, it won't be _private_ anymore. FastSpring's security problems thus become yours. Make sure you don't use this key for anything else in your life, ever. Create new key pairs for every app you develop. Consequently, don't just use existing private keys and the take five minutes to generate new ones as detailled below.[^ortiz]
+W> Since you'll be uploading the private key to FastSpring, it won't be _private_ anymore. FastSpring's security problems thus become yours. Make sure you don't use this key for anything else in your life, ever. Create new key pairs for every app you develop. Consequently, don't just use existing private keys and the take five minutes to generate new ones as detailed below.[^ortiz]
 
 The license information, which consists of a randomized value and the user name, for example, is encrypted on FastSpring's server into a license code. Your app will decode the information from the license code the customer receives. With the decrypted data, it can start the verification process.
 

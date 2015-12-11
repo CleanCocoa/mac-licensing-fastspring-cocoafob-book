@@ -30,7 +30,7 @@ Of course the App Store offers cool benefits for you, too:
 
 Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. On the flip side, you lose more money per transaction and are bound to the strict App Store security policies.
 
-So when you do everything on your own, you have to take care of app updates and copy protection with a licens keys, for example. To figure all that out takes quite some time. I wrote this book to save you the days of research, implementing and testing.
+So when you do everything on your own, you have to take care of app updates and copy protection with a license keys, for example. To figure all that out takes quite some time. I wrote this book to save you the days of research, implementing and testing.
 
 D> **Philip Goward, founder of Smile,** calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it.
 D>

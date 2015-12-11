@@ -115,7 +115,7 @@ Set the the e-mail body to something along these lines:
 
 There are a quite a few template variables used. 
 
-* The license is embedded in the `fulfullment` group, as you can see. If the user bought a dozen licenses, all will be printed inside the e-mail using `license.licenses.list`. 
+* The license is embedded in the `fulfillment` group, as you can see. If the user bought a dozen licenses, all will be printed inside the e-mail using `license.licenses.list`. 
 * Only the first one will be used to generate the activation e-mail using `license.outcome.licenses[0]`.
 * The licensee's name is encoded using `util.string.base64()`.
 

@@ -17,7 +17,7 @@ Recall the public key:
     UpIg
     -----END PUBLIC KEY-----
 
-It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key to fragment the information and obfuscade the key's representation in the binary.
+It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key to fragment the information and obfuscate the key's representation in the binary.
 
 First, preserving newlines, the complete string will contain (line wraps are due to book page limits and indicated by the trailing `\`):
 
