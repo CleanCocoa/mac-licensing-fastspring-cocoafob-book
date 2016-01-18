@@ -83,11 +83,11 @@ From `FsprgEmbeddedStoreMac/FsprgEmbeddedStore/`, add all the files except the "
 * `Model/FsprgOrderItem.h`
 * `Model/FsprgOrderItem.m`
 
-Disable ARC for the following files in "Compiler Sources" under the app target's "Build Phases" pane. Add the `-fno-objc-arc` flag to all FastSpring-related `.m` files in the list.
+Disable ARC for the 9 files that are left in "Compiler Sources" under the app target's "Build Phases" pane when you filter for "Fsprg". Add the `-fno-objc-arc` flag to all FastSpring-related `.m` files in the list as shown in the screenshot.
 
 ![ARC disabled for the FastSpring files files which cause build errors otherwise.](images/20-101-arc-disabled-fastspring-cocoafob.png)
 
-Now the test target will not find the header files by default, though.
+Now the test target may not find the header files by default, though. That seems to be an issue with (some) Swift-only projects, as I didn't have to adjust anything for the Word Counter which is a mostly Objective-C project.
 
 Go to the test target settings and select the "Build Setting" pane. Use the search to get to "User Header Search Paths". In the test target's column, which is probably the second column you can edit, double-click the table cell and drag the `FsprgEmbeddedStore` folder in there (that's the one where we picked the files from).
 
