@@ -57,7 +57,7 @@ Setting up the URL handler involves a new part of Foundation, though, so let's l
     
         NSAppleEventManager.sharedAppleEventManager()
             .setEventHandler(self, 
-                andSelector: Selector("handleGetUrlEvent:withReplyEvent:"), 
+                andSelector: #selector(AppDelegate.handleGetUrlEvent(_:withReplyEvent:)), 
                 forEventClass: AEEventClass(kInternetEventClass), 
                 andEventID: AEEventID(kAEGetURL))
     }
