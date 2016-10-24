@@ -7,44 +7,56 @@ Fantastic!
 I think that's cool, because:
 
 - You will earn more per sale -- most store fronts on the market will take a cut between 6 and 10% only, as opposed to the 30% Apple takes _after taxes_.[^vat]
-- You will not be hampered by App Store Sandboxing restrictions: even though Sandboxing is said to be the way to go for the future, releasing a Sandboxed app in the App Store will impose even stricter limitations, like not having access to assistive devices, observing keyboard inputs, or registering Audio drivers.
-- You can publish updates more often and react to bugs quicker. When you release an update, it's live immediately.
+- You will not be hampered by App Store Sandboxing restrictions: even though Sandboxing is said to be the way to go for the future, releasing a Sandboxed app in the App Store will impose even stricter limitations, like not having access to assistive devices, observing keyboard inputs, or registering audio drivers.
+- You own the update process: you can publish updates more often and react to bugs quicker. When you release an update, it's live immediately.
 - You can add copy protection to you app. No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](http://www.macworld.com/article/1157018/appstore_licensing.html)
-- You can issue discounts: student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales, you name it. I recently gave away one-time 70% discount coupons to people who had trouble with my product after their problem was solved when I thought they liked the product.
-- You will know your customers and get in touch with them. This saved my behind once already when my app wouldn't update automatically and I wanted to tell my customers how to get the latest version. Same holds true for special offers or upselling existing customers.
+- You can issue discounts: student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales -- you name it.
+- You will know your customers and get in touch with them. This saved my back in the past when my app wouldn't update automatically and I wanted to tell my customers how to get the latest version. Same holds true for special offers or upselling existing customers.
 
 D> Speaking of discounts: you can also issue what **Craig Scott of toketaWare** calls "good will discounts." There are people who'll pay for your product as long as they think it's a good deal. If there are people who are angry because they think your product is too expensive: give them a few percent off to convert them to paying customers. 
 D>
-D>The surprise can be very effective: "Quite often your angriest customer can be 'turned' into your most vociferous advocate. I don't like 'giving grease to the squeaky wheel' but it does work!" This is a great lesson: don't be pissed if people treat you harshly. Surprise them (and yourself) and their negative emotions will change for the better and create a strong connection.
+D>The surprise can be very effective: "Quite often your angriest customer can be 'turned' into your most vociferous advocate. I don't like 'giving grease to the squeaky wheel' but it does work!" This is a great lesson: don't be pissed if people treat you harshly. Surprise them with a small token of appreciation and their negative emotions will change for the better and create a strong connection.
 D>
-D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's a mindset of suffering. Since the app is your product, if you want to do someone a favor and offer her a discount then go ahead and do it. They'll be thankful for it. In both cases, you may win their hearts, which is good to keep a business running.
+D> Same applies to those that seem "deserving," which is similar to the angry folks -- only without the anger. It's a mindset of suffering when people approach you and say they're poor but still want to use the app. Since the app is your product, if you want to do someone a favor and offer a discount, then by all means go ahead and do it. They'll be thankful for it. You may even win their hearts and loyalty.
 
 [^vat]: Say you sell an app for €9.99 in Germany. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- whereas the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
 
-Of course the App Store offers cool benefits for you, too:
+Selling on the Mac App Store offers benefits for you, too, which you shouldn't carelessly dismiss:
 
-- Apple's App Stores are a very important marketplace where people discover new things. It's a place where some "go shopping."
-- Releasing an Update equals pushing a binary to the iTunes Connect web service. After is passed the review process (which takes about 7 days at the moment of writing this[^rev]), people can download it from one central place: the App Store application. 
+- Apple's App Stores are a very important marketplace where people discover new things. It's a place where some "go shopping." (Although I can hardly imagine how that works in practice.)
+- Releasing an update equals pushing a binary to the iTunes Connect web service. After it passed the review process (which used to take a few days but is now done in about 1 day, according to <http://appreviewtimes.com>), people can download it from one central place: the App Store application. When updates download automatically, users will always work with the latest version.
 
-[^rev]: According to <http://appreviewtimes.com>
-
-Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. On the flip side, you lose more money per transaction and are bound to the strict App Store security policies.
-
-So when you do everything on your own, you have to take care of app updates and copy protection with a license keys, for example. To figure all that out takes quite some time. I wrote this book to save you the days of research, implementing and testing.
 
 D> **Philip Goward, founder of Smile,** calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it.
 D>
 D> If you build a great app targeted at professionals with "pro-pricing" around $100 or above, once you have build an audience for your product the oft-cited discoverability benefit of selling on the Mac App Store becomes miniscule. Having full control over sales and customer service then becomes more important.
 
-In this book, you'll learn:
+Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. On the flip side, you lose money for each transaction, you're bound to the strict App Store security policies, and if Apple disables your account by mistake, you're screwed.
 
-- how to set up FastSpring as the store where people buy your software 
-- add automatic license key generation to the checkout process
-- implement license code verification in you app
-- create a time-based trial
-- offer in-app purchases
+When you distribute outside the Mac App Store, you have to take care of app updates and copy protection yourself, too. To figure all that out takes quite some time. I wrote this book to save you days of research, implementing and testing.
 
-This book is designed to make your job as developer who sells outside the Mac App Store as simple as possible.
+## What You'll Learn
+
+You'll learn how to perform the following tasks:
+
+* Set up a product for sale with FastSpring, including license code generation and order confirmation e-mails.
+* Guard your app against software piracy, requiring license code and name to let users pass.
+* Implement a registration handler in your app which verifies the license information. _You can copy this well-tested code right into your existing app!_
+* Add a time-based trial to your application. _This, too, can be copied right into your existing app!_
+
+As a bonus, you'll learn a few things about Mac software architecture through well-written, fully functional sample applications which are thoroughly tested. There are more than 200 test cases included in the code repository!
+
+I'll show you all these things in detail so you can be certain that everything is taken care of:
+
+- how to set up FastSpring as the store where people buy your software,
+- add automatic license key generation to the checkout process,
+- implement license code verification in you app,
+- create a time-based trial,
+- offer in-app purchases,
+- set up app updates,
+- and how to figure out a price and prepare the release.
+
+This book is designed to make your job an independent software developer as simple as possible. When I wrote this book, I had in mind how hard selling my first Mac app was, so I try to talk about the usual fears of the process. But if you're experienced with releasing apps already, you'll find ample advice on how to transition away from the Mac App Store.
 
 After reading this book, you'll be able to quickly add license code verification to an existing app and lock out users who won't pay after the trial expires. You'll even be able to offer a store front from right within your application using FastSpring's _Embedded Store SDK_ which may increase the conversion from demo users to paid customers. All of this is designed to work as a drop-in: you add the files to your project and don't have to worry about the details anymore.
 
@@ -58,13 +70,13 @@ The sample code will be written in the latest stable version of Swift. I'll upda
 
 ## Why FastSpring?
 
-I> I'm not at all affiliated with FastSpring. I love their service and got in touch when I was finishing the book -- and they in turn loved this book. So we collaborate on spreading the word. Not because they pay me (they don't) but because I believe "making it" with Mac apps is possible, and that using FastSpring will help get there.
+I> I'm not at all affiliated with FastSpring. I love their service and got in touch when I was finishing the book -- and they in turn loved this book. So we collaborate on spreading the word. Not because they pay me (they don't) but because I believe "making it" with Mac apps is possible, and FastSpring will be a good choice to get there.
 
 A few years ago, I picked FastSpring to sell my apps mostly because of social proof. Lots of indie teams I respected for years already used FastSpring, so I figured their service was a good fit and gave it a spin.[^socproof] I still love their service. That's why I wrote this book to help you become independent from Apple's stores.
 
 [^socproof]: Also, you can read about a small [survey from 2009](http://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where FastSpring scored quite high.
 
-Compared to other e-commerce solutions, FastSpring is still kind of young. Some obvious competitors to accept payments are:
+Some obvious competitors to deal with payments are:
 
 - Paddle
 - Avangate, e-sellerate, kagi
@@ -75,21 +87,21 @@ PayPal and Stripe will handle purchases, and that's it. Figuring out VAT yoursel
 
 D> **Pieter Omvlee** revealed that **Bohemian Coding**, creators of the infamous Sketch design tool, initially sold via PayPal around 8 years ago. Bohemian Coding moved to FastSpring because of the better features, namely handling VAT automatically. Even though Sketch was sold exclusively on the Mac App Store when Apple opened its doors, after re-introducing FastSpring for volume licenses it turns out their own FastSpring-based store performs better than the Mac App Store.
 D> 
-D> **Tyler Hall** started his business by selling VirtualHostX via PayPal from 2007--2009, too. But he switched once a friend of his was locked out of PayPal due to "suspicious" activity. Imagine your sales going strong, then suddenly your payment processor blocks your account. That equals sudden death or at least prolonged coma for your business.
+D> **Tyler Hall** started his business by selling VirtualHostX via PayPal from 2007--2009, too. But he switched once a friend of his was locked out of PayPal due to "suspicious" activity. Imagine your sales going strong, then suddenly your payment processor blocks your account. That equals sudden death (or at least a severe and prolonged coma) for your business.
 D>
-D> Stuff like that still happens to very few people using amazon to sell books or as affiliate partners, for example. I guess this is due to the fact that these companies are so huge and worry about their customers first and foremost -- which is not you. To an e-commerce provider you as the store owner are the primary customer. That's a huge difference.
+D> Account terminations still happen. There are many recorded incidents of people using amazon to sell books or being an affiliate. Then there was this weird story in late 2016 about an app named "Dash" which was removed from the Mac App Store when the developer's account was terminated. The point is: [you can't do a thing when that happens to you.](https://christiantietze.de/posts/2016/10/dash-removed-from-app-stores/) Apple and amazon are huge, so false positives will occur, and they need to be proactive and cannot hesitatey when they truly worry about their customers -- which is not you, the developer, but the end user. To an e-commerce provider, you are the store owner and you are their customer. The end user is your responsibility, not theirs. That is a huge difference.
 
 Gumroad will also offer a simple store widget and lets you upload files. Credit cards work way better here than with PayPal, but not everyone around the world has a credit card in the first place -- and I'm not talking about lesser developed countries: It's quite rare to know someone in Germany in 2015 with a credit card.
 
-Kagi and e-sellerate are apt to create a real custom e-stores. So is FastSpring. All of these take care of handling VAT for you. But what sets FastSpring apart is the great customer service: they offer you to take care of the initial store design _for free._ They are super responsive, and their dashboard is very powerful.
+Kagi and e-sellerate are apt to create a real custom e-stores. So is FastSpring. All of these take care of handling VAT (value added tax) for you. But what sets FastSpring apart is the great customer service. For example, they offer you to take care of the initial store design _for free._ They are super responsive, and their dashboard is very powerful.
 
-FastSpring pays on time, twice a month, every month. I'm located in Germany, so I expected trouble when receiving payments from a California-based company -- but FastSpring handles payments to the European Union perfectly. You can even set up your store to accept money via wire transfer or direct deposit next to PayPal and credit cards. Their [list of payment methods](http://www.fastspring.com/payment-methods-and-security) is huge.
+FastSpring pays on time, twice a month, every month. I'm located in Germany, so I expected trouble when receiving payments from a California-based company -- but FastSpring handles payments to bank accounts in the European Union perfectly. From a customer's perspective, paying for software works well, too. Their [list of payment methods](http://www.fastspring.com/payment-methods-and-security) is huge. As I said above, credit cards aren't common in Germany, so people will be happy to be able to resort to PayPal or wire transfer if you enable these options.
 
-D> **Ironic Software** use Kagi and FastSpring next to each other: having two stores (plus the Mac App Store) surprisingly results in more sales. FastSpring is Ironic's Tom Andersen's favorite, though, because the backend is so nice to use.
+D> **Ironic Software** use Kagi and FastSpring next to each other: having two stores (plus the Mac App Store) surprisingly results in more sales for them. FastSpring is Ironic's Tom Andersen's favorite, though, because the backend is so nice to use.
 
-Now Paddle is a different kind of competitor. Paddle centers around developer integration whereas FastSpring is an e-commerce store aware of software developer's needs without centering their service around folks like you and me.
+Now Paddle is a different kind of competitor. Paddle's service centered around developer integration from the start. FastSpring is a general e-commerce service provider. FastSpring is aware of software developer's needs, but not everything they do revolves around folks like you and me.
 
-Paddle offer a simple SDK for trials, in-app purchases, and license verification. Their service seemed to fit perfectly, so I gave it a spin in 2013. I tried the SDK in my first shipping app and learned a lot along the way -- but I didn't feel comfortable because of the lack of _control._ I couldn't reliably find out how their stuff is working. There was no way to issue test purchases from within the app to see if the right events are raised. So in the end I didn't use Paddle at all.
+Paddle offers a simple SDK for trials, in-app purchases, and license verification. Their service seemed to fit perfectly, so I gave it a spin in 2013. I tried the SDK in my first shipping app and learned a lot along the way -- but I didn't feel comfortable because of the lack of _control._ I couldn't reliably find out how their stuff is working. There was no way to issue test purchases from within the app to see if the right events are raised. So in the end I didn't use Paddle at all.
 
 FastSpring offers a test store front on the web and from within the app if you do in-app purchases. That's very convenient to see if your checkout works and if your app transitions from "locked" to "paid". 
 
@@ -100,20 +112,9 @@ That's what this book is for: **get all the obstacles out of your way so you can
 You don't have to figure out the edge cases. Let this book and the sample code take care of the details so you can focus on developing your product and selling it online. You can still tweak the setup later if you want.
 
 
-## What You'll Learn in a Nutshell
+## Getting a Few Technical Terms Straight
 
-You'll learn how to perform the following tasks:
-
-* Set up a product for sale at FastSpring, including license code generation and professional order confirmation e-mails.
-* Guard your precious app against software piracy, requiring license code and name to let users pass.
-* Implement a registration handler in your app which verifies the license information. _You can copy this well-tested code right into your existing app!_
-* Add a time-based trial to your application which expires even when the application is running. _This, too, can be copied right into your existing app!_
-
-As a bonus, you'll learn a few things about Mac software architecture through well-written, fully functional sample applications which are thoroughly tested. There are more than 200 test cases included in the code repository!
-
-## Getting a Few Technical Terms Straight up Front
-
-We'll be talking about "keys" and "codes" a lot. To remedy confusion, here's a list of technical terms which are going to be important.
+We'll be talking about "keys" and "codes" a lot. To prevent confusion, I want to prime you with this list of important technical terms.
 
 FastSpring
 : That's your e-commerce solution. It's your store front and product management system.
@@ -132,7 +133,7 @@ Private Key
 
 License Code
 : The string of characters your customers will receive after they buy your app. 
-: CocoaFob-generated license codes should look familiar, like this: `GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A`
+: CocoaFob-generated license codes should look familiar if you ever bought a Mac app outside the App Store. They tend to look like this: `GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A`
 
 License Code Verification
 : The process you have to implement in your app: the user enters a license code, the app uses the public key to decrypt the information from it, then it verifies if the information matches some internal criteria. 
