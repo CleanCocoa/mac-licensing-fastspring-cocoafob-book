@@ -17,4 +17,4 @@ D> I remember how badly gamers reacted when single-player computer games require
 D> 
 D> In his [blog post](http://tyler.io/experimenting-with-piracy/) on piracy, Tyler listed a few other measures against software piracy that did lower the number a bit, too, although not by much. Bugging the user with a personalized guilt-laden information dialog converted about 5%. Giving pirates a one-time discount to convert to real customers worked for about 11%. Remember what Craig Scott said about turning angry prospects into happy customers? It seems to work with people who want to use your app for longer than just the trial period, too. The deal has to be good from their point of view.
 
-**You can find a fully functional sample app in the book's code repository.** It's in the [`No-Trial-Verify-at-Start` folder.](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob/tree/master/No-Trial-Verify-at-Start)
+**You can find a fully functional sample app in the book's code repository.** It's in the [`No-Trial-Verify-at-Start` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/No-Trial-Verify-at-Start)

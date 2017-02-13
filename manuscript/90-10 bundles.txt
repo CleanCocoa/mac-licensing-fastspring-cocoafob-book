@@ -12,7 +12,7 @@ Basically, all participants register at FastSpring and provide their bank accoun
 
 While the host adds each product to the bundle, it's important to set the products to "No-Price / Zero-priced option" so only the bundle price counts.
 
-The bundle participants have to sign up at the host's store as [the docs][spay] indicate, via the store-specific payee URL: `http://www.fastspring.com/signup_payee.php?ci=companyid`
+The bundle participants have to sign up at the host's store as [the docs][spay] indicate, via the store-specific payee URL: `http://www.fastspring.com/signup_payee.php?ci=<<COMPANY_ID>>`
 
 Once the payee has been approved by FastSpring in a manual review process, you can set up split pay rules for them. Common parameters include: begin date, end date, split percent, then filtered by site, origin of the link, coupon used, product bought. The last option is what you're after: select the bundle from the list.
 

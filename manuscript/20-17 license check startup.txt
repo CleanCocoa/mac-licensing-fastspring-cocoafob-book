@@ -4,7 +4,7 @@ Obtaining the current state of the app depends on whether a valid license is pre
 
 I mentioned `LicenseProvider` already. It's responsible for reading a `License` from `NSUserDefaults`.
 
-If a `License` is present, this indicates that the application is not `.Unregistered` anymore but `.Registered(_)`.
+If a `License` is present, this indicates that the application is not `.unregistered` anymore but `.registered(_)`.
 
 Using `LicenseProvider`, we can add `LicenseInformationProvider` which wraps the result in the `LicenseInformation` enum:
 
@@ -14,13 +14,16 @@ Using `LicenseProvider`, we can add `LicenseInformationProvider` which wraps the
         public init(licenseProvider: LicenseProvider) {
             self.licenseProvider = licenseProvider
         }
-    
+        
+        public lazy var licenseVerifier: LicenseVerifier = LicenseVerifier()
+        
         public var currentLicenseInformation: LicenseInformation {
-            if let license = self.license() {
-                return .Registered(license)
+            if let license = self.license(),
+                license.isValid(licenseVerifier) {
+                return .registered(license)
             }
         
-            return .Unregistered
+            return .unregistered
         }
     
         func license() -> License? {
@@ -28,7 +31,7 @@ Using `LicenseProvider`, we can add `LicenseInformationProvider` which wraps the
         }
     }
 
-That's pretty simple. Once `LicenseInformationProvider` is set up, its `currentLicenseInformation` computed property can be used throughout the application to obtain the information needed. It's not caching the value, so the result will always be fresh.
+Once `LicenseInformationProvider` is set up, its `currentLicenseInformation` computed property can be used throughout the application to obtain the information needed. It's not caching the value, so the result will always be fresh.
 
 `AppDelegate` is a good place to start implementing the initial check upon launch:
 
@@ -39,19 +42,19 @@ That's pretty simple. Once `LicenseInformationProvider` is set up, its `currentL
     func launchAppOrShowLicenseWindow() {
         
         switch currentLicenseInformation {
-        case .Unregistered:
+        case .unregistered:
             if licenseIsInvalid() {
                 displayInvalidLicenseAlert()
             }
-            
+    
             showRegisterApp()
-            
-        case let .Registered(license):
+        case .registered(_):
+    
             unlockApp()
         }
     }
 
-Only unlock the app if `LicenseInformationProvider` returns `.Registered(_)` with a valid license.
+Only unlock the app if `LicenseInformationProvider` returns `.registered(_)` with a valid license.
 
 `LicenseInformationProvider` should do the check so no invalid license information leak by obtaining `currentLicenseInformation`. Better keep the invariant protected. 
 

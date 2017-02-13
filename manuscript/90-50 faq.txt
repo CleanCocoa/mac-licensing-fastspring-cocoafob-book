@@ -14,7 +14,7 @@ So get the certificates once you're ready to ship if you don't want to spend mon
 
 The Mac App Store takes care of delivering new builds of your application. You have to do this on your own, though.
 
-The [Sparkle Updater](http://sparkle-project.org) is the de facto standard solution. To implement it, please refer to the project documentation.
+The [Sparkle Updater](http://sparkle-project.org) is your go-to solution. To implement it, please refer to the project documentation.
 
 In short, you'll need:
 
@@ -30,6 +30,6 @@ Nope. That's the beauty of this approach for the fearful among us: you don't buy
 
 Honestly, you should work on your mindset soon to survive the tough ride ahead. Fear is not the best of all motivators.
 
-DevMate, for example, changed their pricing recently to make it easier for solo indie devs to try their service. But as of Dec 2015, once you reach the number of 10,000 active users (people who used the app during the payment period of a month), you will be billed 1 cent per user per month. Even if you don't sell anything anymore from that point onward -- which would be highly unlikely, admitted, but still. That's the price for using their infrastructure and service.
+DevMate (`http://devmate.com/`), for example, changed their pricing recently to make it easier for solo indie devs to try their service. They used to bill 1 cent per active user once you reached 10,000 active users in total, even if you didn't sell anything from that point onward. Now their pricing is a lot more friendly toward small indie developer studios. DevMate handles payments through FastSpring, by the way. Once you start using FastSpring, you can transition to DevMate anytime.
 
-FastSpring take a fee for every transaction. No transaction, no cost.
+FastSpring takes a fee for every transaction. No transaction, no cost. That's it.

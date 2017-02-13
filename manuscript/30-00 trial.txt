@@ -7,9 +7,9 @@ That's where trials come into play. You offer new users a test drive for a limit
 To add a time-based trial to your app, you have to change `LicenseInformation` a bit and add a third intermediate state:
 
     enum LicenseInformation {
-        case Registered(License)
-        case OnTrial(TrialPeriod)
-        case TrialUp
+        case registered(License)
+        case onTrial(TrialPeriod)
+        case trialUp
     }
 
 I experimented with different `TrialPeriod` implementations.
@@ -17,10 +17,10 @@ I experimented with different `TrialPeriod` implementations.
 To use a start date and a duration value came natural, but it became unnecessarily clumsy to use. The duration has to be provided by the app in code anyway. And for most timer operations, you have to compute the end date of the trial period, too. So I suggest this instead, in the most basic form:
 
     struct TrialPeriod {
-        public let startDate: NSDate
-        public let endDate: NSDate
+        public let startDate: Date
+        public let endDate: Date
     }
 
 From there on, this chapter will teach you how to change the existing application to take the trial into account.
 
-**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running)
+**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running)

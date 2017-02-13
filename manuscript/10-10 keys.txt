@@ -107,7 +107,7 @@ I prefer personalized license codes. You could also utilize them to check how of
 
 It's important that you don't change the CocoaFob product name if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app, so new licenses won't be compatible to old ones and vice versa.
 
-More recently, I've come to take a simpler template into consideration, omitting the licensee's name, because using a template of `#{product}` only is useful to allow bulk-generating licenses. If you ever want to participate in a bundle sale, this can make things a lot easier as some bundle organizers simply deliver a non-personalized license code from a long list you provide.
+More recently, I've come to take a simpler template into consideration, omitting the licensee's name, because using a `#{product}`-only template is useful for bulk-generating licenses. If you ever want to participate in a bundle sale, this can make things a lot easier as some bundle organizers simply deliver a non-personalized license code from a long list you provide.
 
 To support non-personalized license codes next to your standard personalized license code verification, you'd have to supply a second algorithm (or object) in code which doesn't take the licensee's name into account, even though the form can look the same, of course.
 

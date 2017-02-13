@@ -2,25 +2,25 @@
 
 ## In-App Purchases
 
-I didn't know about in-app purchases before Apple's App Stores made them popular, but I guess the underlying principle is well-aged already.
+I didn't know about in-app purchases before Apple's App Stores made them popular, but I came to think the underlying principle is well-aged already.
 
-In-app purchases are very popular in modern "games". I put the term in quotes because I don't want to put the cool video games from my childhood into the same category as the stupefying but addicting money sinks that are so popular nowadays. It all started with FarmVille on Facebook, didn't it? In such games, you are lured into addicting gameplay until you reach a certain level where you wouldn't be able to advance if you didn't pay for in-game currency or other kinds of consumables.
+In-app purchases are very popular in modern "games". I put the term in quotes because I don't want to put the cool video games from my childhood into the same category as the stupefying but addicting money sinks that are so popular nowadays. It all started with FarmVille on Facebook, didn't it? In games[^games] like FarmVille, you are lured into an addictive gameplay experience until you reach a certain level where you wouldn't be able to advance if you didn't pay for in-game currency or other kinds of consumables.
 
-Did you know that some of the underlying algorithms not only make players stagnate, but lose what they've earned, too? There's [a great talk](https://www.youtube.com/watch?v=us6OPbYtKBM) about this by Puzzle Clubhouse's Jesse Schell at D.I.C.E. SUMMIT 2013.
+  [^games]: I don't consider these frauds to be real "games". User joy is not their only and topmost design goal. A bit of joy, sure, but also a lot of emotional attachment and exploitation. They're not designed to be challenging and rewarding for the player. They are designed to be impossible to play until the user pours in money continually. Like heroine, they promise pure fun for cash.
+  
+Did you know that some of the underlying algorithms not only make players stagnate, but lose what they've earned, too? There's [a great talk](https://www.youtube.com/watch?v=us6OPbYtKBM) about this by Puzzle Clubhouse's Jesse Schell at D.I.C.E. SUMMIT 2013. In short, if you continue to play for free, you'll eventually get _worse_ until you buy in-game consumables. That's just sick. Don't do that at home.
 
-Anyway, I don't consider these to be games. User joy is not their topmost priority. They're not designed to be challenging and rewarding for the player. They are designed to be impossible without taking money on a periodical basis.
-
-_But_ there's in-app purchases in productivity apps and other non-game category apps nowadays, too. I don't know about abuse on that front, so we're still pretty safe to consider this as an option.
+All that got IAP's in general a lot of bad reputation. _But_ there's in-app purchases in productivity apps and other non-game category apps nowadays, too. I don't know about abuse on that front, so we're still pretty safe to consider this to be an option where you won't meet much resentment.
 
 FastSpring allows you to implement these using the embedded store SDK. You just have to think outside the box a bit.
 
-Among the better received in-app purchases in non-game apps are _contents_, not features, [as Stuart K. Hall's experience indicates](http://stuartkhall.com/posts/an-app-store-experiment-part-3). That'd be a new set of videos and instructions for your workout app, for example. Make sure to read [Part 4](http://stuartkhall.com/posts/an-app-store-experiment-part-4) of his series, also, where his numbers indicate that users, once hooked, don't want to pick single options but simply _unlock everything_.
+Among the better received in-app purchases in non-game apps are _contents_, not features, [as Stuart K. Hall's experience indicates](http://stuartkhall.com/posts/an-app-store-experiment-part-3). For his workout app, that's a new set of workout videos and instructions. Make sure to read [Part 4](http://stuartkhall.com/posts/an-app-store-experiment-part-4) of his series, where his numbers indicate that users, once hooked, don't want to pick single options but simply _unlock everything_. Providing a bundle purchase option might be a good idea for you, too.
 
-In fact, in the Mac App Store and iTunes App Store (iOS), since there's no app demos, in-app purchases are used to unlock "pro" features. Where traditionally shareware offered full features for a limited time of, say, 30 days, nowadays users can download an app for free and unlock the full feature set for a price.
+In the Mac App Store and iTunes App Store (iOS), in-app purchases are used to unlock "pro" features. It's the only option since there's no app demos. Where traditionally shareware offered full features for a limited time of, say, 30 days, nowadays users are trained to download a feature-limited app for free and unlock the full feature set for money.
 
-Offering a trial, be it a time- or feature-limited one, with the use of the embedded store SDK of FastSpring, can already be considered an in-app purchase. Only it's _the app itself_ customers receive.
+When you offer a trial, be it a time- or feature-limited, and use FastSpring's embedded store SDK, we could say that you already offer an in-app purchase. Only it's _the full app itself_ customers purchase from within the app.
 
-You could add consumables or paid add-ons to your app in a similar way you added "the app" as a product:
+Since you know how to achieve that, you could add consumables or paid add-ons to your app in a similar way you added "the app" as a product:
 
 * In-app purchases have to be distinct products in your FastSpring account. They are just like your real app, only they aren't.
 * You may want to hide them from the real web store and limit visibility to within the app.
@@ -30,7 +30,11 @@ Apple's App Stores are very convenient to implement this, since the in-app purch
 
 Rolling a custom solution, you have to enable your users to unlock already paid-for add-ons when they install the app on another machine, say. That means you'd end up providing another license code to them.
 
-If you develop an online game or something else with a web-based account under your control, you could instead change account details to represent already purchased items. A user buys 100 credits for your poker app? Store the credits in your online account database so the credits don't get lost, for example.
+If you develop an online game or something else with a web-based account under your control, you could instead change account details to represent already purchased items. A user buys 100 credits for your poker app? Store the credits in your online account database so the credits don't get lost, for example. 
 
-Overall, the process of implementing in-app purchases is very similar to regular license purchases. You only have to be a bit more creative with the product set-up and handling of the order after completion.
+Requiring desktop productivity app users to have an internet connection to log-in to the app isn't wide-spread, but it might work. Again, AAA games pioneered this. Modern games by Blizzard, for example, require setting up an account with the serial number. The game purchase is linked to your Battle.net user account. This, in turn, makes distribution of the game via physical media obsolete. You can download StarCraft 2 for free, but you'll need to pay to get access to the whole game experience from your user's account. 
+
+Chances are pro-users who do their work with your app will not be pleased when bad reception or being offline prevents opening the app. Don't jump on the feature train of online account management too early. Weigh the pro's and con's and try to find out the real cost for your business of all your alternatives. Then again, what kind of pro-app can you develop where in-app consumables play an important role?
+
+Overall, the process of implementing in-app purchases can be modeled in a very similar way to regular license purchases. You only have to be a bit more creative with the product set-up and handling of the order after completion. Handing out a dozen super-long license codes may not be the best approach. Switching a toggle in an online database sounds cool, but relying on an internet connection has its downsides, too.
 
