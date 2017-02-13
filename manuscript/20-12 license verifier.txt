@@ -106,7 +106,7 @@ So that is all you need to do:
 * take a license code string,
 * pass the license code and registration name to `CocoaFobLicVerifier` to obtain the result.
 
-You can find all of the files necessary to use in the "License" group in the [sample projects](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob).
+You can find all of the files necessary to use in the "License" group in the [sample projects](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob).
 
 The types I use in these projects are:
 

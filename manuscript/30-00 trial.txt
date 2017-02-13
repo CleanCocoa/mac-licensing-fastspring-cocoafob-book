@@ -23,4 +23,4 @@ To use a start date and a duration value came natural, but it became unnecessari
 
 From there on, this chapter will teach you how to change the existing application to take the trial into account.
 
-**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running)
+**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running)
