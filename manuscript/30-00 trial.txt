@@ -7,9 +7,9 @@ That's where trials come into play. You offer new users a test drive for a limit
 To add a time-based trial to your app, you have to change `LicenseInformation` a bit and add a third intermediate state:
 
     enum LicenseInformation {
-        case Registered(License)
-        case OnTrial(TrialPeriod)
-        case TrialUp
+        case registered(License)
+        case onTrial(TrialPeriod)
+        case trialUp
     }
 
 I experimented with different `TrialPeriod` implementations.

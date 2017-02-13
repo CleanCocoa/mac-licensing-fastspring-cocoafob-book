@@ -1,57 +1,52 @@
 ## Using the Clock to Obtain Time
 
-The `TrialPeriod` value object encapsulates both start and end time. And we're able to read and write it to disk via `NSUserDefaults`. 
+The `TrialPeriod` value object encapsulates both start and end time. And we're able to read and write it to disk via `UserDefaults`. 
 
 A trial shall have a duration of 5 days for this app. To create a `TrialPeriod`, we need the current time as `startDate` and the duration to calculate `endDate`. 
 
-The current time can be obtained using `NSDate()` default constructor. But that's not helping us during tests, which will make the behavior of a whole bunch of service objects hard to verify -- or worse, since nothing can be tested, everything ends up in one big convoluted mess.
+The current time can be obtained using `Date()`, the default constructor. But that's not helping us during tests, which will make the behavior of a whole bunch of service objects hard to verify -- or worse, since nothing can be tested, everything ends up in one big convoluted mess.
 
 Thinking in terms of an expressive domain and testing seams, we need a clock.
 
     class Clock {
-        func now() -> NSDate {
-            return NSDate()
+        func now() -> Date {
+            return Date()
         }
     }
 
 To make testing a bit more comfortable, I favor a protocol to supply test doubles instead of subclassing `Clock`:
 
     public protocol KnowsTimeAndDate: class {
-    
-        func now() -> NSDate
+        func now() -> Date
     }
 
     public class Clock: KnowsTimeAndDate {
-    
         public init() { }
     
-        public func now() -> NSDate {
-        
-            return NSDate()
+        public func now() -> Date {
+            return Date()
         }
     }
 
     public class StaticClock: KnowsTimeAndDate {
+        let date: Date
     
-        let date: NSDate
-    
-        public init(clockDate: NSDate) {
-        
+        public init(clockDate: Date) {
             date = clockDate
         }
     
-        public func now() -> NSDate {
-        
+        public func now() -> Date {
             return date
         }
     }
+    
 
 This helps to test `TrialPeriod` creation:
 
     extension TrialPeriod {
         public init(numberOfDays daysLeft: Days, clock: KnowsTimeAndDate) {
             startDate = clock.now()
-            endDate = startDate.dateByAddingTimeInterval(daysLeft.timeInterval)
+            endDate = startDate.addingTimeInterval(daysLeft.timeInterval)
         }
     }
 
@@ -92,7 +87,7 @@ Backed-up by `KnowsTimeAndDate`, it's easy to adds a few convenience methods on 
     extension TrialPeriod {
         public func ended(clock: KnowsTimeAndDate) -> Bool {
             let now = clock.now()
-            return endDate.laterDate(now) == now
+            return endDate < now
         }
     
         public func daysLeft(clock: KnowsTimeAndDate) -> Days {
@@ -104,17 +99,16 @@ Backed-up by `KnowsTimeAndDate`, it's easy to adds a few convenience methods on 
         }
     }
 
-These two methods are a pain to test if you substitute `clock.now()` with `NSDate()`: when you run your tests, the date values can be off a second and cause trouble in assertions.
+These two methods are a pain to test if you substitute `clock.now()` with `Date()`: when you run your tests, the date values can be off a second and cause trouble in assertions.
 
-`Days` is just a simple wrapper around double values which helps to calculate seconds (`NSTimeInterval`) without actually passing meaningless integers around. With Swift's type checking, it then becomes easy to work with durations and enforce validity of the parameters.
+`Days` is just a simple wrapper around double values which helps to calculate seconds (`TimeInterval`) without actually passing meaningless integers around. With Swift's type checking, it then becomes easy to work with durations and enforce validity of the parameters.
 
     public struct Days {
-    
-        public static func timeIntervalFromAmount(amount: Double) -> Double {
+        public static func timeInterval(amount: Double) -> Double {
             return amount * 60 * 60 * 24
         }
     
-        public static func amountFromTimeInterval(timeInterval: NSTimeInterval) -> Double {
+        public static func amount(timeInterval: TimeInterval) -> Double {
             return timeInterval / 60 / 60 / 24
         }
     
@@ -122,15 +116,20 @@ These two methods are a pain to test if you substitute `clock.now()` with `NSDat
     
         /// Rounded to the next integer.
         public var userFacingAmount: Int {
+        
             return Int(ceil(amount))
+        }
+    
+        public init(timeInterval: TimeInterval) {
+            amount = fabs(Days.amount(timeInterval: timeInterval))
         }
     
         public init(_ anAmount: Double) {
             amount = anAmount
         }
     
-        public var timeInterval: NSTimeInterval {
-            return Days.timeIntervalFromAmount(amount)
+        public var timeInterval: TimeInterval {
+            return Days.timeInterval(amount: amount)
         }
     
         public var isPast: Bool {
@@ -138,9 +137,9 @@ These two methods are a pain to test if you substitute `clock.now()` with `NSDat
         }
     }
 
-In my book on application architecture, _Exploring Mac App Development Strategies_, I talk about the benefit of value objects and how to make things testable in more detail. You can find more about that book and value objects [on my website.](http://christiantietze.de/)
+In my book on application architecture, _Exploring Mac App Development Strategies_, I talk about the benefit of value objects and how to make things testable in more detail. You can find more about that book and value objects [on my website.](http://cleancocoa.com/)
 
-The main lesson I want to uncover is this: try to defer object creation to service objects like the good old Factory object. Especially creation of things you do not own, like `NSDate` and similar Foundation types. It pays off to not worry about their behavior when you write tests (which you should).
+The main lesson I want to uncover is this: try to defer object creation to service objects like the good old Factory object. Especially creation of things you do not own, like `Date` and similar Foundation types. It pays off to not worry about their behavior when you write tests (which you should).
 
 Now that `Days` takes care of encapsulating the main time interval we'll need, and `Clock` to tell the current time, `TrialPeriod` becomes super simple:
 
@@ -148,13 +147,13 @@ Now that `Days` takes care of encapsulating the main time interval we'll need, a
 
         public func ended(clock: KnowsTimeAndDate) -> Bool {
             let now = clock.now()
-            return endDate.laterDate(now) == now
+            return endDate < now
         }
-    
+
         public func daysLeft(clock: KnowsTimeAndDate) -> Days {
             let now = clock.now()
-            let timeUntil = now.timeIntervalSinceDate(endDate)
-        
+            let timeUntil = now.timeIntervalSince(endDate)
+    
             return Days(timeInterval: timeUntil)
         }
     }
