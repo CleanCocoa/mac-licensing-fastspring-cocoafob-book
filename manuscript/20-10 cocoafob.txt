@@ -1,14 +1,14 @@
 ## Embedding CocoaFob
 
-For Swift 2 and above, CocoaFob provides a native implementation. If you use Swift 1.2 or Objective-C, refer to [the instructions in the appendix.](#cocoafob-objc)
+For Swift 3, CocoaFob provides a native implementation. If you use Objective-C, refer to [the instructions in the appendix.](#cocoafob-objc)
 
-I tend to add GitHub-based projects as submodules to my projects. That's how the [sample code](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob) works, too. I put all of them into an "External" folder. So from the project root of your project, these are the commands you'd have to enter at the command line:
+### Manual Checkout
+
+I tend to add GitHub-based projects as submodules to simple projects like these. That's how the [sample code](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob) works, too. I put all of them into an "External" folder. So from the project root of your project, these are the commands you'd have to enter at the command line:
 
     $ mkdir External
     $ cd External/
     $ git submodule add git://github.com/glebd/cocoafob.git
-
-Note that we won't pull code for the `CommandLine` dependency since we're not going to use the Swift command line utility to generate keys.
 
 Alternatively, you can [download the code from GitHub](https://github.com/glebd/cocoafob/tree/master/swift/CocoaFob) and add the files manually.
 
@@ -20,3 +20,9 @@ You're going to need the following files from the `swift/CocoaFob` subfolder:
 * `CocoaFobStringExt.swift`
 
 Add them to your Xcode project. That's everything you need to do to prepare the project.
+
+### Dependency Managers
+
+CocoaFob now also provides CocoaPods integration. The resulting library consists of all the stuff you are going to need -- plus a bit more, like license key generation. 
+
+As of early 2017, Carthage and the Swift Package Manager are not supported.

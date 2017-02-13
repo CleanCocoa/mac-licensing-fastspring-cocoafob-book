@@ -28,7 +28,7 @@ Note the trailing newline character.
 
 Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string into chunks. The obfuscation process could look like this:
 
-    private func publicKey() -> String {
+    fileprivate func publicKey() -> String {
         
         var parts = [String]()
         parts.append("-----BEGIN DSA PUBLIC KEY-----\n")
@@ -50,7 +50,7 @@ Instead of a mutable string, which is the way to go in Objective-C, I'll use an 
         parts.append("YHUlf\nUpIg\n")
         parts.append("-----END DSA PUBLIC KEY-----\n")
     
-        let publicKey = parts.joinWithSeparator("")
+        let publicKey = parts.joined(separator: "")
         
         return publicKey
     }
@@ -58,11 +58,11 @@ Instead of a mutable string, which is the way to go in Objective-C, I'll use an 
 Now that we can hope the public key won't be found too easily by someone  trying to circumvent the licensing process, we can use the `CFobLicVerifier` to verify license information.
 
     public class LicenseVerifier {
-        static let AppName = "MyNewApp"
+        static let appName = "MyNewApp"
         let appName: String
     
         public convenience init() {
-            self.init(appName: LicenseVerifier.AppName)
+            self.init(appName: LicenseVerifier.appName)
         }
     
         public init(appName: String) {
@@ -76,7 +76,7 @@ Now that we can hope the public key won't be found too easily by someone  trying
             let registrationName = "\(appName),\(name)"
             let publicKey = self.publicKey()
         
-            guard let verifier = verifierWithPublicKey(publicKey) else {
+            guard let verifier = verifier(publicKey: publicKey) else {
                 assertionFailure("CocoaFobLicenseVerifier cannot be constructed")
                 return false
             }
@@ -84,18 +84,18 @@ Now that we can hope the public key won't be found too easily by someone  trying
             return verifier.verify(licenseCode, forName: registrationName)
         }
     
-        private func verifierWithPublicKey(publicKey: String) 
+        fileprivate func verifier(publicKey: String) 
             -> CocoaFobLicVerifier? {
 
             return CocoaFobLicVerifier(publicKeyPEM: publicKey)
         }
     
-        private func publicKey() -> String {
+        fileprivate func publicKey() -> String {
             // ... as above ...
         }
     }
 
-The implementation is pretty simple. The construction of a `CocoaFobLicVerifier` can fail when the public key does not satisfy the requirements and is broken. Apart from that, passing on the result of `verify(_:, forName:)` is straigthforward.
+The implementation is pretty simple. The construction of a `CocoaFobLicVerifier` can fail when the public key does not satisfy the requirements and is broken. Apart from that, passing on the result of `verify(_:, forName:)` is straightforward.
 
 So that is all you need to do:
 
@@ -123,17 +123,19 @@ All of them are very focused to accomplish a single task. `LicenseProvider` for 
     public class LicenseProvider {
         public init() { }
     
-        lazy var userDefaults: NSUserDefaults = 
+        // `UserDefaults.standardUserDefaults` is a factory that
+        // can return something else for unit tests.
+        lazy var userDefaults: Foundation.UserDefaults = 
             UserDefaults.standardUserDefaults()
     
         public var currentLicense: License? {
         
             guard let name = userDefaults.stringForKey(
-                    "\(License.UserDefaultsKeys.Name)"),
+                    "\(License.UserDefaultsKeys.name)"),
                 licenseCode = userDefaults.stringForKey(
-                    "\(License.UserDefaultsKeys.LicenseCode)") else {
+                    "\(License.UserDefaultsKeys.licenseCode)") else {
                 
-                return .None
+                return nil
             }
         
             return License(name: name, licenseCode: licenseCode)
@@ -149,11 +151,9 @@ All of them are very focused to accomplish a single task. `LicenseProvider` for 
             self.licenseCode = licenseCode
         }
     
-        public enum UserDefaultsKeys: String, CustomStringConvertible {
-            case Name = "licensee"
-            case LicenseCode = "license_code"
-        
-            public var description: String { return rawValue }
+        public enum UserDefaultsKeys: String {
+            case name = "licensee"
+            case licenseCode = "license_code"
         }
     }
     

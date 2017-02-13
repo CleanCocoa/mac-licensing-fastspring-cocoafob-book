@@ -1,6 +1,6 @@
 ## Download the Code
 
-[Download all current samples from GitHub.](https://github.com/DivineDominion/mac-licensing-fastspring-cocoafob)
+[Download all current samples from GitHub.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob)
 
 There are two projects included:
 

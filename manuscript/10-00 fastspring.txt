@@ -1,10 +1,12 @@
 # Set up Your App for Sale on FastSpring
 
-Head to FastSpring's [sign-up page](http://www.fastspring.com/sign-up) if you don't have an account already. This may take a little while even for the awesome people at FastSpring to set up manually for you.
+Head to FastSpring's [sign-up page](http://www.fastspring.com/sign-up) if you don't have an account already. Account activation may take a little while, so better do it early.
 
-FastSpring will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to setup next.
+The FastSpring backend will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to setup next.
 
-If you have an account set-up, great. You may proceed.
+If you have an account set-up, great. Proceed!
 
-If you still wait for your account approval, you may want to skim the following sections to get a feel for the process already. Then take a closer look at implementing license verification in code. You can at least prepare your app while you wait.
+If you still wait for your account approval, you may want to skim the following sections to get a feel for the process and come back to it later. 
+
+This step doesn't have to be completed before you can work in Xcode. Up next, we'll take a close look at implementing license verification in code. Start there while you wait.
 

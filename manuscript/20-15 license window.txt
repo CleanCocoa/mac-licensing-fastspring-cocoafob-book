@@ -35,12 +35,15 @@ We focus on `ExistingLicenseViewController` here to handle user input and look a
         public var eventHandler: HandlesRegistering?
     
         @IBAction public func register(sender: AnyObject) {
-            if let eventHandler = eventHandler {
-                let name = licenseeTextField.stringValue
-                let licenseCode = licenseCodeTextField.stringValue
-            
-                eventHandler.register(name, licenseCode: licenseCode)
+            guard let eventHandler = eventHandler else {
+                return
             }
+
+            let name = licenseeTextField.stringValue
+            let licenseCode = licenseCodeTextField.stringValue
+
+            eventHandler.register(name, licenseCode: licenseCode)
+            
         }
         
         public func displayEmptyForm() {
@@ -54,7 +57,7 @@ We focus on `ExistingLicenseViewController` here to handle user input and look a
         }
     }
 
-That's a pretty simplistic approach. This is what view controllers ought to do: react to user input and delegate to other objects as soon as possible.
+That's a very simple approach. This is what view controllers ought to do: react to user input and delegate to other objects as soon as possible.
 
 This kind of approach to implementing view controllers makes them easily testable. In fact, the sample code contains more than 50 tests with quite a few regarding Nib loading and view controller interaction.
 
@@ -83,15 +86,15 @@ It is apparent that `RegisterApplication`, which implements the `HandlesRegister
         }
     
         public func register(name: String, licenseCode: String) {
-            if !licenseVerifier.licenseCodeIsValid(licenseCode, forName: name) {
+            if !licenseVerifier.isValid(licenseCode: licenseCode, forName: name) {
                 displayLicenseCodeError()
                 return
             }
         
-            let licenseInformation = LicenseInformation.Registered(
+            let licenseInformation = LicenseInformation.registered(
                 License(name: name, key: licenseCode))
         
-            licenseWriter.storeLicenseCode(licenseCode, forName: name)
+            licenseWriter.store(licenseCode: licenseCode, forName: name)
             changeBroadcaster.broadcast(licenseInformation)
         }
     
@@ -116,8 +119,8 @@ The value objects we use behind the scenes are, simplified:
     }
     
     enum LicenseInformation {
-        case Unregistered
-        case Registered(License)
+        case unregistered
+        case registered(License)
     }
 
 That's all there is to representing if a user has unlocked the app already.
@@ -126,19 +129,20 @@ The notification `LicenseChangeBroadcaster` fires can be consumed by any interes
 
 In the sample application, which does not allow using the main application interface until the app is unlocked, `AppDelegate` is the gatekeeper. It subscribes to these events and unlocks the main app:
 
-    func licenseDidChange(notification: NSNotification) {
-        if let userInfo = notification.userInfo, 
-            licenseInformation = LicenseInformation.fromUserInfo(userInfo) {
-            
-            switch licenseInformation {
-            case .Registered(_):
-                displayThankYouAlert()
-                unlockApp()
-                
-            case .Unregistered:
-                // If you support un-registering, handle it here
-                return
-            }
+    func licenseDidChange(_ notification: Notification) {
+    
+        guard let userInfo = notification.userInfo, 
+            let licenseInformation = LicenseInformation.fromUserInfo(userInfo) 
+            else { return }
+    
+        switch licenseInformation {
+        case .registered(_):
+            displayThankYouAlert()
+            unlockApp()
+        
+        case .unregistered:
+            // If you support un-registering, handle it here
+            return
         }
     }
 
