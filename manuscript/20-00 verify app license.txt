@@ -1,7 +1,5 @@
 # Sample App 1: How to Verify License Codes in Your App
 
-![The "Enter a License" window of _New App_.](images/20-050-license-window.png)
-
 According to the license template `#{product},#{name}` the license code is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
 
 A license code is invalid when checked against that template if it satisfies at least one of the following criteria:

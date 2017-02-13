@@ -101,7 +101,9 @@ But if the user registers the app in the meantime, the trial timer should be can
 
     typealias CancelableDispatchBlock = (_ cancel: Bool) -> Void
 
-    func dispatch(cancelableBlock block: @escaping () -> Void, atDate date: Date) -> CancelableDispatchBlock? {
+    func dispatch(
+        cancelableBlock block: @escaping () -> Void, 
+        atDate date: Date) -> CancelableDispatchBlock? {
     
         // Use two pointers for the same block to make
         // the block reference itself.

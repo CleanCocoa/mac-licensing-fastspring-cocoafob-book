@@ -90,6 +90,13 @@ Some obvious competitors that handle payments are:
 
 PayPal and Stripe will handle purchases, and that's it. Figuring out VAT yourself is not fun and the time needed to make the store really do its job isn't worth the lower transaction fee.
 
+Gumroad will also offer a simple store widget and lets you upload files. Credit cards work way better here than with PayPal, but not everyone around the world has a credit card in the first place -- and I'm not talking about lesser developed countries: It's quite rare to know someone in Germany in 2015 with a credit card.
+
+Kagi and e-sellerate are apt to create a real custom e-stores. So is FastSpring. All of these take care of handling VAT (value added tax) for you, which otherwise is a mess in the European Union. 
+
+If you want a more subjective argument: The great customer service sets FastSpring apart. For example, they offer you to take care of the initial store design _for free._ They are super responsive. A few people I interviewed pointed out they were happy with the quick and helpful responses -- even though I didn't ask. That's my experience, too. So much for the anecdotes. 
+
+
 D> **Pieter Omvlee** revealed that **Bohemian Coding**, creators of the infamous Sketch design tool, initially sold via PayPal around 8 years ago. Bohemian Coding moved to FastSpring because of the better features, namely handling VAT automatically. Even though Sketch was sold exclusively on the Mac App Store when Apple opened its doors, after re-introducing FastSpring for volume licenses it turns out their own FastSpring-based store performs better than the Mac App Store.
 D> 
 D> **Tyler Hall** started his business by selling VirtualHostX via PayPal from 2007--2009, too. But he switched once a friend of his was locked out of PayPal due to "suspicious" activity. Imagine your sales going strong, then suddenly your payment processor blocks your account. That equals sudden death (or at least a severe and prolonged coma) for your business.
@@ -98,12 +105,6 @@ D> Account terminations still happen. There are many recorded incidents of peopl
 Apple and amazon are huge, so false positive charges are inevitable. They also need to be proactive and exercise ownership to protect their customers -- which is not you, the developer, but the end user. Selling on your own turns things around. To an e-commerce provider, you are the store owner and you are their customer. The end user is your responsibility, not theirs. That is a huge difference.
 
   [^dash]: In 2016, Dash, the popular documentation browser for Mac, was removed from the App Stores because the developer's acoount was cancelled. This can happen quickly and the lack of control from your side is threatening. (Read more on my website: <https://christiantietze.de/posts/2016/10/dash-removed-from-app-stores/>) It turned out Apple _did_ have a point, but everyone could have handled the issue a lot better. In hindsight, the developer said, "I was lucky to have setup a direct way of distributing Dash a while ago and as a result I’ve been mostly unaffected by the removal from the App Store." ([Source](https://blog.kapeli.com/100-days-without-the-app-store))
-
-Gumroad will also offer a simple store widget and lets you upload files. Credit cards work way better here than with PayPal, but not everyone around the world has a credit card in the first place -- and I'm not talking about lesser developed countries: It's quite rare to know someone in Germany in 2015 with a credit card.
-
-Kagi and e-sellerate are apt to create a real custom e-stores. So is FastSpring. All of these take care of handling VAT (value added tax) for you, which otherwise is a mess in the European Union. 
-
-If you want a more subjective argument: The great customer service sets FastSpring apart. For example, they offer you to take care of the initial store design _for free._ They are super responsive. A few people I interviewed pointed out they were happy with the quick and helpful responses -- even though I didn't ask. That's my experience, too. So much for the anecdotes. 
 
 Keep in mind that I got in touch with a lot more of the people behind the curtains at FastSpring when I wrote this book than you might ever need to. During the spring 2017 webinar development it felt as if I was introduced to the whole family. I am getting more positively biased every year and work hard to be more helpful to you, dear reader, than a mere evangelist.
 
@@ -147,7 +148,10 @@ Private Key
 
 License Code
 : The string of characters your customers will receive after they buy your app. 
-: CocoaFob-generated license codes should look familiar if you ever bought a Mac app outside the App Store. They tend to look like this: `GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A`
+: CocoaFob-generated license codes should look familiar if you ever bought a Mac app outside the App Store. They tend to look like this:    
+
+    GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-
+    CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A
 
 License Name
 : Also called "licensee," the name of your customer your app is licensed to. We will set up license code generation to be based on the customer's name, but you can remove this information from the process. We'll talk about that later.
