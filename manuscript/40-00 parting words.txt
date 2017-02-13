@@ -20,7 +20,7 @@ Oh how my best pal both laughed and screamed at me when I told him. The name "Ta
 
 When I relaxed after the surge of negative emotions for being criticized and laughed at died down, we looked for a new name. We tried different word combinations and I liked "table flip," because of the meme and the emoji you probably know:
 
-    (╯°□°）╯︵ ┻━┻
+![](40-000-flip.png)
 
 It was fun, in a way internet people will understand. Markdown is a child of the internet, so it was a good fit, like an in-group joke. But "write table markup" and "flip" didn't click. 
 
