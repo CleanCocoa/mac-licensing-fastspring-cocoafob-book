@@ -1,6 +1,6 @@
 ## Embedding CocoaFob with Objective-C {#cocoafob-objc}
 
-With Swift 1.2, you still had to use the Objective-C code of the library. When you use Swift 1.2 or Objective-C, you have to add a lot more files and disable ARC for some of them.
+For purely historical reasons, here's how to set up the license verifier with Swift 1.2 or Objective-C.
 
 Include the following files from the `objc` folder [of CocoaFob](https://github.com/glebd/cocoafob/):
 
@@ -127,11 +127,11 @@ With a working `CFobLicVerifier` instance, the result of `verifyRegCode(_:, forN
 This time, the error pointer will not be populated with programmer errors. `verifyRegCode` will report why the license information couldn't be verified. Look at the predefined `CFobErrorCode`s:
 
     enum _CFobErrorCode {
-    	CFobErrorCodeInvalidKey = -1,
-    	CFobErrorCodeCouldNotDecode = -2,
-    	CFobErrorCodeSigningFailed = -3,
-    	CFobErrorCodeCouldNotEncode = -4,
-    	CFobErrorCodeNoName = -5,
+        CFobErrorCodeInvalidKey = -1,
+        CFobErrorCodeCouldNotDecode = -2,
+        CFobErrorCodeSigningFailed = -3,
+        CFobErrorCodeCouldNotEncode = -4,
+        CFobErrorCodeNoName = -5,
     };
 
 `verifyRegCode` considers the license source template results to be the "name", whereas we talk about licensee's name and product name all the time. The combination of both, according to the license template we set up in FastSpring, is what CocoaFob needs for decrypting and verifying. Conversely, if that's empty or `nil`, `CFobErrorCodeNoName` will be raised. If this value is encrypted with a private key which doesn't match the built-in public key of the app, another error code will be used. And so on. 

@@ -23,10 +23,10 @@ A URL is composed of multiple parts. We may easily recognize the host, path, and
 
 Substitute `...` with the actual code. I favor the third option, because there, you have the following components:
 
-* `mynewapp` as `NSURL.scheme`
-* `license` as `NSURL.host`
-* `/activate` as `NSURL.path`
-* `licenseCode=...` as `NSURL.query`
+* `mynewapp` as `URL.scheme`
+* `license` as `URL.host`
+* `/activate` as `URL.path`
+* `licenseCode=...` as `URL.query`
 
 Although that's the variant which stays truest to thinking in terms of HTTP resources, it's overly complicated if your app doesn't support anything else.
 
@@ -43,39 +43,91 @@ The name parameter is base64-encoded so we don't run into problems with special 
 
 ### Handle Activation Within the App
 
-In code, I make the following changes:
+In the code, I make the following changes:
 
-* Add `URLQueryRegistration` type. Instances take a `NSURL`, extract the query portion, and delegate parsing to `URLQueryLicenseParser`. The result is passed on to an object which conforms to `HandlesRegistering`. This will be the `RegisterApplication` service which we already use for manual registering.
+* Add `URLQueryRegistration` type. Instances take a `URL` (former `NSURL`), extract the query portion, and delegate parsing to `URLQueryLicenseParser`. The result is passed on to an object which conforms to `HandlesRegistering`. This will be the `RegisterApplication` service which we already use for manual registering.
 * `URLQueryLicenseParser` splits the whole query string which begins right after the `?` in the URL into key--value-pairs suited for a dictionary. It then decodes the name and returns a well-known `License` value object.
 * Add URL scheme registration and handling of the event to `AppDelegate`.
 
 The code to get from URL to license is nothing special.
 
-Setting up the URL handler involves a new part of Foundation, though, so let's look at the code:
+    enum URLComponents: String {
+        case host = "activate"
+        case licensee = "name"
+        case licenseCode = "licenseCode"
+    }
+    
+    public class URLQueryRegistration {
+    
+        let registrationHandler: HandlesRegistering
+    
+        public init(registrationHandler: HandlesRegistering) {
+            self.registrationHandler = registrationHandler
+        }
+    
+        public lazy var queryParser: URLQueryLicenseParser 
+            = URLQueryLicenseParser()
+    
+        public func register(fromUrl url: URL) {
+            guard let query = query(url: url),
+                let license = queryParser.parse(query: query) else {
+                return
+            }
+        
+            registrationHandler.register(
+                name: license.name, 
+                licenseCode: license.licenseCode)
+        }
+    
+        fileprivate func query(url: URL) -> String? {
+        
+            if let host = url.host, 
+                let query = url.query, 
+                host == URLComponents.host {
+                return query
+            }
+        
+            return .none
+        }
+    }
 
+The `URLQueryLicenseParser` is a bit longer because you have to extract parts of the string and escape and unescape stuff here and there. It's still boring. Instead of printing all the code here, I suggest you take a look at the demo code directly and play with it. Or have a look [at the code online.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/blob/master/Trial-Expire-While-Running/MyNewApp/URLQueryLicenseParser.swift)
+
+Let's have a look at the lower-level handling of incoming URL requests and then handing off the real work to `URLQueryRegistration` in `AppDelegate`:
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        prepareTrialOnFirstLaunch()
+        startTrialTimer()
+    
+        registerForURLScheme() // <- New!
+        observeLicenseChanges()
+        prepareLicenseWindowController()
+        launchAppOrShowLicenseWindow()
+    }
+    
     func registerForURLScheme() {
     
-        NSAppleEventManager.sharedAppleEventManager()
-            .setEventHandler(self, 
-                andSelector: #selector(AppDelegate.handleGetUrlEvent(_:withReplyEvent:)), 
-                forEventClass: AEEventClass(kInternetEventClass), 
+        NSAppleEventManager.shared()
+            .setEventHandler(
+                self,
+                andSelector: #selector(AppDelegate
+                    .handle(getUrlEvent:withReplyEvent:)),
+                forEventClass: AEEventClass(kInternetEventClass),
                 andEventID: AEEventID(kAEGetURL))
     }
 
-    func handleGetUrlEvent(event: NSAppleEventDescriptor, 
+    func handle(getUrlEvent event: NSAppleEventDescriptor, 
         withReplyEvent: NSAppleEventDescriptor) {
     
-        let eventObject = event
-                .paramDescriptorForKeyword(AEKeyword(keyDirectObject))
-                
-        if let urlString = eventObject?.stringValue, 
-            url = NSURL(string: urlString) {
+        if let urlString = event.paramDescriptor(
+            forKeyword: AEKeyword(keyDirectObject))?.stringValue,
+            let url = URL(string: urlString) {
         
-            // If you support multiple actions, here'd be the place to 
+            // If you support multiple actions, here'd be the place to
             // delegate to a router object instead.
         
             URLQueryRegistration(registrationHandler: registerApplication)
-                .registerFromURL(url)
+                .register(fromUrl: url)
         }
     }
 
@@ -87,9 +139,9 @@ Now we need FastSpring to generate the links.
 
 ### Set Up Confirmation E-Mail in SpringBoard
 
-Customers will already receive their invoice via e-mail. There's no way to touch that. You can send a customized letter right afterwards, though, including license codes.
+Customers will already receive their invoice via e-mail. You can send a customized letter right afterwards, though, including license codes and the new and shiny activation link.
 
-Go to your SpringBoard, select your product, and add a new fulfillment action. Select the first option for e-mail.
+Log into your SpringBoard, select your product, and add a new fulfillment action. Select the first option for e-mail.
 
 The subject is set to something like: "Your #{orderItem.display} Delivery Information". Obviously, there's a template string included, which will expand to "My New App", "Word Counter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
 
@@ -121,5 +173,5 @@ There are a quite a few template variables used.
 
 Save the fulfillment action.
 
-If you perform a test purchase from your SpringBoard afterwards, you should receive a new kind of e-mail from now on with license info and the activation link.
+If you perform a test purchase from your SpringBoard afterwards, you should receive a new kind of e-mail from now on with license info and the activation link. Try it, it's fun!
 
