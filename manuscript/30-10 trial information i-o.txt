@@ -4,6 +4,7 @@ You have to store the `TrialPeriod` somewhere. The sample app will put trial inf
 
 The user defaults is a pretty bad place for a shipping app if you worry about users trying to avoid to pay for your software since savvy users can manipulate the values via command line.
 
+{format=shell}
     $ defaults read de.christiantietze.MyNewApp
     {
         "trial_ending" = "2015-08-30 09:17:25 +0000";

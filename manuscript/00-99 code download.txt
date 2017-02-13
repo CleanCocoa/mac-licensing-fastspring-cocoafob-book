@@ -13,10 +13,13 @@ License code generation will be powered by FastSpring, as explained in the next 
 
 Once your product is set up with FastSpring, you need to add the details to `FastSpringCredentials.plist` which is used by the sample apps to load the embedded store with the correct details.
 
+{pagebreak}
+
+{float=left}
+![`Trial-Expire-While-Running` files](images/00-050-code-org.png)
+
 ## Project Organization
 
-{float=right}
-![`Trial-Expire-While-Running` files](images/00-050-code-org.png)
 
 As the project navigator reveals, I have taken quite an effort to structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
 
@@ -37,3 +40,5 @@ There are six major groups in the time-trial enabled sample app:
 **User Interface**: Contains window controllers for the store window and the license information window.
 
 You can drag & drop all of these files (except `AppDelegate`, `MainMenu.xib`, and `Images.xcassets` of course) into your existing project, adjust a few parameters, extend your own `AppDelegate`, and that's it. No additional action required.
+
+{pagebreak}
