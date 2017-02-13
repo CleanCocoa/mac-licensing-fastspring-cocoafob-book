@@ -79,7 +79,7 @@ Things are different when the trial passes while the app is running.
 
 ### While Running the App
 
-The ultimate goal of this step is to use the `LicenseChangeBroadcaster` to fire a change notification for the `.TrialUp` case.
+The ultimate goal of this step is to use the `LicenseChangeBroadcaster` to fire a change notification for the `.trialUp` case.
 
 A timer has to fire when the `TrialPeriod`'s `endDate` has arrived.
 
@@ -156,7 +156,7 @@ These free functions provide a way to create multiple `CancelableDispatchBlock`s
             _cancel = true
         }
     
-        func schedule(fireDate: NSDate) {
+        func schedule(fireDate: Date) {
             if _didSchedule { return }
 
             let delay = Int(fireDate.timeIntervalSinceNow)
@@ -177,7 +177,7 @@ It looks way less weird, I admit.
 
 Now that the timer is taken care of and the license change event can be fired, the `AppDelegate`, which is the observer of these events, can finally react:
 
-    func licenseDidChange(notification: NSNotification) {
+    func licenseDidChange(notification: Notification) {
         guard let userInfo = notification.userInfo,
             let licenseInformation = 
                 LicenseInformation.fromUserInfo(userInfo: userInfo) 

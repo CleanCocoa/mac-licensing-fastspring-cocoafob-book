@@ -38,12 +38,12 @@ License verification works a bit differently, though.
 {title="LicenseVerifier based on Objective-C CocoaFob"}
     public class LicenseVerifier {
     
-        static let AppName = "MyNewApp"
+        static let appName = "MyNewApp"
         let appName: String
     
         public convenience init() {
         
-            self.init(appName: LicenseVerifier.AppName)
+            self.init(appName: LicenseVerifier.appName)
         }
     
         // I like to provide an initializer where you can inject the `appName`
@@ -59,7 +59,7 @@ License verification works a bit differently, though.
             let registrationName = "\(appName),\(name)"
             let publicKey = self.publicKey()
         
-            var error: NSError?
+            var error: Error?
             if let verifier = verifierWithPublicKey(publicKey, error: &error) {
             
                 error = nil
