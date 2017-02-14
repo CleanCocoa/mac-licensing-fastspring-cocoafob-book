@@ -26,7 +26,7 @@ It was fun, in a way internet people will understand. Markdown is a child of the
 
 I looked for excuses to still call it "TableFlip." What could "flipping a document" mean? Like having two sides of the same document, a textual and a visual side. In the end, I defined "flipping" to mean that TableFlip always shows what's inside a Markdown file, even when you edit it using another editor. TableFlip will pick up changes you make to the file, visualizing the tables in the document. It then makes editing tabular data simple so you can perform changes and "flip" them back. 
 
-Today I still feel like a genius for having that idea. Sure, the task became more complex than a mere table editor that saves to a file or to the clipboard. But the project as a whole became a lot more inspiring. It's the most awesome feature of the whole app, I'd say. None of that would've happened had I kept "TableDown," _The Sad Markdown Table Editor._
+Today I still feel like a genius for having had that idea. Sure, the task became more complex than a mere table editor that saves to a file or to the clipboard. But the project as a whole became a lot more inspiring. It's the most awesome feature of the whole app, I'd say. None of that would've happened had I kept "TableDown," _The Sad Markdown Table Editor._
 
 TL;DR: Feedback is important. You will sometimes be an idiot when it comes to managerial decisions, especially when you enjoy coding more than you enjoy business development. Or when you're under pressure. It's hard to wear all these different hats. 
 
