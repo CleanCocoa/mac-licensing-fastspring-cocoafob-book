@@ -15,13 +15,12 @@ Once your product is set up with FastSpring, you need to add the details to `Fas
 
 {pagebreak}
 
-{float=left}
-![`Trial-Expire-While-Running` files](images/00-050-code-org.png)
 
 ## Project Organization
 
+![Files of the second sample app](images/00-050-code-org.png)
 
-As the project navigator reveals, I have taken quite an effort to structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
+As the project navigator reveals, I structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
 
 The root folder of the project contains the obligatory `AppDelegate`, an `Alerts` factory, and two major use case objects: `RegisterApplication` and `PurchaseLicense`, both responsible for what it says on the tin.
 
