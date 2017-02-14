@@ -150,8 +150,11 @@ License Code
 : The string of characters your customers will receive after they buy your app. 
 : CocoaFob-generated license codes should look familiar if you ever bought a Mac app outside the App Store. They tend to look like this:    
 
+
+{linenos=off}
     GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-
     CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A
+
 
 License Name
 : Also called "licensee," the name of your customer your app is licensed to. We will set up license code generation to be based on the customer's name, but you can remove this information from the process. We'll talk about that later.
