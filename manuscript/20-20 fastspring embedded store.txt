@@ -27,10 +27,11 @@ Until then, follow these instructions to set up a web view-based embedded store 
 
 The Embedded Web Store will need a different style. The [FastSpring SDK on GitHub][github] contains a folder called "FsprgEmbeddedStoreStyle". Put the CSS, the XHTML, and the PayPal folder into a Zip file. Alternatively, you can use the prepared Zip from the sample code. We'll need that in a moment.
 
-Log into your SpringBoard. From there, apply the following configurations:
+![Enable the web store](images/20-102-enable-web-store.png)
 
-![20 102 Enable Web Store](images/20-102-enable-web-store.png)
-![20 103 Create Style](images/20-103-create-style.png)
+![Create a new store style](images/20-103-create-style.png)
+
+Log into your SpringBoard. From there, apply the following configurations:
 
 * _Store Settings_ / _Advanced_: pick "Property List XML" to enable Web Store requests.
 * _Styles_: create a new style. Upload the Zip file you just prepared. 
