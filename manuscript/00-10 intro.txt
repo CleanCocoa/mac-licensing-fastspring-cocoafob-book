@@ -67,9 +67,9 @@ After reading this book, you'll be able to quickly add license code verification
 
 Then there's the part about implementing time-based trials in your app. Time-based trials are the de facto standard to limit functionality of what was used to be called "shareware" in the '90s. Keeping track of time is another functionality you would have to add to your app but which I have taken care of. It integrates into the existing license mechanism nicely.
 
-Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start but potentially running forever. Users have to pay to unlock the full potential of the app. We won't cover that in much detail because it'll turn out that this is essentially an in-app purchase. Since you eill learn how to add in-app purchases to unlock features, you will be able to create feature-based trials, too.
+Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start but potentially running forever. Users have to pay to unlock the full potential of the app. We won't cover that in much detail because it'll turn out that this is essentially an in-app purchase. Since you will learn how to add in-app purchases to unlock features, you will be able to create feature-based trials, too.
 
-All in all, you only have to take the well-factored sample code of this book and copy the parts you want to use into your awesome app to get started. If your app is already functional, it may take you no more than half an hour to put your app under copy protection and add a time-based trial -- depending on your existing code, of course.
+All in all, you only have to take the well-factored sample code of this book and copy the parts you want to use into your awesome app to get started. If your app is already functional, it may take you no more than an hour to put your app under copy protection and add a time-based trial -- depending on your existing code, of course.
 
 The sample code will be written in the latest stable version of Swift. I'll update the book regularly, so check back for a new e-book version download when you notice Swift has changed.
 
