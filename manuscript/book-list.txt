@@ -1,7 +1,7 @@
 {icon=book}
-G> ## Other Books by Me
+G> ## My Other Books
 G>
-G> Clean Cocoa is my mission: bringing you the best coding practices to create working applications for Mac and iOS.
+G> "Clean Cocoa" is my mission: showing you the best coding practices to create great apps for macOS and iOS.
 G>
 G> To that end, I've written the following other books which you might want to check out:
 G>
