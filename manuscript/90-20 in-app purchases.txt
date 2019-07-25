@@ -14,7 +14,7 @@ All that got IAP's in general a lot of bad reputation. _But_ there's in-app purc
 
 FastSpring allows you to implement these using the embedded store SDK. You just have to think outside the box a bit.
 
-Among the better received in-app purchases in non-game apps are _contents_, not features, [as Stuart K. Hall's experience indicates](http://stuartkhall.com/posts/an-app-store-experiment-part-3). For his workout app, that's a new set of workout videos and instructions. Make sure to read [Part 4](http://stuartkhall.com/posts/an-app-store-experiment-part-4) of his series, where his numbers indicate that users, once hooked, don't want to pick single options but simply _unlock everything_. Providing a bundle purchase option might be a good idea for you, too.
+Among the better received in-app purchases in non-game apps are _contents_, not features, [as Stuart K. Hall's experience indicates](https://stuartkhall.com/posts/an-app-store-experiment-part-3). For his workout app, that's a new set of workout videos and instructions. Make sure to read [Part 4](https://stuartkhall.com/posts/an-app-store-experiment-part-4) of his series, where his numbers indicate that users, once hooked, don't want to pick single options but simply _unlock everything_. Providing a bundle purchase option might be a good idea for you, too.
 
 In the Mac App Store and iTunes App Store (iOS), in-app purchases are used to unlock "pro" features. It's the only option since there's no app demos. Where traditionally shareware offered full features for a limited time of, say, 30 days, nowadays users are trained to download a feature-limited app for free and unlock the full feature set for money.
 

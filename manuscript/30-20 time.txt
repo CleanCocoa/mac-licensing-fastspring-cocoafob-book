@@ -135,7 +135,7 @@ These two methods are a pain to test if you substitute `clock.now()` with `Date(
         }
     }
 
-In my book on application architecture, _Exploring Mac App Development Strategies_, I talk about the benefit of value objects and how to make things testable in more detail. You can find more about that book and value objects [on my website.](http://cleancocoa.com/)
+In my book on application architecture, _Exploring Mac App Development Strategies_, I talk about the benefit of value objects and how to make things testable in more detail. You can find more about that book and value objects [on my website.](https://christiantietze.de/)
 
 The main lesson I want to uncover is this: try to defer object creation to service objects like the good old Factory object. Especially creation of things you do not own, like `Date` and similar Foundation types. It pays off to not worry about their behavior when you write tests (which you should).
 

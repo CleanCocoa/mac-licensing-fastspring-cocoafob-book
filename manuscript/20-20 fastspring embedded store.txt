@@ -56,7 +56,7 @@ Now everything should be ready to roll from FastSpring's side.
 
 You can use CocoaPods or get the source from GitHub:
 
-* CocoaPods: <http://cocoapods.org/?q=fsprgembeddedstoremac>
+* CocoaPods: <https://cocoapods.org/?q=fsprgembeddedstoremac>
 * GitHub: <https://github.com/FastSpring/FsprgEmbeddedStoreMac#how-to-embed-it>
 
 I use GitHub for the samples to keep the project set-up simple.

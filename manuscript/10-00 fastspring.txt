@@ -1,6 +1,6 @@
 # Set up Your App for Sale on FastSpring
 
-Head to FastSpring's [sign-up page](http://www.fastspring.com/sign-up) if you don't have an account already. Account activation may take a little while, so better do it early.
+Head to FastSpring's [sign-up page](https://www.fastspring.com/sign-up) if you don't have an account already. Account activation may take a little while, so better do it early.
 
 The FastSpring backend will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to setup next.
 
