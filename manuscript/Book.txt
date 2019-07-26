@@ -2,7 +2,9 @@ frontmatter.txt
 00-00 flap.txt
 
 mainmatter.txt
-00-10 intro.txt
+00-10 pros and cons.txt
+00-20 about.txt
+00-30 terms.txt
 00-50 process framework.txt
 newsletter.txt
 00-99 code download.txt

@@ -1,25 +1,29 @@
 ## Licensing Is All About a Big State Change
 
-Copy protection of applications through licensing is all about handling transitions from unactivated to activated. Since there's going to be quite a bit of code involved in implementing this, it pays off to do it in a clean way and represent app state expressively.
+The whole topic of protecting access to features of your application unless people pay for it can be boiled down to handling a transition of your app from "unactivated" state to "activated" state. 
 
-The state the app is in is determined at launch, for example. But changes can happen over time when the trial period is up or the user enters a license code to unlock the app. The state representation changes have to be handled by your application: you have to handle transitions.
+If you want, you could have a global variable in your code called `appIsUnlocked` and set it to `true` upon activation. We'll be using a more sophisticated approach, but in the end, a single boolean value is a very god representation already.
 
-With Swift, it's trivial to represent the state as an enum with an associated value for convenience:
+To manage the state change in a clean way, and since it's a very important part to get right, it pays off to implement all this as expressively as possible. You don't want to guess when and why your app is locking and unlocking itself in two years from now. We'll try our best to avoid creating tomorrow's legacy code when we implement the activation process.
+
+Think about a license code-activated application with a 30 day time-based trial. During the trial, users should have access to the full feature set. After the trial has ended, some or all features should be inaccessible unless the user enters a valid license code. In some sense, the activated app is identical to the app in trial mode, only without a clock ticking. How do you represent this?
+
+The state the app is in is determined at least during app launch. Changes can happen during the app's runtime when the trial period is up or the user enters a license code. The app has to represent its current state and its transitions.
+
+With Swift, it's trivial to represent the state of an app that has to be activated at first launch as an enum with an associated value for the details:
 
     enum LicenseInformation {
-        case Registered(License)
-        case Unregistered
+        case registered(License)
+        case unregistered
     }
 
-Or, if you want to support a time-based trial:
+It only gets a bit more complex if you want to support a time-based trial:
 
     enum LicenseInformation {
-        case Registered(License)
-        case OnTrial(TrialPeriod)
-        case TrialUp
+        case registered(License)
+        case onTrial(TrialPeriod)
+        case trialUp
     }
-
-That's the foundation of everything we're going to do: giving the application a means to find out which state it's in at the moment, and handle transitions.
 
 The associated `License` type is based on license code and licensee name for the sample apps of this book:
 
@@ -28,8 +32,17 @@ The associated `License` type is based on license code and licensee name for the
         let licenseCode: String
     }
 
-You're invited to stick to that and use it as-is in your applications. It's your choice if you want different details to be captured, though. You'll simply have to replace the type with something else and adjust the objects which read and write licenses accordingly.
+And the `TrialPeriod` type can be equally simple:
 
-Here's the battle plan:
+    struct TrialPeriod {
+        public let startDate: Date
+        public let endDate: Date
+    }
 
-We will start with setting up the app in your FastSpring dashboard in the next chapter. Then we'll implement a simple license check in the app's startup routine which determines if the app is allowed to run or if the user only sees the dialog to enter license details. In the last chapter, we're going to add a trial mode to enable users to test drive our software before they decide to buy.
+That's the foundation of everything we're going to do: to give the application a means to find out which state it's in at each moment, and to handle transitions. This is a first representation of the technical terms from the last section in code.
+
+You could capture different details in your `License`, like a company name, an expiration date, or whatever else you like. For the sake of this book, we'll stick to the very common combination of license code and licensee name.
+
+Here's a rehash of the battle plan for the next chapters in case you missed it  in the intro:
+
+We will start with setting up the app in your FastSpring dashboard. Then we'll implement a simple license check in the app's startup routine which determines if the app is allowed to run, or if the user only sees the dialog to enter license details. In the final chapter, we're going to add a trial mode to enable users to test drive our software before they decide to buy.

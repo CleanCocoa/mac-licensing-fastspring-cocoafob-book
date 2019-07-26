@@ -1,0 +1,45 @@
+# Copy Protection with License Codes
+
+Maybe you didn't expect the term "copy protection" here. The term is closely related to Digital Rights Management (DRM) which has gained a very bad reputation on the internet. From my experience, it seems most developers (or "hackers", as some still call themselves in the tradition of Eric S. Raymond) loathe the notion of copy protection in general. In its most general form, the sentiment states that information should be free, music should be free, video and games and code, too. And when you absolutely have to pay to obtain it, then nobody should hinder you from storing and sharing the data as you like, they say. That's where most people think the music industry screwed up, and why some people prefer to buy games on GOG.com (no DRM) instead of Steam (has DRM).
+
+I can get behind the latter easily: when you buy something, you should be able to use it for as long as humanly possible. That's why I have qualms with most, but not all, subscription-based business models. You can find my take on the topic in the appendix.
+
+So that's what we're aiming for: some hurdle to force users to pay once for using your application. It sounds harsh, but yes, it's about _forcing_ people to pay. You could give your app away for free and add a tip jar if you need money, after all. But the business model of paying to unlock features is gating users from having their computer execute parts of the binary application that is already stored on their computer. It's very artificial, if you think of it. Thankfully, it's a simple exchange, and people generally seem to understand it very well: you give money and get software. Regular folks compare this to buying groceries, which is technically not the same, but their frame of mind is what really counts here.
+
+Before we dive into the technical implementation of making sure all the people one day either buy a license or stop using your app, we'll start with some general explanations of the process.
+
+## Terms Used Throughout This Book
+
+We'll be talking about "keys" and "codes" a lot. To prevent confusion, I want to introduce a couple of important technical terms.
+
+FastSpring
+: That's your e-commerce solution. It's your storefront and product management system. It is also the hub of your own little customer support center where order details are stored. You'll be the person in charge when people request refunds, so you need access to all orders quickly.
+
+CocoaFob
+: A set of algorithms, available as Open Source scripts, to generate and verify license codes. It's supported by FastSpring and very easy to implement.
+: Source is available at: <https://github.com/glebd/cocoafob>
+
+Public Key
+: OpenSSL-generated random number used for 3rd parties to verify the data comes from you. Used for e-mail to tell recipients it was really you who sent the mail. Used for license code verification in our case.
+
+Private Key
+: OpenSSL-generated random number you have to, well, keep private. It's needed to create and sign the license key data. Should be kept private because you can infer the public key from it.[^ortiz] However, we're going to need to give it to FastSpring for them to generate license codes. So please don't re-use this private key for anything else. We'll discuss the details in the upcomingchapter.
+
+[^ortiz]: Thanks to Jorge D. Ortiz Fuentes (<https://powwau.com/en/>) for corrections of the key descriptions (and a lot more). For encryption/decryption of information, both keys can be used for both actions. But always keep the private key secure.
+
+License Code
+: Also called "registration code", this is the string of characters your customers will receive after they buy your app. 
+: CocoaFob-generated license codes should look familiar if you ever bought a Mac app outside the App Store. They tend to look like this, broken into multiple lines for this page's layout:    
+
+
+{linenos=off}
+    GAWQE-FCUGU-7Z5JE-WEVRA-PSGEQ-Y25KX-9ZJQQ-GJTQC-
+    CUAJL-ATBR9-WV887-8KAJM-QK7DT-EZHXJ-CR99C-A
+
+
+Licensee
+: Also called "license name" or "registration name", this is the name of your customer your app is licensed to. We will set up license code generation to be based on the customer's name, but you can omit this information from the process or use company names if that better suits your business. We'll talk about your options later.
+
+License Code Verification
+: Also called "activation", this is the process where the user enters a license code and the app unlocks itself or additional features if the code is valid. 
+: This is the part you have to add to your app, where you use the public key to decrypt the license code and test the extracted information for matches. We'll discuss the implementation in [Chapter 2](#chapter2).

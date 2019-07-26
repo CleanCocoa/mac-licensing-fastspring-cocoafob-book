@@ -1,0 +1,65 @@
+# Pro and Cons of the Mac App Store
+
+So you consider releasing a macOS app outside the Mac App Store.
+
+Fantastic! 
+
+Before I tell you about the book, let's talk about a few high-level things first. There are various reasons to not put your app in the Mac App Store. I think the App Store looks way better since macOS&nbsp;10.13 Mojave. But even with a new, stronger editorial voice in the App Store you may find some things borderline unbearable. Let's have a look at some important points real quick, and also consider the upsides of the Mac App Store with honesty.
+
+## Sales-Related Arguments
+
+**You will earn more per sale.** Most online store fronts will take a cut between 6 and 10% only, as opposed to the 30% Apple takes _after taxes_.[^vat] Two companies left the App Store in 2016 and shared their numbers. They report a slight decline in units sold but a growth in total revenue because of Apple's absurd 30% commission.[^30p]
+
+**You are not affected by paid search ads.** The iOS App Store ranks paid search ads for keywords higher than apps of the same name. Imagine searching for the app "Uber", and the first result is the competitor, Lyft, and vice-versa. I understand why Google sells ad space in their search results. That's their business. But your affiliation with Apple is different and _should_ be treated differently.
+
+**You can issue discounts.** Student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales -- you name it.
+
+## Control-Related Arguments
+
+**You can develop pro features.** You won't be be hampered by the severe Sandboxing restrictions that prevent some productivity apps to even pass the review. Think _Timing 2_, _Little Snitch_, or my own _WordCounter_. The App Store will impose strict limitations, like not having access to assistive devices, observing keyboard inputs, or registering audio drivers.
+
+**You fully control the update process.** You can publish updates more often and react to bugs quicker. When you release an update, it's live immediately. And you can provide quick fixes after you discover a problem.
+
+**You can add copy protection to you app.** No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](https://www.macworld.com/article/1157018/appstore_licensing.html)
+
+## Business-Related Arguments
+
+**You will know your customers and get in touch with them.** This saved my back in the past when my app wouldn't update automatically and I wanted to tell my customers how to get the latest version. I could just email them and apologize. Same holds true for special offers or upselling existing customers. Also, people occasionally get in touch and tell you how amazing the app is in response to your automated order confirmation mails.
+
+**You can tailor B2B offers.** Business-to-business offers can be as simple as bulk license discounts. Or you can create more elaborate schemes, like annual subscriptions for the whole company with free updates through a special channel and online seat verification. This might be interesting if you want to go beyond selling apps, like creating a service-based business.
+
+D> Speaking of discounts and customer relationship: you can also issue what **Craig Scott of toketaWare** calls "good will discounts." There are people who'll pay for your product as long as they think it's a good deal. If there are people who are angry because they think your product is too expensive: give them a few percent off to convert them to paying customers instead of arguing about the value you provide.
+D>
+D> The surprise can be very effective: "Quite often your angriest customer can be 'turned' into your most vociferous advocate," Craig says. "I don't like 'giving grease to the squeaky wheel' but it does work!" This is a great lesson: don't be angry when people treat you harshly. Surprise them with a small token of appreciation. Their negative emotions will transform for the better and you may even convert them into loyal fans.
+D>
+D> The same mindset can apply to deal with so-called "entitled" prospects. People approach you and say they're poor but still want to use the app. -- Well, if you can't afford to pay the price, that's bad luck, eh? But since the app is your very own product, you can do with it what you want. Give it away, make it more expensive, prohibit people from buying it completely -- or do someone a favor and offer a discount if you want. Of course there's good reason not to do business with "those people," so please don't feel pushed to give your stuff away to everybody.
+
+ [^vat]: Say you sell an app for €9.99 to a German customer. After a 19% VAT reduction of €1.90, Apple takes 30% of the remaining €8.09 and you'll earn a depressing €5.66 -- whereas the same app sold via FastSpring would leave you with €8.14 after the 8.9% order fee.
+
+ [^30p]: Rogue Amoeba published ["Making More Outside The App Store"](https://weblog.rogueamoeba.com/2017/02/10/piezos-life-outside-the-app-store/) in February 2017; Kapeli published [100 Days Without the App Store](https://blog.kapeli.com/100-days-without-the-app-store) in late January 2017.
+
+## Upsides of the Mac App Store to Consider
+
+Selling on the Mac App Store offers benefits for you, too, which you shouldn't carelessly dismiss:
+
+**Apple's App Store is a very important marketplace.** People discover new things there. They trust Apple, and some may not even know that they can downloads apps outside the App Store. So an App Store presence can make sense to maximize mainstream availability. It's a place where some are said to "go shopping." -- I can hardly imagine how that works in practice. I think iOS as a platform with its plethora of free apps and the rapidly rotating roster of featured apps is more interesting for bored virtual window-shoppers.
+
+**Updating your apps is simple for you and your users.** Publishing an update means to upload a binary to the App Store Connect web service. After it passes the review process (which used to take a few days but is down to about 1 day, see <https://appreviewtimes.com>), people can download the new version from one central place, the App Store. When updates download automatically, users will always have the latest version. All their apps can be updated at once. Outside the App Store, each app is responsible for its own update process and will likely show an "Update Available" dialog, which may or may not annoy users.
+
+**Apple provides all the infrastructure.** You do not have to worry about your web server serving downloads reliably and fast around the world. Payments are processed by Apple. Updates are distributed by Apple. The App Store is a place for the app description, screenshots, and promotional video -- this could, in some cases, make crafting a landing page or full-blown website obsolete.
+
+## In a Nutshell
+
+Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. This may be less important for "pro" apps and more important for mainstream tools or games. Your Grandmother can be comfortable downloading apps on the App Store, but would she jump through the hoops of entering Credit Card information in an online store?
+
+On the flip side, you lose more money with each transaction, you're bound to the strict App Store Sandboxing policies, you cannot create special offers -- and if Apple disables your account, your business is effectively closed. This doesn't happen often, but it can happen, as we'll discuss in a sidebar in a later chapter. <!--ct: TODO 20190725183301 sidebar link to PayPal account closing-->
+
+D> **Philip Goward, founder of Smile**, calls the Mac App Store a "warehouse." If you consider your application to be a commodity, a warehouse is the right place to put it. But if you build software for professionals with "pro-pricing" (say $100 or above), the oft-cited benefit of easy discoverability on the Mac App Store is miniscule. Having full control over sales and customer service becomes more important once you have build an audience for your product.
+
+Not certain what to do now? Even though App Store-bashing seems to be quite popular, it's not obvious what developers really think and do. Are they all talk and no action, complaining about the App Store without skin in the game? 
+
+The actual effect on your business is hard to tell in advance. Try the process of distributing via the App Store and outside of it for yourself and see how your own particular sales are affected. Does distribution outside the Mac App Store help or hamper business? Your results may depend on many variables, so take careful steps.
+
+Remember you can always do both: distribute via the Mac App Store and on your own platform. There are a lot of well-known developers taking this hybrid approach. I tried a hybrid approach myself in 2019 with my plain-text CSV and Markdown table editor app _TableFlip_ without telling anyone. I sold the app for about 2 years on my own platform, then experimented with a release on the App Store. To my surprise, people found and bought the app on the App Store on day one. I can only assume these purchases are the result of organic searches on the store.
+
+The devs of MacPaw's DevMate team conducted a survey in 2016 about the Mac App Store and collected 679 entries. You can [find the results online](https://devmate.com/mac-dev-survey). It was re-released and got an update in [2017 and 2018](https://setapp.com/mac-market-survey-2018) under the Setapp label. We'll talk about services like DevMate (now fused into Paddle) and Setapp in a minute. For now, keep in mind the survey isn't representative. It's not a study. Use the results to boost your existing opinion if you want -- but don't make rash decisions based on a survey alone!
