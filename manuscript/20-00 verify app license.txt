@@ -1,4 +1,4 @@
-# Sample App 1: How to Verify License Codes in Your App
+# Sample App 1: How to Verify License Codes in Your App {#chapter2}
 
 According to the license template `#{product},#{name}` the license code is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
 
