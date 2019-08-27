@@ -1,0 +1,7 @@
+## Hosting Your Own License Generator {#custom-web-generator}
+
+If you participate in a bundle sale, you cannot rely on the fulfillment actions offered by FastSpring. To generate licenses for buyers, you'll have to roll your own license generator script.
+
+Here's how.
+
+(Placeholder)

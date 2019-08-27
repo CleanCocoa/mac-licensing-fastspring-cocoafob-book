@@ -101,15 +101,15 @@ The "License Source Template" or simply "license template" is interesting. You m
 
 ![CocoaFob configuration finished](images/10-103-license-form-filled.png)
 
-I picked a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
+- I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
+- For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
 
-I prefer personalized license codes. You could also utilize them to check how often a given license is used and deactivate illegally shared licenses if you're into that kind of thing.
+I highly recommend you stick to whatever you set the license template to once your app is available for purchase. This will likely break compatibility with your license verification code, unless you go the extra mile and support both the old and new templates. So by default it's important that you don't change the CocoaFob product name if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app, so new licenses won't be compatible to old ones and vice versa.
 
-It's important that you don't change the CocoaFob product name if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app, so new licenses won't be compatible to old ones and vice versa.
+With my own apps, I started and usually default to the personalized template of `#{product},#{name}`. 
+But I've come to take the non-personalized variant into consideration, where you omit the licensee's name. Using a `#{product}`-only template is super useful for bulk-generating licenses. If you ever want to participate in a bundle sale, this can make things a lot easier as some bundle organizers simply deliver a non-personalized license code from a long list you provide. The bundle sales I did participate in allowed execution of a license generator script on my web server via a callback, though, so I had access to the licensee name. This means that in practice I did never run into problems with personalized licenses. See the [dedicated section in the appendix](#custom-web-generator) about how you can roll your own license generator.
 
-More recently, I've come to take a simpler template into consideration, omitting the licensee's name, because using a `#{product}`-only template is useful for bulk-generating licenses. If you ever want to participate in a bundle sale, this can make things a lot easier as some bundle organizers simply deliver a non-personalized license code from a long list you provide.
-
-To support non-personalized license codes next to your standard personalized license code verification, you'd have to supply a second algorithm (or object) in code which doesn't take the licensee's name into account, even though the form can look the same, of course.
+To support both non-personalized and personalized license code verification in a single app, you'd have to supply a second algorithm in code which doesn't take the licensee's name into account as fallback. The form can look the same, and you just ignore the name on a second try.
 
 I was lucky to participate in a bundle which we sold via FastSpring, so I could simply duplicate my product settings. See [the bonus content](#sellbundles) at the end of the book for details about bundle setup. 
 
