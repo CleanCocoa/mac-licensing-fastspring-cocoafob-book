@@ -1,0 +1,114 @@
+## Setup Instructions for the Classic Store
+
+One particular feature of the Classic store is dearly missing: built-in support for discounts based on referrer.
+
+In the Classic store, you can set up a 20% discount from links incoming from a specific source. This makes it easy to market your app at a discount on other people's blogs or exclusively in newsletter campaigns.
+
+With the Contextual store, you'll instead need to generate a campaign coupon code that people have to copy & paste into the checkout form. It's a bit more cumbersome -- not a lot, of course. It requires collaboration with the referring site so they show your coupon code. If that's a show-stopper and you want total control from your side, you'll need to interact with the Contextual API and apply coupon codes based on incoming links to a custom sales page you maintain. If you do any web development at all, this will probably not be a problem.
+
+The following instructions are shorter and more to-the-point to avoid duplication with explanation from the Contextual store setup. Use it as a quick reference. If you want to know more about the details, please flip back to the setup steps for the Contextual store.
+
+### Create an App Listing
+
+Sign in to your [SpringBoard](https://springboard.fastspring.com/).
+
+If you have already prepared an app in the past, skip to the next section where we set up license code generation.
+ 
+![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-050-springboard.png)
+
+Head to the "Products and Pages" menu to start creating a product listing for your app.
+
+The SpringBoard's detail pages are is generally divided into the topmost navigation, a larger content section to the left, and a smaller info and action section in a sidebar to the right.
+
+Pick "Create Product" from the _Actions_ sidebar to the right.
+
+I am going to call the app of this book, well, **"My New App"**.
+
+Make sure to add a price. Curiously, products initially don't have a price attribute at all. Those without a price don't seem to work when testing purchases from within the app.
+
+I won't set a different display name or customize the URL path. These settings are up to you if you want to experiment with them. They will not affect functionality of anything detailed in this book, but make sure to test everything twice nevertheless.
+
+![Springboard showing the recently created product](images/10-100-app-created.png)
+
+You may want to leave the product in "Test" mode until you finish everything. "Active" products are visible for purchase on your store. "Test" products are visible only to you, and work with test checkouts both on the web store and from within the app.
+
+### Configure License Code Generation via CocoaFob
+
+![Choose CocoaFob-based license generation from the fulfillment options](images/10-101-generate-license.png)
+
+You will find license code generation under "Fulfillment Actions" at the bottom. Set up the license generator as follows:
+
+* Add a fulfillment action, 
+* pick "Generate a License" from the options, and select CocoaFob. 
+* Hit "Next".
+* Pick a name for CocoaFob to use for the licenses. Optimize for machine readability here.
+* We will provide a value for the "DSA Private Key" field in a second.
+
+![The license generation setup form](images/10-102-license-form.png)
+
+The name doesn't have to be the same as your FastSpring product ID or product name. It's `newapp` in CocoaFob and "My New App" for the store in this case. That's what we'll be using in the app's license verification code to identify the app. Make it a unique string and keep it handy.
+
+W> A note on the DSA keys: CocoaFob licensing works with pairs of private--public keys. The private key is used to generate licenses on FastSpring. Since you upload it to a 3rd party, it's not really a _private_ key anymore, so please don't use this key for anything but this license code generator.
+
+Open Terminal.app and navigate to a directory where you want to store the keys to keep them safe.
+
+Generate DSA parameters, a private key, and then a derived public key counterpart with these three calls (we're skipping the output here):
+
+{linenos=off,lang="text"}
+    $ openssl dsaparam -out dsaparam.pem 512
+    ...
+    $ openssl gendsa -out privkey.pem dsaparam.pem
+    ...
+    $ openssl dsa -in privkey.pem -pubout -out pubkey.pem
+    ...
+
+Open the private key file in a text editor to copy the key, or directly copy it to your clipboard from the Terminal via:
+
+{linenos=off,lang="text"}
+    $ cat privkey.pem | pbcopy
+
+Then paste the contents into the "DSA Private Key" text area in the CocoaFob action setup.  Finally, hit "Save" in the _Actions_ sidebar to activate the fulfillment action.
+
+W> You should not, under no circumstances, re-use the keys printed in this book. That'd be as good as having no licensing protection at all because everyone would be able to generate license codes with these SSL keys themselves.
+
+After saving the fulfillment, you can customize an additional option: The "License Source Template" or simply "license template". You will want to carefully pick what should be used to generate the license.
+
+![CocoaFob configuration finished](images/10-103-license-form-filled.png)
+
+- I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
+- For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
+
+### Test the checkout process
+
+FastSpring is very flexible and you can test the heck out of the store without paying anything. In test checkouts you can observe the effect of promo codes and verify that product or time-limited offers display as expected. For example, when I offer my writing apps at a discount during November for NaNoWriMo, I expect the test store to display a discount depending on the date limit for these apps but not others. 
+
+FastSpring's store customizations are very powerful. You can check all of them before you go live. And you should, because that's what professionals do. You don't want the price of your app to be wrong, or cause any kind of confusion at this stage of the sales funnel.
+
+To test how an app displays in Classic,
+
+1. head to your SpringBoard's "home" page by selecting the menu item with the house icon from the top menu,[^backtostore]
+2. select "Store Testing" from the "Products and Settings" group,
+3. then click the "Detail" link next to any of your products.
+
+[^backtostore]: If you have multiple stores, e.g. one Classic and one Contextual store, you then have to pick the Classic store's name. If you only have a single store, you'll immediately get to the home page of the SpringBoard.
+
+FastSpring will open a pop-up with a URL starting with `https://test-sites.fastspring.com`. 
+
+![](images/10-150-test-payment.png)
+
+Continue to the checkout page for your product. In the order detail page, you can enter all your customer details; the customer name will affect the license code generation, so don't just slam random strings into that field when it's focused. And you'll receive real order confirmation email, so enter a valid email here, too.
+
+Then, as a payment method, pick "Test Payment" if it isn't selected already. That'll take care of not actually billing you while still exercising the fulfillments.
+
+When you place the order, check the confirmation page:
+
+- Is the price correct?
+- Is your order confirmation message displayed at the bottom? Do links inside that message work?
+
+Head over to your email account:
+
+1. Was a custom fulfillment email sent that includes your thank-you message and the license code?
+2. Was generic order notification email sent that includes the order number and price?
+3. Did the store admin receive a "TEST - Order" email notification with all the details from the order?[^ordernot]
+
+[^ordernot]: Don't worry: You will not get individual order notification emails in your inbox except for test orders unless you tell FastSpring to send them: Go to "Notifications" in the top menu bar (the icon is a radio tower); edit the top "Default Settings" group and toggle the "Enable Default Order Email" checkbox. Remember to hit "Save" in the action group to the right.

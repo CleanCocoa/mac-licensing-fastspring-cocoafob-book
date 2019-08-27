@@ -1,12 +1,16 @@
 # Set up Your App for Sale on FastSpring
 
-Head to FastSpring's [sign-up page](https://www.fastspring.com/sign-up) if you don't have an account already. Account activation may take a little while, so better do it early.
+In this chapter, we'll configure your app listing for your very own store. FastSpring will process your purchases. Their backend will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to configure. 
 
-The FastSpring backend will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to setup next.
+FastSpring offers two store backends in parallel: The old one, called "Classic Store", and the new one introduced in 2016, called "Contextual Store". Both systems differed for quite a while, but nowadays, I think it's safe to say that Contextual is the clear winner for app developers. You get a proper REST API and much nicer checkout experience. I'll show you how you can set up both store backends nevertheless, but will focus on the functionality of Contextual because it's clearly the way forward.
 
-If you have an account set-up, great. Proceed!
+![Classic's checkout page from the 90s to the left, Contextual's modern popup checkout UI displaying on top of the website to the right, both for one of my apps](images/10-010-contextual-vs-classic.png)
 
-If you still wait for your account approval, you may want to skim the following sections to get a feel for the process and come back to it later. 
+Contextual is the new default when you create an account. You can later opt-in to add access to the Classic store to your account via a support ticket. The same applies if you find you didn't get access to the Contextual backend initially: just ask the support team to put you on the other backend, too.
 
-This step doesn't have to be completed before you can work in Xcode. Up next, we'll take a close look at implementing license verification in code. Start there while you wait.
+To get started, head to FastSpring's [sign-up page](https://www.fastspring.com/sign-up) if you don't have an account already. Account activation may take a little while because it involves a human. 
+
+If you already have an account set-up, great! Proceed to the next section in this chapter.
+
+If you still wait for account approval, you may want to skim the following sections to get a feel for the process and the parts involved, and come back later to create the store listing. In the meantime, head to the next chapter and learn how you can prepare your app to be activated via license codes.
 
