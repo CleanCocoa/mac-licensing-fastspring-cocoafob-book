@@ -137,13 +137,17 @@ Because there's no real application and thus no real infrastructure set up in th
 
 Now we need FastSpring to generate the links.
 
-### Set Up Confirmation E-Mail in SpringBoard
+### Set Up Confirmation E-Mail in FastSpring
 
-Customers will already receive their invoice via e-mail. You can send a customized letter right afterwards, though, including license codes and the new and shiny activation link.
+Customers will already receive their invoice via e-mail. You can send a customized letter right afterwards, though, including license codes and the new and shiny activation link. This is very useful for reference, so I highly recommend you do this.
 
-Log into your SpringBoard, select your product, and add a new fulfillment action. Select the first option for e-mail.
+#### Contextual store setup
 
-The subject is set to something like: "Your #{orderItem.display} Delivery Information". Obviously, there's a template string included, which will expand to "My New App", "Word Counter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
+Log into your FastSpring Dashboard, select your product, and add a new fulfillment action. Select the first option, "Send Email". (The setup for the Classic store is exactly the same.)
+
+Leave the _Reuse Options_ as is, e.g. "One-Time Use Only".
+
+The subject is set to something like: "Your #{orderItem.display} Delivery Information". There's a template string included, which will expand to "My New App", "WordCounter", "iThoughts X", or whatever app you're setting up. The name for FastSpring is used, not the one for CocoaFob.
 
 Set the the e-mail body to something along these lines:
 
@@ -163,15 +167,14 @@ Set the the e-mail body to something along these lines:
     
     -- <<Your Name Here>>
 
-(Since long lines cannot be preserved in print, you can find a plain text template in the code repository below "FastSpring assets" to copy & paste into the form.)
+(Since long lines cannot be preserved in print, you can find a plain text template on the website and in the code repository below "FastSpring assets" to copy & paste into the form.)
 
 There are a quite a few template variables used. 
 
 * The license is embedded in the `fulfillment` group, as you can see. If the user bought a dozen licenses, all will be printed inside the e-mail using `license.licenses.list`. 
 * Only the first one will be used to generate the activation e-mail using `license.outcome.licenses[0]`.
-* The licensee's name is encoded using `util.string.base64()`.
+* The licensee's name is encoded using the `util.string.base64()` function.
 
 Save the fulfillment action.
 
 If you perform a test purchase from your SpringBoard afterwards, you should receive a new kind of e-mail from now on with license info and the activation link. Try it, it's fun!
-
