@@ -1,8 +1,12 @@
 ## Setting Up Your App for Sale in FastSpring
 
-Sign in to your [SpringBoard](https://springboard.fastspring.com/) where you can manage your business things.
+Let's make sure you got access to the Contextual store, first. It's pretty easy to discern Classic from Contextual by their URL and looks. When you get your login link, you can infer the backend you got access to.
 
-After signing in, you have to set up your app for sale. 
+![Classic vs Contextual: login forms and URLs compared](images/10-011-login-combo.png)
+
+So sign in to your [Contextual Dashboard](https://dashboard.fastspring.com/) where you can manage all your business things.
+
+After signing in, you have to set up your app for sale. In the process, I'll help you find your way around the backend. 
 
 That means we will create a new product. FastSpring offers selling of any digital good, be it software, music, e-books, subscriptions -- you name it. FastSpring even allow to configure shipment of CDs, for example. So don't look for the words "application" or "software" when you navigate around your SpringBoard. FastSpring's terminology focuses on the more general term "products".
 
