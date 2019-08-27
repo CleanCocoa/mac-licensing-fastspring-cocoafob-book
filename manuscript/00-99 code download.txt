@@ -2,7 +2,9 @@
 
 [Download all current samples from GitHub.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob)
 
-There are two projects included:
+To get direct access to all links printed here, head over to my website's resource page for this book at <https://christiantietze.de>.
+
+In the GitHub repository, you'll find two example projects:
 
 * `No-Trial-Verify-at-Start`: the simple one. The real application is blocked until the user registers as a paying customer. It supports buying a license from within the app using the Embedded Web Store SDK by FastSpring.
 * `Trial-Expire-While-Running`: the complex one. A time-based trial means the app is unlocked from day 1 until the trial expires. Then the application will lock itself and urge the user to register or buy. Also supports buying a license from within the app.
