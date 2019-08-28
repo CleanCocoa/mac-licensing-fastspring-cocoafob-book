@@ -1,32 +1,31 @@
-## Generating Keys for License Code Generation and Verification
+### Generate DSA keys for both the CocoaFob license code generation and verification
 
-CocoaFob licensing works with pairs of private--public keys much like you use for encryption of files and e-mail, for example.
+The CocoaFob library works via public-key cryptography. A private key produces the license code, a public key decrypts the message and is shared publicly via your app. This is similar to how popular peer-to-peer email cryptography works.
 
-Your app will ship with the public key embedded in the app bundle. Customers will buy your application via FastSpring, where the private key is used to generate a new license code.
+CocoaFob's license generator takes a string and encodes it with a with a private key. The result is randomized so that running the algorithm on the same string multiple times produces different results. The input string is, for example, the app name. The result is the license code.
 
-W> Since you'll be uploading the private key to FastSpring, it won't be _private_ anymore. FastSpring's security problems thus become yours. Make sure you don't use this key for anything else in your life, ever. Create new key pairs for every app you develop. Consequently, don't just use existing private keys and the take five minutes to generate new ones as detailed below.[^ortiz2]
+License code verification works by taking the license code, decrypting it with a public key that matches the private key from the code generator.
 
-The license information, which consists of a randomized value and the user name, for example, is encrypted on FastSpring's server into a license code. Your app will decode the information from the license code the customer receives. With the decrypted data, it can start the verification process.
+Note that your app will ship with the public key embedded in the app bundle, not the private key. The public key is used for the verification process, but itself is unable to generate valid license codes. People with malicious intent cannot generate their own license codes using the public key. When customers buy your application via FastSpring, FastSpring uses the private key internally in the CocoaFob license generator to create a license code.
 
-First, we need the private key to complete the form. 
+W> Since you'll be uploading your private key to FastSpring, it won't be _private_ anymore. Any of FastSpring's security problems thus become yours. Make sure you don't use this key for anything else in your life, ever. Create a new pair of keys for the purpose of licensing _this one particular app_ only. Create new key pairs for every app you develop. Consequently, don't just use existing private keys, like your SSH private key, your email private key, or any other you happen to have lying around. Do spend the 3 minutes it takes to generate new key pairs and store them somewhere safe as detailed below.[^ortiz2]
 
-Switch to your favorite terminal emulator (or use the default Terminal.app of Mac OS X) to create this key.
+First, we are going to need the private key to complete the FastSpring setup. 
 
 [^ortiz2]: Again, thanks to Jorge D. Ortiz Fuentes for the heads up and for clarifying the implications.
 
-
-### Generating Keys in the Terminal
+Switch to your favorite terminal emulator, e.g. Terminal.app, to create the private key first and then extract a related public key from it. 
 
 We're going to generate a private key and extract a public key from it using OpenSSL. I encourage you to do this for your app according to this guide and keep the results tucked away somewhere safe. I'll provide the keys used for the awesome "My New App" app both here in the book and in the sample code package.
 
-W> You should not, under no circumstances, re-use the keys printed in this book. That'd be as good as having no licensing protection at all because everyone would be able to generate license codes with these SSL keys themselves.
+W> You should not, under no circumstances, re-use the keys printed in this book. That'd be as good as having no licensing protection at all because everyone would be able to generate license codes for your app with these publicly available keys.
 
-First, generate some DSA parameters:
+First, generate some DSA parameters used for the key generator. Type the following in your terminal, omitting the leading `$`. By convention the dollar sign denotes the beginning of a new line in the terminal prompt. This is used to print both what you're supposed to type and the resulting output, for example.
 
 {linenos=off,lang="text"}
-    openssl dsaparam -out dsaparam.pem 512
+    $ openssl dsaparam -out dsaparam.pem 512
 
-The result for the sample app is this:
+The resulting `dsaparam.pem` from a run for the sample app is this:
 
 {linenos=off,lang="text"}
     -----BEGIN DSA PARAMETERS-----
@@ -36,14 +35,12 @@ The result for the sample app is this:
     ZwU0hCAJ6pd09eeTP983
     -----END DSA PARAMETERS-----
 
-Second, generate a DSA private key:
+Second, generate a DSA private key using the parameters:
 
 {linenos=off,lang="text"}
-    openssl gendsa -out privkey.pem dsaparam.pem
+    $ openssl gendsa -out privkey.pem dsaparam.pem
 
-The private key will be stored at FastSpring for license code generation.
-
-Again, the resulting contents:
+The contents of this file, `privkey.pem`, will be stored on FastSpring's servers during setup of the license code generator. In my case, the result was this:
 
 {linenos=off,lang="text"}
     -----BEGIN DSA PRIVATE KEY-----
@@ -55,16 +52,19 @@ Again, the resulting contents:
     J5OHnK/HHpfy3KA=
     -----END DSA PRIVATE KEY-----
 
-Put the private key into the "DSA Private Key" field to finish configuring CocoaFob.
-
-Last, extract the public key from the private key:
+You can open the file in a text editor to copy and paste the contents. If you want to put the file contents in your clipboard directly from the terminal, you can use the `cat` program to print the file contents, and direct the output to `pbcopy` (short for "pasteboard copy") like this:
 
 {linenos=off,lang="text"}
-    openssl dsa -in privkey.pem -pubout -out pubkey.pem
+    $ cat privkey.pem | pbcopy
 
-The public key is bundled with the app to verify license codes.
+Now that you have the contents in your clipboard, paste them in the text area on the CocoaFob license generator website under the "DSA Private Key" label. This completes the initial setup of CocoaFob.
 
-Which results in:
+While we're at it, create a public key from the private key. This will be useful later to configure the license code verifier in your app:
+
+{linenos=off,lang="text"}
+    $ openssl dsa -in privkey.pem -pubout -out pubkey.pem
+
+My `pubkey.pem` file contains the following:
 
 {linenos=off,lang="text"}
     -----BEGIN PUBLIC KEY-----
@@ -76,42 +76,89 @@ Which results in:
     UpIg
     -----END PUBLIC KEY-----
 
-Remember: Don't share the _private key_ with anyone. Make sure you don't lose it, either: it cannot be replicated.
+Remember: Don't share the _private key_ with anyone. Give away the public key freely. Make sure you don't lose the private key, either: it cannot be replicated!
 
-### What if you lose one or both keys?
+### What happens if you lose the private and/or public key?
 
-Your app is bundled with the public key. As long as you don't lose the source code of your app, you'll be able to ship updates to existing customers. The embedded public key will continue to work with license codes generated with the matching private key. When you lose the public key, you can always generate a new one from the private key.
+![Multiple public keys can be created from a single private key](images/10-110-public-from-private-key.png)
 
-Thinking about it in object terms, license codes are coupled to private keys, not to public keys. Public keys are coupled to private keys, too. Both license codes and public keys are replacable. The private key is really important, though.
+In general, you can create multiple public keys from the same private key, but it doesn't work the other way around. You cannot replace the private key and keep the old public key intact. The encryption result of the new private key will be incompatible with the old public key. That means losing the public key is not much of a problem, but losing the private key forces you to replace it and update all public keys, because the old ones are incompatible.
 
-When you loose your private key, generating a new private key will cause some trouble. While existing licenses will still work with the old public key, license codes generated with a new private key will require you add (and not replace) the resulting public key to your app. The old public key will be needed to validate existing customer's license codes.
+Let's run through all possible scenarios.
 
-In short, when you lose your private key, you cannot re-create it and need to add a similar license code validation mechanism with a new public key _next to the existing one._
+![License codes, encrypted from a shared private key, can be decrypted by multiple public keys](images/10-111-single-key-license.png)
 
-When you lose both private and public keys for some reason, you cannot continue to support existing licenses, either. Only then will you have to provide new license codes to existing customers to migrate them to the new validator. In every other case it suffices to add a second validation try with new keys.
+What happens when you lose the public key? Your app includes the public key, and it's probably the only place you use it, so the worst that can happen is you lose whole code repository, including the public key. That's harsh, but you can survive this blow. It'll be a lot of work to re-create the app, sure, but you will be able to ship a new version with a new public key that is fully compatible to existing licenses. Existing customers will not run into issues with the new version. Both the old and new public key will continue to work as long as the license codes are generated with the same private key. When you lose the public key, you can always generate a new one from the private key with the command shown above.
 
-Now that you know just how important it is to secure these codes, do everything in your power to keep them safe and cozy.
+When you lose your private key, you'll be in more trouble. To generate a new private key will render all existing public keys incompatible. You cannot decrypt the license codes made with the new private key using public keys that are based on the old, now missing private key. 
 
+![New public keys derived from a new private key are incompatible with encrypted messages from the old private key](images/10-112-incompatible.png)
 
-### Picking a license code generator template
+Once you replace the private key in the CocoaFob license generator, for example, and ship an update to your app with a new public key, existing customers will all be affected. None of the existing licenses will work anymore. Also, older versions of your app with the outdated key will not accept the new license code. If you don't mitigate the problem, it's a confusing situation, to say the least.
 
-When you hit "Save" in the *Actions* sidebar (I have no clue why there's no button at the bottom, honestly), your order fulfillment is complete. You can customize it further to your liking.
+This is not the end of the world, though. If you still have the old public key in your app and only use the private key, you can continue to maintain compatibility with existing licenses. You can use both the old and new public key in one app: Just try to decrypt a user-entered license code with the new public key first, and if that fails, fallback to the old public key method and try again. 
 
-The "License Source Template" or simply "license template" is interesting. You may want to carefully pick what should be used to generate the license.
+Support both license code from old and new private keys in a single app and users will not notice a difference. It's a minor nuisance for you, but not for existing customers. And keeping existing customers happy is always better than being lazy, because disappointed customers are not going to recommend your product. If you reach out and force them to replace their license codes makes you less reliable in their eyes. It diminishes their trust in you and causes confusion. To reiterate: try to support old licenses for as long as humanly possible in the face of private key loss.
+
+It's a different story if your private key is _compromised,_ for example if someone hacks into your FastSpring account, copies your private key from the CocoaFob generator settings, and uses it to create and share a license code generator, also known as a keygen. 
+
+In case of a compromised private key, you will want to change your account password and stop support for the compromised key as soon as possible.  What to do with existing customers's licenses? How do you prevent the keygen to be effective and support license codes coming from you at the same time? This is a tough situation. The app's version that people already have installed on their machine is out of your control. Forget about it. They will continue to accept license codes based on the compromised private key, even those from the keygen.
+
+I can only suggest damage reducing tactics here. You could gather all existing license codes that went through FastSpring and hard code them as accepted input into the app. This effectively adds a bypass of the public-key-based decryption through a whitelist of known license codes. Only license codes not in this whitelist will execute the actual public key decryption based on the new, uncompromised private key. None of the codes from the keygen tool will be on your whitelist, so you're protected from this piracy attempt. This, in turn, means you have to assemble a record of all valid license codes, i.e. all license codes that were generated by FastSpring. To achieve this, you will have to maintain a HTTP API endpoint and accept order completion callbacks by FastSpring's system, then store the relevant data in a secure database. Or you simply email the license details to yourself upon order completion, then scrape your email inbox for all known codes.
+
+Compromised private keys are an annoying blow to your infrastructure. That's why you should keep them, well, _private._
+
+Now when you lose _both_ private keys and public keys at the same time, that's a real problem. Say your computer dies, all app code is gone, and the universe conspires against you and makes it so that FastSpring's servers suffer from severe data loss at the same time. Only then will you absolutely have to reach out to existing customers. Since you don't have the public key anymore, you cannot ship a replacement app that accepts the same license codes. Since you don't have the private key anymore, you cannot continue to sell new licenses to the old app version. This situation is an immediate show-stopper. Remove the app from your store entirely, work on a replacement, and sell it as a paid upgrade. Thankfully it's very unlikely that a catastrophic event like this ever occurs. (In the case of nuclear warfare destroying all infrastructure of your business, we all have more severe things to worry about than your passive income streams drying up.)
+
+Now that you know just how important it is to secure these codes, do everything in your power to keep them safe and cozy. In short, key loss should be avoided, but is not a death blow to your business. You can work around any of the problems one way or another.
+
+### Configure the license code generator template
+
+When you finally hit "Create" and finish setup of the CocoaFob license generator, your basic order fulfillment is complete, but FastSpring were hiding an important detail from us that we're going to look up next: the template used by the actual license code generator.
 
 ![CocoaFob configuration finished](images/10-103-license-form-filled.png)
 
-- I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
-- For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
+The "License Source Template" or simply "license template" is crucial as it determines which input string is used by the generator, and what you should expect during license code verification in your app. The default is a combination of product name and licensee name. 
 
-I highly recommend you stick to whatever you set the license template to once your app is available for purchase. This will likely break compatibility with your license verification code, unless you go the extra mile and support both the old and new templates. So by default it's important that you don't change the CocoaFob product name if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app, so new licenses won't be compatible to old ones and vice versa.
+I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users conversely have to provide both the license code and their name. (The app name will be hard-coded into the app.)
 
-With my own apps, I started and usually default to the personalized template of `#{product},#{name}`. 
-But I've come to take the non-personalized variant into consideration, where you omit the licensee's name. Using a `#{product}`-only template is super useful for bulk-generating licenses. If you ever want to participate in a bundle sale, this can make things a lot easier as some bundle organizers simply deliver a non-personalized license code from a long list you provide. The bundle sales I did participate in allowed execution of a license generator script on my web server via a callback, though, so I had access to the licensee name. This means that in practice I did never run into problems with personalized licenses. See the [dedicated section in the appendix](#custom-web-generator) about how you can roll your own license generator.
+For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
 
-To support both non-personalized and personalized license code verification in a single app, you'd have to supply a second algorithm in code which doesn't take the licensee's name into account as fallback. The form can look the same, and you just ignore the name on a second try.
+You can alternatively use the licensee's email address or other parameters available from the order form to personalize it, if you want. I think even the referrer link would be available, though that doesn't make much sense And you can add static portions to the template string: the default uses a comma (`,`) as separator. You could also surround both variables with parens, quotation marks, or your favorite Shakespeare poem. 
 
-I was lucky to participate in a bundle which we sold via FastSpring, so I could simply duplicate my product settings. See [the bonus content](#sellbundles) at the end of the book for details about bundle setup. 
+Keep in mind that all portion you control, like the product name, should come first. You can form much better expectations during license code validation in your app when you know the static part of the decrypted string up to the separator. Imagine you split the decrypted string at a comma, app and the user-entered portion comes first and contains a comma as well. Then the validation would fail even though the generated license should be valid.
 
-Now all the product-related stuff is done. Let's look at the app side.
- 
+Whatever you choose: I highly recommend you stick to the template once your app goes live and is available for purchase. Changing the template will likely break compatibility with old license verification code, so you need to spend extra time to support both the old and new template. For the same reason keep the CocoaFob product name constant if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app similar to when you lose the private key that is used to generate license codes.
+
+With my own apps, I started with the default and usually default stick to the personalized template of `#{product},#{name}`.
+
+I did take the non-personalized variant into consideration, where you omit the licensee's name. Using a template of `#{product}` only is super useful for bulk-generating licenses.[^bulk]
+
+[^bulk]: Why would you want to bulk-generate multiple licenses, though? If you want to give away a dozen license codes for free during a marketing campaign, you are better off if you give away a dozen one-time coupon codes, or a single coupon code that's limited to a dozen purchases. Giving away non-personalized codes in bulk means people can share codes freely on the web, too. They may be less inclined when they had to go through an order form, even if the purchase was free. And since their name is involved, they may be less likely to share the code outside of a circle of close friends and family they can trust. I sound like a broken record by now, but keep in mind that no mechanism at work here really _protects_ you from piracy. It's just making it less or more likely to happen. Don't fret about it too much.
+
+Non-personalized licenses may also be preferable when you sell not to individuals but to companies. If you sell developer tools or professional image editing software, you might want to have a licensing scheme in place that enables a company to buy a license for 10 seats one way or another. The best way, in my opinion, is to use server-side verification to enforce a seat limit and enable a company to revoke access of ex-employees. With an offline license code verification, the next best thing is non-personalized license codes, though.
+
+You might think non-personalized licenses will also help in participating in bundle sales, like a "humblebundle", MacHeist, and similar. I found this not to be the case: The bundle sales I did participate in remotely called a license generator script on my web server upon order completion, passing in the licensee's name or email. I never ran into problems with personalized licenses. If you want to learn how you can set-up a script on your server for bundle sale callbacks, see the [dedicated section in the appendix.](#custom-web-generator)
+
+Once, I was lucky to organize a bundle which we ended up selling via FastSpring. Two of three apps in the bundle could be set-up to employ FastSpring's tools, and the other one supported bulk-generated licenses. See [the bonus content on bundles](#sellbundles) at the end of the book to learn how to set a bundle up yourself.
+
+You could also support both non-personalized and personalized license code verification in your app and simply ignore the licensee name input value if the decrypted license code doesn't contain the information.
+
+We'll keep things simple here. For now, I again suggest you stick to the personalized license template to (maybe) reduce the risk of license code sharing online, and use this as your sole license verification scheme -- until you are forced to change things.
+
+### Optional CocoaFob advanced configuration
+
+So far, we were looking at the "General" options tab for the CocoaFob license generator. Apart from customizing the product name, license template, and private key, you can also have a look at "Advanced" options.
+
+![Advanced options of the CocoaFob license generator configuration](images/10-104-cocoafob-adv.png)
+
+First, there's the "License Name" dropdown. You can set it to any one of the following:
+
+- "Not Name Based" will effectively pass an empty string for `#{name}`.
+- "Customizable Name" (default) refers to an actual form field during the order process labeled "license name". Customers can provide their real name for the invoice and use their sexy chat handles for the license generator, if they want, with the system falling back to their full name by default. You can customize the storefront's order form to include that field accordingly.
+- "Email Address" is largely redundant because you also have the `#{email}` template variable. If your order form or API request does not contain a real name, though, this might be useful.
+- "Person Name" refers to the real name.
+
+Second, there's the "Generate Multiple Licenses" checkbox. By default, this is turned off, so only one license key will be generated regardless of the quantity purchased. It makes sense to tick this if customers should get as many licenses as they pay for. While this sounds obvious, your actual EULA or other written policy may just as well state that buying 10 licenses will result in 1 license code that is eligible to be used on 10 devices simultaneously. Unless you install some kind of web-based check for compliance, this is left to the goodwill of customers, though. And, honestly, I would find such a policy without a technical check to be kind of weird. ("Why did I pay ten times the price again if nobody would've noticed?")  I sell personalized licenses and allow people to use their license on an unlimited amount of devices they own. I have no means to verify this. So I want to hand out one license code per purchase, at least to evoke the impression of giving them something for their money.
+
+Last, the "Custom Template Key" can be used to reference the result of the license generator by name. As we will see later, by default, license codes are printed via a multi-line string using the variable `#{orderItem.fulfillment.licenses.list}`. Say your customer buys licenses for multiple apps in a single order, like my TableFlip and WordCounter apps in a bundle. You want to print each app's license code in context in a single message. Use the custom template key so you can reference them by name, e.g. `#{orderItem.fulfillment.WORDCOUNTER_LICENSE_IS_HERE.licenses.list}`. (It still ends up as a "list", or rather a multi-line string in case the customer buys each app multiple times!) We'll be looking at how to customize email templates to show all this information in [a chapter in the appendix](#email).

@@ -4,7 +4,7 @@ In this chapter, we'll configure your app listing for your very own store. FastS
 
 FastSpring offers two store backends in parallel: The old one, called "Classic Store", and the new one introduced in 2016, called "Contextual Store". Both systems differed for quite a while, but nowadays, I think it's safe to say that Contextual is the clear winner for app developers. You get a proper REST API and much nicer checkout experience. I'll show you how you can set up both store backends nevertheless, but will focus on the functionality of Contextual because it's clearly the way forward.
 
-![Classic's checkout page from the 90s to the left, Contextual's modern popup checkout UI displaying on top of the website to the right, both for one of my apps](images/10-010-contextual-vs-classic.png)
+![Classic's checkout page from the 90s to the left, Contextual's modern popup checkout UI displaying on top of a website to the right, both for one of my apps](images/10-010-contextual-vs-classic.png)
 
 Contextual is the new default when you create an account. You can later opt-in to add access to the Classic store to your account via a support ticket. The same applies if you find you didn't get access to the Contextual backend initially: just ask the support team to put you on the other backend, too.
 

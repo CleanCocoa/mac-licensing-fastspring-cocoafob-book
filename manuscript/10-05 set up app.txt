@@ -1,31 +1,82 @@
 ## Setting Up Your App for Sale in FastSpring
 
-Let's make sure you got access to the Contextual store, first. It's pretty easy to discern Classic from Contextual by their URL and looks. When you get your login link, you can infer the backend you got access to.
+Let's make sure you got access to the Contextual store, first. It's pretty easy to discern Classic from Contextual by their URL and looks. When you get your login link, you can infer the backend you got access to by the URL and the looks of the login form.
 
 ![Classic vs Contextual: login forms and URLs compared](images/10-011-login-combo.png)
 
-So sign in to your [Contextual Dashboard](https://dashboard.fastspring.com/) where you can manage all your business things.
+Sign in to your [Contextual Dashboard](https://dashboard.fastspring.com/). After signing in, you have to set up your app for sale. In the process, I'll help you find your way around in the FastSpring backend. 
 
-After signing in, you have to set up your app for sale. In the process, I'll help you find your way around the backend. 
+This is our action plan:
 
-That means we will create a new product. FastSpring offers selling of any digital good, be it software, music, e-books, subscriptions -- you name it. FastSpring even allow to configure shipment of CDs, for example. So don't look for the words "application" or "software" when you navigate around your SpringBoard. FastSpring's terminology focuses on the more general term "products".
+1. We will create a new product listing with details for your app, plus set up the license generator.
+2. We will configure two separate store fronts, so you know how to do this whenever you need to. One is a regular checkout page with a shopping basket you can link people to, the other is a popup you can embed on your website for a faster checkout experience.
+3. Finally, we'll be putting the app on both stores's virtual shelves, so to speak.
 
-![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-050-springboard.png)
+I'll be saying "product listing" and "app" interchangeably here. Keep in mind that you can sell all kinds of goods on FastSpring. It can be any digital good, like software, music, e-books, service subscriptions -- you name it. FastSpring even allows to configure production and shipment of CDs, for example. Or you can create a jewelry store. Naturally, FastSpring's wording is very general to fit all users. So don't look for the words "application" or "software" when you navigate around on FastSprings dashboard or in the docs, they use the more general term "product" everywhere.
 
-The SpringBoard is generally divided into the topmost navigation, a larger content section to the left, and a smaller info and action section in a sidebar to the right.
+![The empty dashboard after logging in for the first time. Imagine one day logging in and the sales numbers being surprisingly high in the top-left tile.](images/10-050-dashboard.png)
 
-Pick "Create Product" from the _Actions_ sidebar to the right. If you have already prepared an app in the past, skip to the next section where we set up license code generation.
+Most navigational tasks in the backend are split up in two tiers: the topmost navigation bar, which is static, and a page sub-menu just below it. In the Dashboard right after logging in, the sub-menu is empty save for the page title, "Dashboard". You'll want to keep an eye on this part of the navigation since it will present options, save and cancel buttons, and sometimes "go back" navigation action.
 
-I am going to call the app of this book, well, **"My New App"**.
+### Create your first product listing
 
-I won't set a different display name or customize the URL path. These settings are up to you if you want to experiment with them.
+Click the "Products" main menu item to go to the listing of all your products in the current store.
 
-Make sure to add a price, though, in order for test checkouts to work. Products initially don't have a price attribute. Those without a price don't seem to work when testing checkouts from within the app at all.
+The sub-menu now displays different tabs, "Products" (active), "Bundles", and "Subscriptions", which show your product listings by the respective type. To the right, it has a "Create Product" button. Click that.
 
-Whatever you configure your product to look like, most of it won't matter for our case -- _except the name._ The product name will be used for license code generation and automatic order processing in the app. If all that sounds like mumbo-jumbo to you, don't worry, we'll get there. Just make sure you know your app's name.
+![Product creation dialog.](images/10-051-create-product.png)
 
-![Springboard showing the recently created product](images/10-100-app-created.png)
+We are going to call the app **"My New App"** in this book. That's the "Product Title" displayed to the customer. You may customize the app's product path for store URLs or leave the default.
 
-You may want to leave the product in "Test" mode until you finished everything. "Active" products are visible on your store. "Test" products are invisible except for you. They work well with test checkouts on the store and from within the app, though. 
+Make sure to add a price. (I'll use USD&nbsp;50.) The default reference currency is USD. You can leave other currencies empty to have them automatically calculated during the order checkout process based on current exchange rates, but not USD. When you remove the USD value, the product will be _free_ for U.S. customers. Exchange rates are not used for conversion from e.g. EUR to USD, only the other way around! So do make sure to never leave the USD field blank.
 
-FastSpring is very flexible and you can test the heck out of the store without consequences like being billed for a checkout. In test checkouts you can try promo codes, verify that product- or time-limited offers work (like 10% off through all November for my *Word Counter* but not for *Move!* app). FastSpring's store customizations are very powerful -- and you can check all of them in advance to going live.
+Hit the "Create" button and have a look at the product detail page you are redirected to.
+
+![Empty product detail page right after creation](images/10-100-app-created.png)
+
+The sub-menu now displays the product path ("my-new-app") and a backward navigation button.
+
+In the content part, there are two groups.
+
+The first is titled "Fulfillment"; that's a list of actions performed by the system when an order completes. We will be setting up the license generator here in a minute. 
+
+The second group is titled by the product path again and shows the details of the product listing for store fronts. You can customize the product icon, title, short summary for product listings, and long description for product detail pages in the store. It's not mandatory, but I suggest you write different dummy strings into these fields to see where the details are actually displayed. 
+
+In the top-right corner of the product listing group is a button titled "Public". This affects whether customers can see the product in your live storefronts. I think it's good practice to immediately switch that to "Private" until you're finished with the product setup.
+
+### Product customization options explained
+
+The action links at the very bottom of this group are:
+
+- "Checkout Links": click on that to quickly access a test storefront with the product details.
+- "Add Product Offer": use this to display special offers in your store fronts. Once this product is in the basket, these offers will be displayed to the visitor as a cross-sell or upsell. It can make sense to have a discounted product variant that you exclusively use for these scenarios but which are otherwise hidden from the store.
+- "Add Product Option": use this for example to model different pricing tiers for subscription services. Additionally, you can offer multiple choice options to e.g. pick parts of a whole. I don't know what possible use this has for software apart from bundles, which I suggest you create differently, but it's there if you need it.
+- "Create Variation": use this to prepare a variant of the product that inherits all of the base product's properties, but where you can override the price, icon, descriptions, etc. One scenario is to create a variation with the same price set at a 30% discount as an _internal offer_, so it isn't available in the storefronts directly, and then use this variation for cross-selling or upselling from other products. Like upsell your ebook at a huge discount when prospects add your online video course to their shopping basket.
+- "Copy" really should be titled "Duplicate", because it creates a new base product based on the current settings.
+- "More" hides the product deletion link, and "Custom Attributes", which is a custom key--value dictionary tied to the current product variant. This could be useful for API calls and other automation tasks.
+
+You see, FastSpring is very flexible when it comes to designing product variants. With the "Checkout Links" action, you can preview most things in your store quickly -- once you have a storefront set up, that is, which we haven't. We'll get there right after we finish the product setup.
+
+I played around with offers and product variants for a while and would like to share my experience so far to give you some perspective.
+
+### Product variants can be used for marketing campaigns
+
+Product variants at a discount are useful for campaigns like newsletter or blog sponsorships. 
+
+You can share the direct link to the variant with a selected group of people while everyone else will see the default price. You can also customize the variant's description and title to reflect this is a special offer for this special audience, only. 
+
+Little things like that can make the checkout experience feel more personal. In more technical terms, you could say this is a potential means to heighten community loyalty when you make them feel special and acknowledge their being in-group.
+
+Coupon codes offer a similar device: you can add an "Applied Discount Reason" that's displayed right below the discounted price and is a good opportunity to say "Hi" to readers of a blog.
+
+On top, a discounted variant's price reduction can also be time limited: then the discount is good for the duration of your campaign, and then the price goes up again to the default value. You don't need to delete the product variant in this case, and thus will not break the precious incoming links.
+
+### Cross-sell, upsell, and app bundles
+
+The cross-sell and upsell options are nice to offer incentives like "buy my book at 50% off when you buy my video course". I think that these options shine when you have different types of products in your store that people might not shop for together. They are also useful when you have a very broad roster of products, for example when you want to recommend a particular pair of gloves that goes well with a merino wool scarf in your custom-tailored clothes shop.
+
+For my apps, I found bundles to be more useful than the cross-sell or upsell, though.
+
+Here's an example: I want to offer my apps TableFlip and WordCounter together at a discount. Say each costs $15; then buying both should cost $25 instead of the regular $30. Using upsells for this, I'd have to create a $10 variant for both apps to lower the sum total, and then set up an offer for each product that uses the respective variant. This may work for two apps, but the possible combinations grow exponentially. 
+
+Bundles are a much better device to implement this. You can set a bundle price and lump together all the apps, effectively overriding their price. When the customer picks any app that is also available in the bundle, you can offer to "complete" the bundle and swap the single items from the shopping cart with the bundle product. Because this is so useful, we'll discuss the setup and implications of bundles in a [dedicated section in the appendix.](#sellbundles)
