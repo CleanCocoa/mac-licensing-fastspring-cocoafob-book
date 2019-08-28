@@ -14,7 +14,7 @@ Sign in to your [SpringBoard](https://springboard.fastspring.com/).
 
 If you have already prepared an app in the past, skip to the next section where we set up license code generation.
  
-![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-050-springboard.png)
+![The SpringBoard after logging in. You can create new products under "Products and Pages".](images/10-501-springboard.png)
 
 Head to the "Products and Pages" menu to start creating a product listing for your app.
 
@@ -28,13 +28,13 @@ Make sure to add a price. Curiously, products initially don't have a price attri
 
 I won't set a different display name or customize the URL path. These settings are up to you if you want to experiment with them. They will not affect functionality of anything detailed in this book, but make sure to test everything twice nevertheless.
 
-![Springboard showing the recently created product](images/10-100-app-created.png)
+![Springboard showing the recently created product](images/10-502-app-created-classic.png)
 
 You may want to leave the product in "Test" mode until you finish everything. "Active" products are visible for purchase on your store. "Test" products are visible only to you, and work with test checkouts both on the web store and from within the app.
 
 ### Configure License Code Generation via CocoaFob
 
-![Choose CocoaFob-based license generation from the fulfillment options](images/10-101-generate-license.png)
+![Choose CocoaFob-based license generation from the fulfillment options](images/10-503-generate-license.png)
 
 You will find license code generation under "Fulfillment Actions" at the bottom. Set up the license generator as follows:
 
@@ -44,7 +44,7 @@ You will find license code generation under "Fulfillment Actions" at the bottom.
 * Pick a name for CocoaFob to use for the licenses. Optimize for machine readability here.
 * We will provide a value for the "DSA Private Key" field in a second.
 
-![The license generation setup form](images/10-102-license-form.png)
+![The license generation setup form](images/10-504-license-form.png)
 
 The name doesn't have to be the same as your FastSpring product ID or product name. It's `newapp` in CocoaFob and "My New App" for the store in this case. That's what we'll be using in the app's license verification code to identify the app. Make it a unique string and keep it handy.
 
@@ -73,12 +73,12 @@ W> You should not, under no circumstances, re-use the keys printed in this book.
 
 After saving the fulfillment, you can customize an additional option: The "License Source Template" or simply "license template". You will want to carefully pick what should be used to generate the license.
 
-![CocoaFob configuration finished](images/10-103-license-form-filled.png)
+![CocoaFob configuration finished](images/10-505-license-form-filled.png)
 
 - I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
 - For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
 
-### Test the checkout process
+### Test the Checkout Process
 
 FastSpring is very flexible and you can test the heck out of the store without paying anything. In test checkouts you can observe the effect of promo codes and verify that product or time-limited offers display as expected. For example, when I offer my writing apps at a discount during November for NaNoWriMo, I expect the test store to display a discount depending on the date limit for these apps but not others. 
 
@@ -94,7 +94,7 @@ To test how an app displays in Classic,
 
 FastSpring will open a pop-up with a URL starting with `https://test-sites.fastspring.com`. 
 
-![](images/10-150-test-payment.png)
+![](images/10-506-test-payment.png)
 
 Continue to the checkout page for your product. In the order detail page, you can enter all your customer details; the customer name will affect the license code generation, so don't just slam random strings into that field when it's focused. And you'll receive real order confirmation email, so enter a valid email here, too.
 
