@@ -14,6 +14,7 @@ book-list.txt
 10-05 set up app.txt
 10-07 set up cocoafob.txt
 10-10 keys.txt
+10-20 customize.txt
 10-50 classic.txt
 
 20-00 verify app license.txt

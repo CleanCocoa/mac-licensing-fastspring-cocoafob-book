@@ -1,23 +1,8 @@
-### Product fulfillments in detail
-
-To complete the app setup in your store, we'll need to wire the license generator to create a new license for every purchase. Automatic actions on order completion are called "fulfillment".
-
-Have a closer look at the "Fulfillment" group on the product page. By default, the group displays "Digital Product/Service" in a label in its top-right corner, a "No Fulfillment" placeholder in the middle, and a couple of actions at the bottom.
-
-"Add Fulfillment" and "Show Disabled Fulfillments" are self-explanatory, and we'll have a look at available fulfillments in a second. The third action, "Change Product Format", allows you to switch from digital to physical goods and enable shipment. The choice you make here affects the available fulfillment options. If you sell amazing swag for your brand like coffee mugs and t-shirts, or if you offer printed books, this might be worth a second look one day. For now, we'll stick to digital products without physical shipment. 
-
-When you pick "Add Fulfillment", you'll be presented with four options:
-
-- "Send Email", which is useful to send a personalized message to customers. You can also include the license keys and other niceties like app activation links in these emails. I highly recommend you check out [the instructions in the appendix.](#email) For now, we'll skip this optional step.
-- "Generate a License" is exactly what we're going to pick; but first have a look at the other options.
-- "Provide a File Download" is meant for a different business model involving protected, time-limited downloads. Since we're locking our app's functionality behind a paywall that requires a license, it doesn't make sense to _also_ limit the download. Quite the contrary: I suggest you make the app free to download and test-drive for a while instead to create more interest in your app. With the approach laid out in this book, this option is not very useful.
-- "Create a Signed PDF" is not useful for our purposes, but you can pick this option if you sell ebooks in your store. You can have the customer name printed on every page of the PDF, which is supposed to prevent file sharing to some extent. I do like that this feature exists, but I doubt it'll really protect your content from being pirated.
-
-### Configure license code generation via CocoaFob
+## Configure License Code Generation via CocoaFob
 
 ![Choose CocoaFob-based license generation from the fulfillment options](images/10-101-generate-license.png)
 
-Still on the "Add Fulfillment Action" screen, pick "Generate a License", and then choose "CocoaFob" from the list of license generators.[^objcfob] Hit the "Next" button to set up the generator.
+In case you haven't followed the fulfillment details so far, click on the "Add Fulfillment Action" button in the top group of your app product listing screen. There, pick "Generate a License", and then choose "CocoaFob" from the list of license generators.[^objcfob] Hit the "Next" button to set up the generator.
 
 [^objcfob]: Yeah, I know the description text still says "Objective-C", but it really is more versatile than that. I personally take care of the Swift port to work as expected, since I rely on the library in my own apps, too. Skin in the game.
 

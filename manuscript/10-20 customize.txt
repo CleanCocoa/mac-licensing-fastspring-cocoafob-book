@@ -1,0 +1,54 @@
+### Configure the license code generator template
+
+When you finally hit "Create" and finish setup of the CocoaFob license generator, your basic order fulfillment is complete, but FastSpring were hiding an important detail from us that we're going to look up next: the template used by the actual license code generator.
+
+![CocoaFob configuration finished](images/10-200-license-form-filled.png)
+
+The "License Source Template" or simply "license template" is crucial as it determines which input string is used by the generator, and what you should expect during license code verification in your app. The default is a combination of product name and licensee name. 
+
+I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users conversely have to provide both the license code and their name. (The app name will be hard-coded into the app.)
+
+For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
+
+You can alternatively use the licensee's email address or other parameters available from the order form to personalize it, if you want. I think even the referrer link would be available, though that doesn't make much sense And you can add static portions to the template string: the default uses a comma (`,`) as separator. You could also surround both variables with parens, quotation marks, or your favorite Shakespeare poem. 
+
+Keep in mind that all portion you control, like the product name, should come first. You can form much better expectations during license code validation in your app when you know the static part of the decrypted string up to the separator. Imagine you split the decrypted string at a comma, app and the user-entered portion comes first and contains a comma as well. Then the validation would fail even though the generated license should be valid.
+
+Whatever you choose: I highly recommend you stick to the template once your app goes live and is available for purchase. Changing the template will likely break compatibility with old license verification code, so you need to spend extra time to support both the old and new template. For the same reason keep the CocoaFob product name constant if you include `#{product}` in the license template. If you change the template or the template's variables' contents, you have to change the license verification code in your app similar to when you lose the private key that is used to generate license codes.
+
+With my own apps, I started with the default and usually default stick to the personalized template of `#{product},#{name}`.
+
+I did take the non-personalized variant into consideration, where you omit the licensee's name. Using a template of `#{product}` only is super useful for bulk-generating licenses.[^bulk]
+
+[^bulk]: Why would you want to bulk-generate multiple licenses, though? If you want to give away a dozen license codes for free during a marketing campaign, you are better off if you give away a dozen one-time coupon codes, or a single coupon code that's limited to a dozen purchases. Giving away non-personalized codes in bulk means people can share codes freely on the web, too. They may be less inclined when they had to go through an order form, even if the purchase was free. And since their name is involved, they may be less likely to share the code outside of a circle of close friends and family they can trust. I sound like a broken record by now, but keep in mind that no mechanism at work here really _protects_ you from piracy. It's just making it less or more likely to happen. Don't fret about it too much.
+
+Non-personalized licenses may also be preferable when you sell not to individuals but to companies. If you sell developer tools or professional image editing software, you might want to have a licensing scheme in place that enables a company to buy a license for 10 seats one way or another. The best way, in my opinion, is to use server-side verification to enforce a seat limit and enable a company to revoke access of ex-employees. With an offline license code verification, the next best thing is non-personalized license codes, though.
+
+You might think non-personalized licenses will also help in participating in bundle sales, like a "humblebundle", MacHeist, and similar. I found this not to be the case: The bundle sales I did participate in remotely called a license generator script on my web server upon order completion, passing in the licensee's name or email. I never ran into problems with personalized licenses. If you want to learn how you can set-up a script on your server for bundle sale callbacks, see the [dedicated section in the appendix.](#custom-web-generator)
+
+Once, I was lucky to organize a bundle which we ended up selling via FastSpring. Two of three apps in the bundle could be set-up to employ FastSpring's tools, and the other one supported bulk-generated licenses. See [the bonus content on bundles](#sellbundles) at the end of the book to learn how to set a bundle up yourself.
+
+You could also support both non-personalized and personalized license code verification in your app and simply ignore the licensee name input value if the decrypted license code doesn't contain the information.
+
+We'll keep things simple here. For now, I again suggest you stick to the personalized license template to (maybe) reduce the risk of license code sharing online, and use this as your sole license verification scheme -- until you are forced to change things.
+
+Remember to hit the "Save" action button in the sub-menu when you make changes!
+
+### Optional CocoaFob advanced configuration
+
+So far, we were looking at the "General" options tab for the CocoaFob license generator. Apart from customizing the product name, license template, and private key, you can also have a look at "Advanced" options.
+
+![Advanced options of the CocoaFob license generator configuration](images/10-201-cocoafob-adv.png)
+
+First, there's the "License Name" dropdown. You can set it to any one of the following:
+
+- "Not Name Based" will effectively pass an empty string for `#{name}`.
+- "Customizable Name" (default) refers to an actual form field during the order process labeled "license name". Customers can provide their real name for the invoice and use their sexy chat handles for the license generator, if they want, with the system falling back to their full name by default. You can customize the storefront's order form to include that field accordingly.
+- "Email Address" is largely redundant because you also have the `#{email}` template variable. If your order form or API request does not contain a real name, though, this might be useful.
+- "Person Name" refers to the real name.
+
+Second, there's the "Generate Multiple Licenses" checkbox. By default, this is turned off, so only one license key will be generated regardless of the quantity purchased. It makes sense to tick this if customers should get as many licenses as they pay for. While this sounds obvious, your actual EULA or other written policy may just as well state that buying 10 licenses will result in 1 license code that is eligible to be used on 10 devices simultaneously. Unless you install some kind of web-based check for compliance, this is left to the goodwill of customers, though. And, honestly, I would find such a policy without a technical check to be kind of weird. ("Why did I pay ten times the price again if nobody would've noticed?")  I sell personalized licenses and allow people to use their license on an unlimited amount of devices they own. I have no means to verify this. So I want to hand out one license code per purchase, at least to evoke the impression of giving them something for their money.
+
+Last, the "Custom Template Key" can be used to reference the result of the license generator by name. As we will see later, by default, license codes are printed via a multi-line string using the variable `#{orderItem.fulfillment.licenses.list}`. Say your customer buys licenses for multiple apps in a single order, like my TableFlip and WordCounter apps in a bundle. You want to print each app's license code in context in a single message. Use the custom template key so you can reference them by name, e.g. `#{orderItem.fulfillment.WORDCOUNTER_LICENSE_IS_HERE.licenses.list}`. (It still ends up as a "list", or rather a multi-line string in case the customer buys each app multiple times!) We'll be looking at how to customize email templates to show all this information in [a chapter in the appendix](#email).
+
+If you changed anything on this page, hit the "Save" button in the sub-menu again before you leave.
