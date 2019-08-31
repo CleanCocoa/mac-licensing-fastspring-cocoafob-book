@@ -8,7 +8,7 @@ With the Contextual store, you'll instead need to generate a campaign coupon cod
 
 The following instructions are shorter and more to-the-point to avoid duplication with explanation from the Contextual store setup. Use it as a quick reference. If you want to know more about the details, please flip back to the setup steps for the Contextual store.
 
-### Create an App Listing
+### Create an app product listing
 
 Sign in to your [SpringBoard](https://springboard.fastspring.com/).
 
@@ -32,7 +32,7 @@ I won't set a different display name or customize the URL path. These settings a
 
 You may want to leave the product in "Test" mode until you finish everything. "Active" products are visible for purchase on your store. "Test" products are visible only to you, and work with test checkouts both on the web store and from within the app.
 
-### Configure License Code Generation via CocoaFob
+### Configure license code generation
 
 ![Choose CocoaFob-based license generation from the fulfillment options](images/10-503-generate-license.png)
 
@@ -78,7 +78,38 @@ After saving the fulfillment, you can customize an additional option: The "Licen
 - I suggest a license template of `#{product},#{name}` so that each license code is unique per product and licensee. To unlock the app, users have to provide both the license code and the licensee's name.
 - For non-personalized licenses, just stick to `#{product}`. This might be useful for apps targeted at businesses, and for bulk-generated licenses.
 
-### Test the Checkout Process
+### Send license information with an email
+
+As with the Contextual Commerce setup, customers will receive their invoice via email by FastSpring. We will add an email with the license information for reference, too.
+
+Add a new fulfillment action. Select the first option, "Send Email". The setup for Classic and Contextual is exactly the same, so here's the gist, repeated:
+
+- Leave the _Reuse Options_ as is, e.g. "One-Time Use Only".
+- Set the subject to something like: "`Your #{orderItem.display} License Information`" or similar.
+- Set the the e-mail body to contain all the useful information:
+
+{linenos=off,lang="text"}
+    #{order.customer.fullName},
+    
+    Thanks so for buying #{orderItem.display}!
+    
+    Here you find your license information for later reference:
+    
+    License Name: #{orderItem.fulfillment.license.licenseName}
+    License Key: #{orderItem.fulfillment.license.licenses.list}
+        
+    Thanks again for your support. Please drop me a line if you have any questions.
+    
+    -- <<Your Name Here>>
+
+Please find a plain text template on the book website and in the code repository, filed under the "FastSpring assets" folder, to copy & paste into the form.
+
+Save the fulfillment action. You don't need to specify a HTML alternative; but you may want to have a look at the advanced settings to customize the email sender's name.
+
+See the chapter in the appendix about [activation links](#activationlink) to further customize your email template.
+
+
+### Test the checkout process
 
 FastSpring is very flexible and you can test the heck out of the store without paying anything. In test checkouts you can observe the effect of promo codes and verify that product or time-limited offers display as expected. For example, when I offer my writing apps at a discount during November for NaNoWriMo, I expect the test store to display a discount depending on the date limit for these apps but not others. 
 

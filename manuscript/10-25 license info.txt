@@ -1,0 +1,78 @@
+### Show license information after order completion
+
+Remember the "Post Order Instructions" I mentioned right after we created the product listing? That's what we're going to use to display the license information to customers after the purchase.
+
+Go back from the CocoaFob fulfillment details to the product page. In the product variation details, right above the "Price" field, there's "Post Order Instructions". Click on it to edit the contents in a popup editor.
+
+The editor's description text says it all: 
+
+>  Provide instructions for your customers on how to obtain or activate the purchased product. Select "Insert Fulfillment Variable..." to insert dynamically generated licenses or download links.
+
+We're going to do exactly that: render the license information after the purchase! You can start with a personal note, if you want, then click the "Insert Fulfillment Variable" dropdown and select the license generator fulfillment from there. You'll notice that there is only one available option, and the variable name starts with the "Custom Template Key" we have discussed. 
+
+After you select the license generator variable, surround the `{{licenseName}}` and `{{license}}` template variables with Markdown backticks (`\``) to render the content as HTML `<code>` tags. This helps to show the exact writing of the licensee's name, revealing any trailing spaces or similar.
+
+Here's an example; please don't just copy and paste it, because it'll overwrite the correct license generator template variable names and contains paragraph line breaks for printing purposes. Use it as a template for comparison:
+
+{linenos=off,lang="text"}
+    Thank you for buying YOUR_APP_NAME_HERE! Here's your license 
+    information to activate your copy right away:
+    
+    {{#each [new_app_license_0]}}
+        {{nameDisplay}}: `{{licenseName}}`
+        {{display}}: `{{license}}`
+    {{/each}}
+    
+    You will also receive an email with this information and a 
+    convenient activation link for later reference.
+
+Notice I added a trailing paragraph that promises an email with license information. The next section will explain the setup for this. The "convenient activation link" takes some more work and requires changes to the app. It's an optional feature you might just as well leave out. We'll discuss that in a separate chapter [in the appendix.](#activationlink)
+
+### Send an order confirmation e-mail with the license information {#email}
+
+By default, customers will already receive an invoice via e-mail when the order is completed. You don't have control over this part of the process. You can send a personalized email right afterwards, though, including the license information. This is very useful, because a lot of people will not take the extra step to store the license information on their computer. Sending the license information directly to their inboxes will make your future self thank you later: you'll save quite some time on support emails to retrieve lost license information for customers. I highly recommend you do this step.
+
+After customizing the "Post Order Instructions", you should still be on your product listing page, with the fulfillment section at the top.
+
+From here, select "Add Fulfillment" and select the first option, "Send Email". Leave the "Reuse Options" as is, e.g. "One-Time Use Only". If you have a store with tons of products that should result in the same email being sent _for each of them_, you might want to reuse the template. I never did, though, and think you won't use this, either.
+
+The defult subject is set to something like: "`Your #{orderItem.display} Delivery Information`". It contains a template string which will expand to "My New App", "WordCounter", "iThoughts X", or whatever app you're setting up. The customer-facing name of the FastSpring product listing page is used, not the machine-readable one used for CocoaFob. I like to change the subject to say "License Information" instead of the very generic "Delivery Information".
+
+For the email body, we'll be using the following template variables:
+
+- `#{order.customer.fullName}` in the greeting; you can be a bit more personal and omit the last name with the `#{order.customer.firstName}` variable.
+- `#{orderItem.display}` to insert the product name. This is just to make sure the email template updates automatically if you change the app's name. You could just as well hard-code the app name, though, since the template won't be reused anyway.
+- `#{orderItem.fulfillment.license.licenseName}` shows the name you expect customers to copy and paste during app activation. If you are selling non-personalized license codes, you can skip this.
+- `#{orderItem.fulfillment.license.licenses.list}` prints a newline-separated list of license codes. This is almost always going to be just one code, but in case of bulk orders, this will result in multiple codes, one per line.
+- There's no template variable for your own name. I'm afraid you have to type it out manually, heh.
+
+The complete email body can then look something like this:
+
+{linenos=off,lang="text"}
+    #{order.customer.fullName},
+    
+    Thanks you for buying #{orderItem.display}!
+    
+    Here you find your license information for later reference:
+    
+    License Name: #{orderItem.fulfillment.license.licenseName}
+    License Key: #{orderItem.fulfillment.license.licenses.list}
+        
+    Thanks again for your support. Please drop me a line if you have any questions.
+    
+    -- <<Your Name Here>>
+
+You can find a plain text template on the book website and in the code repository, filed under the "FastSpring assets" folder, to copy & paste into the form.
+
+Save the fulfillment action with the button in the top-right of the sub-menu.
+
+You can also preview the result with the "Preview" action. Unfortunately, it requires an existing order in the system -- including a test order. Unless you used the test store links to purchase the app with the faux credit card info already, you won't see anything here. In that case, please wait until we finish the setup of the storefront and perform a test checkout.
+
+Below the sub-menu navigation bar, you may have noticed a tab-like sub-sub-navigation. This is similar to how CocoaFob displayed general and advanced settings.
+
+- "Email (Text)" is the regular HTML version of the email template. That's what we have just created.
+- "Email (HTML)" is an _optional_ alternative with XHTML and basic CSS markup. You can leave it empty as-is so it won't be used at all. Plain text emails are enough, I'd argue. Writing HTML/CSS emails is a pain, because email markup is closer to the wild west of late-1990s web design than it is to the orderly process of crafting web pages for modern, standards-compliant web browsers. The impression of styled email might be worth the trouble if you sell very expensive premium products to businesses and can afford someone to create a reliable style for you. Customers likely won't care about the bells and whistles, though.
+- "Phrases" allows localization of your email. I never experimented with this, but it could be useful if your target audience is international or mostly non-English speaking.
+- "Advanced" shows options to customize the email header plus the "Fulfillment Applicability" option. The default is "Applies to Non-Rebills / First Orders Only", and fits a single-purchase app business nicely. Rebills refer to subscription products, so you can separate the first welcome email from notifications about recurring payments. If you sell anything more fancy than single-purchase app licenses, you may want to have a second look at this setting and customize your email sending policy accordingly.
+
+With the license information email finished, the app configuration is complete. You have prepared a product listing and customized the order process to generate, show, and deliver license information upon purchase.

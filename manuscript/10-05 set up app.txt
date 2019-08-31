@@ -40,7 +40,9 @@ In the content part, there are two groups.
 
 The first is titled "Fulfillment"; that's a list of actions performed by the system when an order completes. We will be setting up the license generator here in a minute. 
 
-The second group is titled by the product path again and shows the details of the product listing for store fronts. You can customize the product icon, title, short summary for product listings, and long description for product detail pages in the store. It's not mandatory, but I suggest you write different dummy strings into these fields to see where the details are actually displayed. 
+The second group has the product path again as title and shows the details of the product listing for store fronts. You can customize the product icon, title, short summary for product listings, and long description for product detail pages in the store. It's not mandatory, but I suggest you write different dummy strings into these fields to see where the details are actually displayed.
+
+Keep an eye on the "Post Order Instructions" field in the second group. That's Markdown-formatted text customers will see when they complete a purchase. You can include app activation instructions and a thank you note here, as we will be doing later.
 
 In the top-right corner of the product listing group is a button titled "Public". This affects whether customers can see the product in your live storefronts. I think it's good practice to immediately switch that to "Private" until you're finished with the product setup.
 
@@ -91,7 +93,7 @@ Have a closer look at the "Fulfillment" group on the product page. By default, t
 
 When you pick "Add Fulfillment", you'll be presented with four options:
 
-- "Send Email", which is useful to send a personalized message to customers. You can also include the license keys and other niceties like app activation links in these emails. I highly recommend you check out [the instructions in the appendix.](#email) For now, we'll skip this optional step.
+- "Send Email", which is useful to send a personalized message to customers. You can also include the license keys and other niceties like app activation links in these emails. We will have a look at this [once the license generator is working.](#email)
 - "Generate a License" is exactly what we're going to pick; but first have a look at the other options.
 - "Provide a File Download" is meant for a different business model involving protected, time-limited downloads. Since we're locking our app's functionality behind a paywall that requires a license, it doesn't make sense to _also_ limit the download. Quite the contrary: I suggest you make the app free to download and test-drive for a while instead to create more interest in your app. With the approach laid out in this book, this option is not very useful.
 - "Create a Signed PDF" is not useful for our purposes, but you can pick this option if you sell ebooks in your store. You can have the customer name printed on every page of the PDF, which is supposed to prevent file sharing to some extent. I do like that this feature exists, but I doubt it'll really protect your content from being pirated.
