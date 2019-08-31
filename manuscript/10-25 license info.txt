@@ -19,14 +19,32 @@ Here's an example; please don't just copy and paste it, because it'll overwrite 
     information to activate your copy right away:
     
     {{#each [new_app_license_0]}}
-        {{nameDisplay}}: `{{licenseName}}`
-        {{display}}: `{{license}}`
+    {{nameDisplay}}: `{{licenseName}}`
+    {{display}}: `{{license}}`
     {{/each}}
     
     You will also receive an email with this information and a 
     convenient activation link for later reference.
 
 Notice I added a trailing paragraph that promises an email with license information. The next section will explain the setup for this. The "convenient activation link" takes some more work and requires changes to the app. It's an optional feature you might just as well leave out. We'll discuss that in a separate chapter [in the appendix.](#activationlink)
+
+I also often include a short download link as well, because some folks will buy blindly, even before they test it. In that case, I use this template:
+
+{linenos=off,lang="text"}
+    Thank you for buying YOUR_APP_NAME_HERE! You can download 
+    the app right here if you haven't already:
+    <https://example.com/my-new-app/download>
+    
+    Then enter your license information in the app
+    to activate your copy:
+    
+    {{#each [new_app_license_0]}}
+    {{nameDisplay}}: `{{licenseName}}`
+    {{display}}: `{{license}}`
+    {{/each}}
+    
+    You will also receive an email with this information and a 
+    convenient activation link for later reference.
 
 When an order completes, the customer will now see the license details on the completion page itself (unless it's a gift purchase), and the receipt email will contain the same information below the order total.
 

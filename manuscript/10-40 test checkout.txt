@@ -1,0 +1,60 @@
+## Test the Checkout Process
+
+You have a product listing, and the web storefronts are all set. It's time to perform manual integration testing of the whole flow!
+
+I perform manual checkout tests whenever I update a product listing significantly, and every time I add a product variant or discount option. In test checkouts you can observe the effect of promo codes on the way prices are displayed, and you can verify that bundle offers or time-limited discounts are rendered as expected. For example, when I offer my writing apps at a discount during November for NaNoWriMo, I expect the test store to display a discount depending on the date limit for these apps but not others. 
+
+FastSpring's store customizations are very powerful. You can check all of them out in the test stores before you go live. And you should. Not just because that's what professionals do, making sure things work, but also because you don't want any catastrophe to happen. The price of your app should be correct, at least. You don't want to cause any kind of confusion at this stage of the sale.
+
+To test how your product listing in Contextual Commerce, there are two ways. You can start from the product listing, or the storefront. I got used to head to the storefronts and start there, because their link generator can produce quick links for product details, too, and lead you to the storefront homepage.
+
+Whichever you chose, your product has to be switched from "Private" to "Public" to enable direct links. I opened a feedback ticket for this because that's highly unintuitive, so when you read this, this might not even be necessary. Try to access your product in the test store following the instructions below to see if it works. If you get an "inaccessible" error, publicize the app first. To make the product public, head to your product listing detail page and click the "Private" button in the top-right of the app group. 
+
+Don't worry about any temporary test product showing up to real customers. At this stage, your storefront is still offline -- unless you already requested an activation from FastSpring. If your storefront is online, you can remove the product from the homepage product listings temporarily. Don't forget to add it back later, though! Recall that each storefront's homepage has to be configured to list a particular product or product offer, so it's pretty easy to hide a product listing that's still in the making. 
+
+True, if people know the app path _and_ how FastSpring URLs are constructed, then they could access the product page directly right now. I doubt this is a problem in practice, but if testing private products in the test store still doesn't work when you read this, please consider filing a support ticket to request they change this like I did.
+
+With the product now set to "Public", select "Checkout Links" from the product page or "Links" from the web storefronts page and open the test store so you can make test purchases with a faux credit card. The credit card number is `4242 4242 4242 4242`, but the CVC code is generated on a per-store basis, so you have to take note of it yourself.
+
+I> You can find the faux credit card information in multiple places. If you start from the product page and click the "Checkout Links" action, a brief summary of the test credit card info for your store will be displayed in the popup. The web storefronts, though, don't show the credit card info when you hit the "Links" action. You need to click on "Test" instead, which will open the "Making Test Purchases" popup as you may recall from back when we went through all the available actions. Copy the CVV Code part for later.
+
+![The product page of My New App the way it looks for U.S. customers. (Storefront homepages display the order details only after at least one product is in the cart.)](images/10-401-product-checkout.png)
+
+Follow the link to the test store. FastSpring will open a new browser tab. The tab's URL starts with your account's store name, followed by the `test` subdomain, followed by  `onfastspring.com`, then the product path: `https://STORENAME.test.onfastspring.com/my-new-app`. For live store links, the `test` subdomain part would be left out. It's handy to know how links for storefronts are created in case you want to link to a live product page directly one day, so I like how expressive and thus easy to remember the URL is.
+
+If you started on your web storefront's homepage, and if your product is still listed there, add the product to your basket to start the order process; if you had to remove your product from the storefront's homepage, you have to go to the product detail page by entering the product path by hand, or produce a direct link from the Contextual Commerce backend. If you started on the product detail page instead, everything's set and you will be able to order the product right away with the form to the right.
+
+Enter your customer details in the order form. That'll be the email address if you followed along and didn't change the configuration dramatically. The email address will be used for order fulfillment emails and sending receipts, so use your real address. Once you pick a payment method, a popup will appear where you enter the customer name. These name components will affect the license code generation.
+
+To perform a test payment, pick "Credit / Debit Card", fill out the missing form fields and provide the faux credit card info. That'll take care of not actually billing you and still exercises all fulfillment steps.
+
+![The order completion page with post order instructions](images/10-402-order-complete.png)
+
+When you placed the order, check the confirmation page:
+
+- Is the app's name correct? (We all make typos on some days.)
+- Is the price and quantity correct?
+- Is the tax what you expected?
+- Are your post order instructions displayed at the bottom? If you placed a download link in there, is it clickable and does not produce a 404? Do links inside that message work? Is the number of license codes correct?
+- Does the small "View Invoice" link at the bottom work?
+
+If you find any of the post order instructions to be wrong, do not close the current tab! Open a new one, head to your FastSpring product details, update the text, and refresh the order confirmation page. The text should update. As long as your session doesn't expire, you can refresh and check this page.
+
+Now head over to your email account:
+
+- Was a custom fulfillment email sent that includes your thank-you message and the license code?
+- Was the generic order receipt sent that includes the order number, price, and post order instruction text?
+
+Once you are satisfied, add the product back to the storefront's homepage if needed, and ask FastSpring support to enable your storefront.
+
+I> If you migrate from Classic Commerce to Contextual, you'll notice that the system no longer sends a "TEST - Order" email notification to the store admin that lists all the details from the order for debugging. To enable them for Contextual Commerce stores, select the "Settings" main menu item, then "Vendor Notifications" from the sub-menu, and locate the entry that says:
+I> 
+I> | Status | To            | Name            | Applies To     |
+I> | ------ | ------------- | --------------- | -------------- |
+I> | Active | Default Email | Order Completed | OLD_STORE_NAME |
+I> 
+I> Click on the table row to open its settings. Head to the "Conditions" tab. There, change "Applicable Site" to "Applies to All" to receive purchase notifications.
+I> 
+I> I had this enabled for a while when I started selling my apps online. It was nice to see order notifications in my email inbox, and check if nothing breaks. (I'm perhaps a bit paranoid about other people's platforms.) Then I disabled the rule one day. I don't miss the notifications.
+I>
+I> You might want to get these, though, if you want to collect generated licenses (as a paranoid backup in case you lose all your DSA keys, remember?), or if you want to process newsletter subscriptions based on that info. After all, it could be easier for you to automate the info from email than creating a webhook endpoint on your web server.

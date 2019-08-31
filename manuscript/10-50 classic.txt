@@ -111,11 +111,7 @@ See the chapter in the appendix about [activation links](#activationlink) to fur
 
 ### Test the checkout process
 
-FastSpring is very flexible and you can test the heck out of the store without paying anything. In test checkouts you can observe the effect of promo codes and verify that product or time-limited offers display as expected. For example, when I offer my writing apps at a discount during November for NaNoWriMo, I expect the test store to display a discount depending on the date limit for these apps but not others. 
-
-FastSpring's store customizations are very powerful. You can check all of them before you go live. And you should, because that's what professionals do. You don't want the price of your app to be wrong, or cause any kind of confusion at this stage of the sales funnel.
-
-To test how an app displays in Classic,
+To test how an app displays in Classic Commerce,
 
 1. head to your SpringBoard's "home" page by selecting the menu item with the house icon from the top menu,[^backtostore]
 2. select "Store Testing" from the "Products and Settings" group,
@@ -123,9 +119,9 @@ To test how an app displays in Classic,
 
 [^backtostore]: If you have multiple stores, e.g. one Classic and one Contextual store, you then have to pick the Classic store's name. If you only have a single store, you'll immediately get to the home page of the SpringBoard.
 
-FastSpring will open a pop-up with a URL starting with `https://test-sites.fastspring.com`. 
+FastSpring will open a pop-up with a URL starting with `https://test-sites.fastspring.com/`, followed by path components that identify your store. 
 
-![](images/10-506-test-payment.png)
+![Test payments will display a notice during the checkout process](images/10-506-test-payment.png)
 
 Continue to the checkout page for your product. In the order detail page, you can enter all your customer details; the customer name will affect the license code generation, so don't just slam random strings into that field when it's focused. And you'll receive real order confirmation email, so enter a valid email here, too.
 
