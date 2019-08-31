@@ -1,0 +1,181 @@
+## Create and Customize Online Storefronts to Sell Your App In Style
+
+So far, you've created an app listing with a price and some product detail and wired CocoaFob to generate license keys when an order is made. Before we can test everything works properly, you'll need to set up a storefront for your app.
+
+In FastSpring's terminology, the store is "the highest-level grouping of settings and features in your FastSpring account. A Store has its own set of products, offers and reports." And a storefront is "[a] website or popup window hosted securely by FastSpring, to which you send purchasers for the purpose of processing their online transactions. Each Storefront can be used to sell any products in the Store. Each Storefront can have its own unique look and feel."[^term-source] When you create a FastSpring account, you get one store from the start (in this case, a Contextual Commerce store) stat also includes a default storefront. 
+
+[^term-source]: I'm quoting the docs at <https://docs.fastspring.com/storefronts>, accessed at 2019-08-29.
+
+In the main menu, select the leftmost item, "Storefronts." The sub-menu will display "Web Storefronts" (currently selected), "Popup Storefronts", and a creation button for the currently selected sub-menu item far to the right.
+
+<!--ct: TODO add Furious Falcon store page example-->
+
+"Web Storefronts" are websites hosted on FastSpring's servers that work much like any web store you ever saw. You can put all your products in there and have people browse the store, put things into their virtual shopping carts, and place an order for their selection in the end. This kind of store involves product descriptions and product detail pages. It displays your upsell and cross-selling offers when applicable. You can direct people to your store for purchasing your app directly, which can be nice for marketing campaigns like newsletter or blog sponsorships. When people are in your store, there's not much else to do besides purchasing a product license. This can be advantageous over linking to your product landing page. But it can also be a detriment because the store details page will likely not help with sparking interest in your product. If someone isn't ready to buy immediately, linking to a landing page that contains testimonials with headshots of happy customers can help in their decision-making.
+
+<!--ct: TODO add Furious Falcon popover example-->
+
+"Popup Storefronts" are useful to display a very streamlined checkout form right inside your website. When people are on your website and want to buy, displaying a simple checkout overlay can be a huge win.
+
+Your account already comes with a default web storefront that reflects your company name. We will be customizing that one. If your business grows and you want to sell some apps separately, you can branch out into multiple storefronts, too. Create sub-storefronts with a different theme to match the app's website and pick which products are available from the storefront's home page. I do this for my apps, too: there's my all-encompassing app store with a theme resembling my personal website that lists all my apps, and there are different storefronts that match the individual product pages.
+
+You will notice that the default web storefront says "Offline" in the top-right corner. You cannot change that for the default web storefront, but you can turn on and off sub-storefronts on your own. 
+
+To activate your main storefront, you need to open a support ticket. The FastSpring support staff will swiftly review your ticket and activate your storefront _as long as your storefront is all set._ That means it should have at least one product listing. We just created one, so we're good. Before you open your shop doors, though, let us run through important options and test the storefront.
+
+### Utility of sub-storefronts
+
+Sub-storefronts customize the look and feel and the appearance of the "homepage". They do not prevent savvy customers from getting to products not shown on the homepage, though.
+
+The link structure is as follows:
+
+- `https://YOURSTORE.onfastspring.com/` is your store's main entry point, displaying its homepage.
+- `https://YOURSTORE.onfastspring.com/PRODUCTPATH/` is a direct link to a product for immediate checkout. From there, customers can only get back to your store's homepage by clicking the logo on the store page.
+- `https://YOURSTORE.onfastspring.com/SUBSTOREFRONT/` is the homepage of a sub-storefront with its own look and feel.
+- `https://YOURSTORE.onfastspring.com/SUBSTOREFRONT/PRODUCTPATH` is a direct link to a product themed by the sub-storefront.
+
+Even if your sub-storefront does not list a particular product from your store, people who know the product path can still get to an unlisted product. I cannot think of a case where this is a problem; if somebody discovered this and bought my app TableFlip from the WordCounter's storefront because they prefer the theme, I'm perfectly fine with that! This is just meant to highlight that the sub-storefronts inherit all products from your base store. If this is a problem because you have different businesses or manage stores for clients, then set up a new store to separate the product lineup.
+
+### Customize the Default Storefront
+
+The default storefront comes with a couple of admin actions:
+
+- "Links" opens a popup that shows how you can access the live storefront's homepage and its equivalent in testing mode. The testing mode is all you'll have at your disposal unless your storefront is online. Have a look if you want. The popup also displays direct links to your product listings, plus a bit of JavaScript and setup instructions if you want to pre-populate form fields or apply a coupon code automatically.[^coupon]
+- "Test", short for "Making Test Purchases", shows you fake credit card info for use during checkouts to see how the system and your fulfillments react. If you make a successful test order, you'll receive a real license code and order completion emails.
+- "Settings" opens up the plethora of options to customize the theme of the storefront.
+- "Homepage" is used to configure the contents of your storefront's main page. You can add (and leave out) certain products. We'll be doing that in a second.
+- "More" hides the "Copy" action which duplicates all settings into a new storefront, and "Languages and Currencies" settings. Storefronts can refuse to accept anything but trusty Russian rubles, for example, or enforce non-localized UI elements.
+
+The homepage settings are the most interesting, I think. The settings are separated into main and secondary product lists. In my own app storefront, I currently make the homepage display bundles at the very top in the main section and put all individual apps into the secondary section. They are still above the fold, but bundle sales are emphasized. For the few individual product sub-storefronts I maintain, the order is reversed: the app at the very top, and applicable bundles at the bottom. Does this increase sales or something? I don't know, but that's one setup I like to think is sensible.
+
+[^coupon]: Ah, coupons ... With the Classic Commerce stores, you were able to pass coupon codes as URL query parameters in your direct links. That was a nice feature and worked especially great for sharing in messages, on Twitter, during marketing campaigns on other people's blogs, and everywhere else where you don't have control over the HTML code to execute arbitrary JavaScript. I have no clue why they scrapped this simple feature. It's not like they're technically incapable to process query parameters now. I regularly contact support to request they add it back in, and I suggest you do the same if you like to see this coming back.
+
+![An exclusive look at the first page of my own storefront's settings](images/10-301-storefront-settings.png)
+
+I skipped the "Settings" action first, because when you click on it, you'll go to a whole different customization page. It has its own navigation menu, after all. You can customize the theme of the store thoroughly. 
+
+Unlike with Classic Commerce storefronts, you cannot upload your own HTML template files and CSS here. But you do get customization options for almost all colors, button styles, images, and most element margins and paddings. I won't give you a tour of every page here but highlight what I thank are the most important settings. The cosmetic changes you'll figure out eventually. I think the Contextual Commerce web storefront abandoned HTML/CSS template files in favor of the JavaScript Store Builder API. You can utilize it to remote-control the FastSpring shopping cart from your website directly. We will dip our toes into this very interesting territory in the next section when we take a look at popup storefronts.
+
+Just remember to hit the "Save and Preview" button from time to time to see the effect of your style changes. The preview will not contain most of the functional changes, only cosmetic changes. To see what the order form looks like when you enable gift purchases, for example, you need to visit (and refresh) your actual test storefront after saving changes.
+
+- "General Settings" is probably the most important page:
+    - Change your "Store Title" to fit your website and business.
+    - Consider enabling "Require email to start the order" if you want to follow-up on abandoned carts. I don't like the practice for my purposes and leave this disabled.
+    - "Show 'Enter VAT ID'" is enabled in my store so EU business customers don't have to pay VAT for which they later have to request a refund by their governments.
+    - "Newsletter Subscription Checkbox" makes sense only if you want to write your own order callback script that wires successful orders with MailChimp, Drip, ConvertKit, or whatever email marketing solution you implement. The built-in integration with MailChimp won't do the job for one-time purchases, only subscriptions.
+- "Header Settings" most importantly allows you to upload your company logo.
+- "Products and Prices" is surprisingly short. Large prices with an appealing color may be your best option here. If you're into color psychology, you might want to consider a calm color and avoid an alarming red. Then again, everything you'll see on the web about sales-optimized marketing pages ends up with large red fonts, thick blue borders, using uppercase Tahoma everywhere, and so on.
+- "Homepage" hosts settings for storefront homepages that show multiple product listings and offers at once. 
+    - I don't like the small target region when you enable "Show checkboxes for adding products to cart" instead of showing an "Add" button. 
+    - I also prefer "Product action button behavior" to be set to "Adds product to cart". As a general rule of thumb, you don't want to add too many steps before the actual checkout and reduce clicks and page links wherever possible. Guides on sales funnels and web store design will evoke the impression that your prospects are going to suffer from severe attention deficit disorders. If you love to show an amazing product listing detail page before people buy, then by all means: do it. As far as I'm concerned, we're here to make an honest business and not manipulate people to buy our stuff. If someone is detracted by one additional click of a button, maybe they just weren't ready for your product and not truly committed to the purchase, yet. That's fine with me. I try to keep things simple because I like to make the user experience the least confusing.
+    - "Product title link behavior" is set to "Show inline product description" so people can see details without leaving the overview page. This may or may not help to make purchases of multiple items at once.
+- "Buttons" lists a ton of style options, but most importantly features the "Short Checkout Flow" option. I enable that as well to keep page transitions to a minimum.
+- "Completion Page" is pretty short, and I do enable "Show licenses on completion page" to give some feedback.
+- "Promotions" display coupon text fields during the checkout process. If you ever want to offer a coupon-based discount, for example educational discounts or discounts during marketing campaigns, you will want to show the field right away so people don't hunt for it and see how much they save. Consider _not_ to enable the abandoned cart options at the bottom of this page. I personally feel moves like this are too needy, especially if you offer a coupon if they continue shopping. A confident seller will wait for them to return, won't she? Depending on your audience and ambition, it could make sense to employ every trick in the book to make the sale. You decide.
+- "Analytics Integration" will be important if you use Google Analytics to monitor your sales funnel. I don't, and I threw out all tracking integrations a couple of years ago. This stuff just wasn't actionable. Again, if you want to optimize your conversion rate, use this to your advantage.
+- "Gift Purchases" are interesting. I keep the option disabled because I want to keep the order form short and simple. Gift purchases work for PayPal, Pay-with-Amazon, and credit card payments, but not wire transfer and similar options. Sometimes I wonder if people would actually use this. If you integrate the storefront with Google Analytics and happen to find out how many people use gift purchases in your store, please let me know!
+
+Storefront customizations can take quite some time to mimic your website, if you have any at all, there is. Because in the end, you can get away with sharing the web storefront link with people to purchase your apps. That's totally possible. There's no law that requires you to have a product landing page _apart_ from your store product detail page. It's just nice to have the flexibility of a custom website.
+
+If you do happen to have a website and want to minimize page transitions and clicks in your app sales funnel, consider adding a Popup Storefront next to the regular webpage-based one. (Spoiler: It's great.)
+
+### Create a Popup Storefront for your website
+
+Popup storefronts are displayed inside your existing webpage like a so-called image lightbox. The popup creates an overlay that dims the main content of your website, then displays an order form in a small window with high contrast. The popup storefront is useful for single-product checkouts, and it truly excels at that. I absolutely love this kind of widget-based order process. As far as I noticed, Gumroad and Paddle pioneered this user interface pattern, and I'm glad FastSpring picked up shortly after.
+
+![Three of my product pages before and after invoking the popup store from their "Buy" buttons.](images/10-302-popup.png)
+
+To create a popup storefront, head to "Storefronts" in the main menu, then select "Popup Storefront" from the sub-menu, then hit the "Create Popup Storefront" to the far right in the sub-menu. 
+
+You can re-use popup storefronts for different products and websites. I have a single web storefront for all my apps, but I use multiple popup storefronts to have each match the style of the app's website or landing page. You don't have to do it this way, but you can, if you want. 
+
+We're going to set up one popup storefront here.
+
+When you have a popup storefront created, you'll notice the storefront's actions to be different from web storefronts. First look at the top-right corner of the list item. It says "No whitelisted website", and "Offline". You can switch the storefront to online anytime, but you need to whitelist your websites first, or else the JavaScript code embedding won't work. Previously, you had to contact support to whitelist sites for you. Now it's a detail you can change yourself, thankfully, but it still needs a couple of minutes to register. Enter your domains now so the backend can save your changes while you customize the rest.
+
+The actions available to you are:
+
+- "Place On Your Website": this opens a popup with setup instructions. We will be getting back to that later.
+- "Preview" opens the popup widget as a popup within your FastSpring admin center. It won't reflect all style changes, just like the "Save and Preview" function of web storefronts only displayed style adjustments without showing functional differences.
+- "Test", again short for "Making Test Purchases", shows the faux credit card details for your manual integration testing needs.
+- "Settings" will open a lot of options again. We'll look at them in a minute.
+- "Products" is similar to web storefront's "Homepage" settings: it is used to configure the available products when customers see the popup. We are going to set the default product when we implement the JavaScript so that the popup performs a single-product checkout for the selection, but you can nowadays have a shopping cart with multiple apps in the popups as well.
+- "More" hides the "Copy" action which duplicates all settings into a new storefront, and "Languages and Currencies" settings. You can also delete a popup storefront from here.
+
+If you look at the preview, you'll notice that the popup is quite busy if you enable all the features. We're going to streamline the experience a fair bit for single-product checkouts. But if your business is selling multiple products, please feel free to dabble with the options for a while and test all the features that FastSpring will have added since release of this book, too! Popup storefronts are constantly getting better. Make sure you know your options before you commit to a style for now -- it's always harder to perform open heart surgery with live popup storefronts later.
+
+Head to the settings and review all the style options. I'll highlight the most important parts of the settings pages again.
+
+- "General Settings" has the most impact on your popup.
+    - "Show Shopping Cart", a fairly new feature, should be disabled when you want to sell a single app, only. Customers can immediately checkout your app and don't have to review the cart first, saving a few clicks and a bit of re-orientation.
+    - "Require email to start the order" makes sense if you want to deal with abandoned carts and get in touch if prospects didn't finish the order process.
+    - "Show 'Enter VAT ID'" doesn't make sense if you sell games, but for productivity apps is very useful.
+    - "Show Norton Secured Seal" may or may not be useful to show that your random page on the internet is not just a credit card info stealing page.
+- "Checkout", which could've been lumped together with general settings as far as I'm concerned, pertains the order form itself.
+    - "Newsletter Subscription Checkbox" is meant for GDPR compliance with product updates; you need to process the order yourself to actually put customers on any email list, though. Leave this as "Hide" unless you want to write a server-side webhook that processes order info.
+    - "Force physical address collection on all order" and "Force phone number collection" are very likely unnecessary for your digital app business.
+    - I like to set "Checkout heading" to display the first product icon, which, in our case, is the _only_ product icon.
+    - "Checkout title" could be your business name again. Depending on the "Checkout heading" setting, the product's name is already shown.
+- "Promotions" offers "Show 'Promotional Code' field", which I think you should enable, and set its display to "Display coupon fields right away" so people know from the start that they can enter coupon codes from a newsletter marketing campaign, for example. A simpler, static form should work better than a checkout form that's always changing under a user's mouse pointer, but you may need to A/B test that to be certain.
+- "Completion Page" is kind of useful to automatically display the license code for later reference. But it does just that: print the license codes, without any further customization options. I once liked to use this, but switched to a setup where I customize the "Post Order Instructions" of each product itself to give more context. So I suggest you leave this turned off.
+- Depending on your set-up so far, "Gift Purchases" might complicate the order form. If your app is useful for mom and pop, and not just for professionals or businesses, this tradeoff may be worth it, though. Would you purchase the Adobe Creative Suite as a gift? Would you purchase a game as a gift? A pair of custom-knit socks, or a magazine subscription? Consider about your product and audience to make the call.
+
+### Display Popup Storefronts on your website
+
+When you click on the "Place On Your Website" action from the popup storefront overview, FastSpring will offer a snippet like the following:
+
+{linenos=off,lang="javascript"}
+    <script
+        id="fsc-api"
+        src="..."
+        type="text/javascript"
+        data-storefront="STORE_URL.test.onfastspring.com/STOREFRONT_ID">
+    </script>
+    
+I'm not printing the actual snippet because the version string in the `src` URL is frequently changing, depends on whether your popup storefront is online or offline, and because the `data-stotefront` attribute is individualized per store and storefront name.
+
+If you know some HTML and JavaScript, you'll notice that this references a script file from FastSpring's servers. It's like an `include` statement. This will include the storefront library for usage, but not actually display any products.
+
+You can go ahead and paste the snippet into your website's HTML source. If you can, place it in the page footer, below the actual content, so the available content loads and displays way before the JavaScript file is included via a remote server request. This will still speed up the page rendering in 2019.
+
+The actual details on how you can use and display the storefront is available [in the FastSpring online documentation](https://docs.fastspring.com/integrating-with-fastspring/store-builder-library/getting-started-with-store-builder-library). It's general-purpose documentation and pretty extensive. I'll provide you with the gist of it to activate a popup storefront.
+
+First, prefer to leave the popup store in offline mode. This will make the code snippet use the `test.onfastspring.com` ID for the `data-storefront` attribute. You can add the `test.` part yourself anytime, though, even if your storefront is live. In any case, adjust the snippet to include the `test.` part in the domain for now.
+
+Second, double-check your website is on the whitelists. If it isn't, you can still show the popup storefront in test mode, but not on the actual website.
+
+Third, embed the `<script>` snippet that loads the library if you haven't already.
+
+Fourth, get the "Product Path" of the product you want to show. Copy or take note of it.
+
+Fifth, copy the direct link to your product in your regular web storefront. Go to your web storefronts overview, click the "Links" action, then copy and paste the URL to your storefront and append the product path. For one of my apps, the resulting URL is `https://christiantietze.onfastspring.com/tableflip`, where `tableflip` is the product path and the rest is the storefront URL. We'll use this as a fallback link.
+
+Finally, add a link or button that says "Buy Now" or similar to your website. Point it to the fallback URL. This is very important. The external JavaScript library may not have loaded when people click on the button, especially on mobile devices or when they have a slow network connection. (Yes, this is still a thing!) You don't want to lose customers because your purchase button doesn't respond, like, at all.
+
+In case of my app TableFlip, the resulting HTML code for a standard link to the product page so far is:
+
+{linenos=off,lang="html"}
+    <a  href="https://christiantietze.onfastspring.com/tableflip">
+      Buy Now
+    </a>
+
+Now we'll invoke the popup store from this link via JavaScript, if available! The library you've just included on your website looks for specific attributes on links and opens the store for you. The attributes we're interested in and the values I suggest are:
+
+- `data-fsc-item-path-value="PRODUCT_PATH"`, which tells the popup store which product this link refers to. That's `"mynewapp"` for the app we created in an earlier chapter.
+- `data-fsc-action="Reset,Add,Checkout"` finally tells the store what the link actually does. It does not display product details. It does not just add the product to a cart. It clears any abandoned cart ("Reset"), adds the product you just specified to the cart ("Add") and goes right to the checkout form ("Checkout"). This way, there will only be an instant checkout of a single item (although the "Reset" option seems to be unnecessary in recent tests).
+
+This is the result for TableFlip:
+
+{linenos=off,lang="html"}
+    <a href="https://christiantietze.onfastspring.com/tableflip"
+       data-fsc-item-path-value="tableflip"
+       data-fsc-action="Reset,Add,Checkout">
+           Buy Now
+    </a>
+
+That should do the trick already!
+
+This is just the surface of it all. The library is built to support an fully embedded web store on your site. Imagine you use an e-commerce website builder like Salesforce to implement a shop. FastSpring's store builder library replaces all that and allows you to host product pages and shopping carts on your own. With actions similar to the link above, you can remote-control a FastSpring-based shopping cart from anywhere on your website. The nature of the store builder library is like a plug-in to any website. I think this is the most customizable, integrated shopping experience you can get.
+
+The documentation for the relevant link attributes we used can be found [online](https://docs.fastspring.com/integrating-with-fastspring/store-builder-library/accessing-the-library-and-data-from-html). You can display the price, including discounts, control shopping carts, and much more.
+
+If you do nothing else today, have a look at <https://www.fastspringexamples.com/> to see many different use cases in action. There's a ton of demo integrations plus a nicer documentation. The demos include a Wordpress-based website, a modal shopping cart you can style to your liking, and regular popup storefronts.

@@ -83,6 +83,8 @@ Here's an example: I want to offer my apps TableFlip and WordCounter together at
 
 Bundles are a much better device to implement this. You can set a bundle price and lump together all the apps, effectively overriding their price. When the customer picks any app that is also available in the bundle, you can offer to "complete" the bundle and swap the single items from the shopping cart with the bundle product. Because this is so useful, we'll discuss the setup and implications of bundles in a [dedicated section in the appendix.](#sellbundles)
 
+If you want to see how bundles, product alternatives, upsell and cross-sell options look in a store, head to <https://www.fastspringexamples.com/> and have a look at the "Advanced Selling Products" examples at the bottom of the left navigation sidebar.
+
 ### Product fulfillments in detail
 
 To complete the app setup in your store, we'll need to wire the license generator to create a new license for every purchase. Automatic actions on order completion are called "fulfillment".

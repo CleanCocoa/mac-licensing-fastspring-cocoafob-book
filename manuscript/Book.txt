@@ -16,6 +16,7 @@ book-list.txt
 10-10 keys.txt
 10-20 customize.txt
 10-25 license info.txt
+10-30 storefront.txt
 10-50 classic.txt
 
 20-00 verify app license.txt

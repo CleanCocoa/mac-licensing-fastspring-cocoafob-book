@@ -2,7 +2,11 @@
 
 In this chapter, we'll configure your app listing for your very own store. FastSpring will process your purchases. Their backend will take care of all the license code generation during the checkout process. This is part of the "order fulfillment" we're going to configure. 
 
-FastSpring offers two store backends in parallel: The old one, called "Classic Store", and the new one introduced in 2016, called "Contextual Store". Both systems differed for quite a while, but nowadays, I think it's safe to say that Contextual is the clear winner for app developers. You get a proper REST API and much nicer checkout experience. I'll show you how you can set up both store backends nevertheless, but will focus on the functionality of Contextual because it's clearly the way forward.
+FastSpring offers two store backends in parallel: The old one, called "Classic Commerce", and the new one introduced in 2016, called "Contextual Commerce". Both systems differed for quite a while, but nowadays, I think it's safe to say that Contextual is the clear winner for app developers because it is on par in features and even exceeds Classic. You get a proper REST API in Contextual, and a much nicer checkout experience. Order confirmation emails aren't ugly anymore, either! 
+
+I'll show you how you can set up both store backends, but will focus on the functionality of Contextual because it's clearly the way forward.
+
+To see what you can do with the Contextual store, have a look at the examples and demos on <https://www.fastspringexamples.com/>. You'll see that the FastSpring Contextual Commerce backend can power a shopping cart _on your own website._ The examples include a preview of different settings, too, for example how the checkout form differs from selling digital to selling physical goods.
 
 ![Classic's checkout page from the 90s to the left, Contextual's modern popup checkout UI displaying on top of a website to the right, both for one of my apps](images/10-010-contextual-vs-classic.png)
 
