@@ -28,9 +28,13 @@ Here's an example; please don't just copy and paste it, because it'll overwrite 
 
 Notice I added a trailing paragraph that promises an email with license information. The next section will explain the setup for this. The "convenient activation link" takes some more work and requires changes to the app. It's an optional feature you might just as well leave out. We'll discuss that in a separate chapter [in the appendix.](#activationlink)
 
+When an order completes, the customer will now see the license details on the completion page itself (unless it's a gift purchase), and the receipt email will contain the same information below the order total.
+
 ### Send an order confirmation e-mail with the license information {#email}
 
-By default, customers will already receive an invoice via e-mail when the order is completed. You don't have control over this part of the process. You can send a personalized email right afterwards, though, including the license information. This is very useful, because a lot of people will not take the extra step to store the license information on their computer. Sending the license information directly to their inboxes will make your future self thank you later: you'll save quite some time on support emails to retrieve lost license information for customers. I highly recommend you do this step.
+By default, customers will already receive a receipt or invoice via e-mail when the order is completed. You don't have control over this part of the process apart from the "Post Order Instructions" being tacked on to the end of the email.
+
+You can opt-in to send a personalized email right afterwards, though, including the license information again. This is very useful, because a lot of people will not take the extra step to store the license information on their computer and may end up deleting their receipts. I often receive emails from customers with praise for the app as a reply to the personal email. It's an invitation to connect with you. I highly recommend you do this step.
 
 After customizing the "Post Order Instructions", you should still be on your product listing page, with the fulfillment section at the top.
 
