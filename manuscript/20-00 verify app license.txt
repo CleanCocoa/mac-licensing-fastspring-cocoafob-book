@@ -1,18 +1,15 @@
 # Sample App 1: How to Verify License Codes in Your App {#chapter2}
 
-According to the license template `#{product},#{name}` the license code is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
+According to the license template I recommended earlier, `#{product},#{name}` produces a license code that is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
 
 A license code is invalid when checked against that template if it satisfies at least one of the following criteria:
 
-* It's not actually a string encrypted by a private key matching the public key known to the app.
-* The extracted application name doesn't match or is missing.
-* The extracted licensee name doesn't match the name the user provides or is missing.
+* The license code is not a string that was encrypted by a private key which matches the public key used by the app for decrypting.
+* Parsing the decrypted string doesn't meet expectations because the expected product name doesn't match or is missing, or
+* because the extracted licensee name doesn't match what the user entered.
 
-We need to embed the CocoaFob algorithms and create an interface like the one pictured above to actually consume license information in the app. This way users will unlock the app's functionality after a purchase.
+As we've discussed, the algorithm can be adjusted a fair bit. You can try different keys to decrypt; and you can try different license templates upon failure to support both personalized and non-personalized license codes.
 
-D> **Tyler Hall** researched the rates of piracy of his apps and found out 83% of the users of VirtualHostX were using a pirated copy. Piracy was strong for quite some time -- until he added server-side validation to unlock license codes. 
-D> I remember how badly gamers reacted when single-player computer games required an internet connection on first launch. That was a lot of years ago. Nowadays you can assume permanent connectivity for most of your customers.
-D> 
-D> In his [blog post](https://tyler.io/experimenting-with-piracy/) on piracy, Tyler listed a few other measures against software piracy that did lower the number a bit, too, although not by much. Bugging the user with a personalized guilt-laden information dialog converted about 5%. Giving pirates a one-time discount to convert to real customers worked for about 11%. Remember what Craig Scott said about turning angry prospects into happy customers? It seems to work with people who want to use your app for longer than just the trial period, too. The deal has to be good from their point of view.
+We need to utilize the CocoaFob algorithm to decrypt a code and then create an abstraction of all the info we need in the application so we have something to work with. This can look like the types I sketched [a few chapters ago](#statechange). Missing from the short segue into modeling a state machine's state back then was the implementation of services that perform the work and react to changes. This chapter is dedicated to implement all that, but without the additional work of implementing a trial mode. You will learn what the essence of locking functionality away behind license code paywalls means. In the next chapter, we will build upon all this and add a time-based trial.
 
-**You can find a fully functional sample app in the book's code repository.** It's in the [`No-Trial-Verify-at-Start` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/No-Trial-Verify-at-Start)
+**You can find a fully functional sample app in the book's code repository.** It's inside the aptly named [`No-Trial-Verify-at-Start` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/No-Trial-Verify-at-Start) Should any direct link ever break, head over to my website which should be around for as long as the internet and I stay alive in one way or another: `https://christiantietze.de/`

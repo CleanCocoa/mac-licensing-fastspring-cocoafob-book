@@ -174,6 +174,8 @@ This is the result for TableFlip:
 
 That should do the trick already!
 
+Remember to change the `<script>` include path later. Once the popup store leaves private testing mode, the URL to include the store builder code changes. At least the `test` subdomain is dropped and the URL (with placeholders) will likely read `data-storefront="STORE_URL.onfastspring.com/STOREFRONT_ID"`.
+
 This is just the surface of it all. The library is built to support an fully embedded web store on your site. Imagine you use an e-commerce website builder like Salesforce to implement a shop. FastSpring's store builder library replaces all that and allows you to host product pages and shopping carts on your own. With actions similar to the link above, you can remote-control a FastSpring-based shopping cart from anywhere on your website. The nature of the store builder library is like a plug-in to any website. I think this is the most customizable, integrated shopping experience you can get.
 
 The documentation for the relevant link attributes we used can be found [online](https://docs.fastspring.com/integrating-with-fastspring/store-builder-library/accessing-the-library-and-data-from-html). You can display the price, including discounts, control shopping carts, and much more.

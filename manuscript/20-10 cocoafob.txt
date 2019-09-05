@@ -1,28 +1,54 @@
 ## Embedding CocoaFob
 
-For Swift 3, CocoaFob provides a native implementation. If you use Objective-C, refer to [the instructions in the appendix.](#cocoafob-objc)
+Since Swift 2, CocoaFob provides native implementations. We're all set for Swift 5 and will be prepared for Swift 6 once it hits, too. 
 
-### Manual Checkout
+If you require instructions about how to set up the lib for Objective-C, please refer to [the appendix.](#cocoafob-objc)
 
-I tend to add GitHub-based projects as submodules to simple projects like these. That's how the [sample code](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob) works, too. I put all of them into an "External" folder. So from the project root of your project, these are the commands you'd have to enter at the command line:
+The original repository is located at `https://github.com/glebd/cocoafob`.
 
+You can consume the code in your app in different ways. To reduce the amount of build tools you need to follow along, I'll stick to a manual checkout with git submodule. We'll do that in a minute.
+
+If you have CocoaPods, you can instead add an entry to your `Podfile`. Since CocoaFob is not registered in the CocoaPods base repository, refer to its GitHub location directly:
+
+{linenos=off,lang="ruby"}
+    use_frameworks!
+    
+    source 'https://github.com/CocoaPods/Specs.git'
+    platform :osx, '10.10'
+    
+    pod 'CocoaFob', 
+         :git => 'https://github.com/glebd/cocoafob',
+         :branch => 'master', 
+         :inhibit_warnings => true
+
+If you use Carthage (like I do for most of my macOS projects), then this will be enough:
+
+{linenos=off,lang="text"}
+    github "glebd/cocoafob" "master"
+
+
+The [sample code](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob) uses git submodules directly. I tend to group all external dependencies into an "External" folder according to a convention I picked up years ago. You might be used to put external dependencies into "Vendor". We'll be using my old convention for the sample projects because ... that's the way I set them up initially back in 2015, duh. 
+
+From the project root of your project, these are the commands you'd have to enter at the command line to checkout cocoafob:
+
+{linenos=off}
     $ mkdir External
     $ cd External/
     $ git submodule add git://github.com/glebd/cocoafob.git
 
-Alternatively, you can [download the code from GitHub](https://github.com/glebd/cocoafob/tree/master/swift/CocoaFob) and add the files manually.
+In the dark ages, you had to add a couple of files from the Swift source code folder manually to your project, thus exposing the license verification code to the whole app. Nowadays, all the cool kids use proper Swift modules for their libraries, and so shall we.
 
-You're going to need the following files from the `swift/CocoaFob` subfolder:
+![The CocoaFob project is part of the app project, and the resulting Framework is embedded and linked against from the app target](images/20-109-embed-cocoafob.png)
 
-* `CFUtil.swift`
-* `CocoaFobError.swift`
-* `CocoaFobLicVerifier.swift`
-* `CocoaFobStringExt.swift`
+The Swift&nbsp;5 version of the framework is located in the `External/cocoafob/swift5/` subfolder. There is an Xcode project that you can use to build the framework, and then embed the build product in your app.
 
-Add them to your Xcode project. That's everything you need to do to prepare the project.
+If you don't know how this works, these are the steps I recommend to add CocoaFob to your project in a reliable way:
 
-### Dependency Managers
+- Drag & drop the `CocoaFob.xcodeproj` project file into your app's Xcode project navigator. (I suggest you drop it in the project root somewhere below the production code and test group.) This will not yet create a dependency. You need to link against the framework product of the newly added subproject, and embed the framework inside the app. 
+- Click on your app project root item in Xcode, 
+- select the app target in the project details view, 
+- then select the "General" tab to show the app target's settings. 
+- At the bottom you have the "Embedded Binaries" and "Linked Frameworks and Libraries" sections. Click on the "+" button of "Embedded Binaries" and select any of the `CocoaFob.framework` entries the displayed dialog will offer. If you've never done this before, you'll notice how adding the framework to "Embedded Binaries" has also affected the "Linked Frameworks and Libraries" section. It won't work the other way around, though: linking does not imply embedding, but embedding implies linking, as far as Xcode is concerned. 
+- As a side effect, this will also make Xcode build the CocoaFob framework when needed when building the app. You can verify this by heading to the "Build Phases" tab of the project navigator and then check the topmost "Target Dependencies" section, which will now list `CocoaFob.framework`.
 
-CocoaFob now also provides CocoaPods integration. The resulting library consists of all the stuff you are going to need -- plus a bit more, like license key generation. 
-
-As of early 2017, Carthage and the Swift Package Manager are not supported.
+Now you're all set. For reference, you can have a look at the sample apps from the book's accompanying source code material. They use the same approach.
