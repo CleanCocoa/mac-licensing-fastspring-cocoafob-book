@@ -6,9 +6,9 @@ When the user uses a MacBook and never restarts the operating system or quits th
 
 ### Blocking on Launch
 
-`LicenseInformationProvider` is responsible for figuring out which state the app is in at any given moment. Since `TrialProvider` is working, we can combine their forces.
+`LicenseStateProvider` is responsible for figuring out which state the app is in at any given moment. Since `TrialProvider` is working, we can combine their forces.
 
-    public class LicenseInformationProvider {
+    public class LicenseStateProvider {
         let trialProvider: TrialProvider
         let licenseProvider: LicenseProvider
         let clock: KnowsTimeAndDate
@@ -24,7 +24,7 @@ When the user uses a MacBook and never restarts the operating system or quits th
     
         public lazy var licenseVerifier: LicenseVerifier = LicenseVerifier()
     
-        public var currentLicenseInformation: LicenseInformation {
+        public var currentLicenseState: LicenseState {
             if let license = self.license(),
                 license.isValid(licenseVerifier: licenseVerifier) {
     
@@ -52,12 +52,12 @@ When the user uses a MacBook and never restarts the operating system or quits th
     
 Figuring out if the trial period is past is very easy because `TrialPeriod` provides an answer to the question with the help of a clock already. I combined `TrialPeriod` and the clock into a simple `Trial` value object.
 
-That's only a few lines of additional code compared to the `LicenseInformationProvider` implementation without trial.
+That's only a few lines of additional code compared to the `LicenseStateProvider` implementation without trial.
 
 With that, the app is able to figure out what to do upon launch. Revisiting the `AppDelegate`:
 
     func launchAppOrShowLicenseWindow() {        
-        switch currentLicenseInformation {
+        switch currentLicenseState {
         case .trialUp:        
             showRegisterApp()
         
@@ -181,11 +181,11 @@ Now that the timer is taken care of and the license change event can be fired, t
 
     func licenseDidChange(notification: Notification) {
         guard let userInfo = notification.userInfo,
-            let licenseInformation = 
-                LicenseInformation.fromUserInfo(userInfo: userInfo) 
+            let LicenseState = 
+                LicenseState.fromUserInfo(userInfo: userInfo) 
             else { return }
     
-        switch licenseInformation {
+        switch LicenseState {
         case .onTrial(_):
             // Change to this state is possible if unregistering while
             // trial isn't up, yet.
@@ -213,4 +213,4 @@ That's all there is to adding a trial:
     * If it exists, show a notice how many trial days are left. If the trial period has passed, don't unlock the app.
 * Install a timer to fire `.trialUp` when the `endDate` is reached. Should the user register in the meantime, make it so the timer doesn't fire the event.
 
-Adding a working `TrialTimer` is only part of the challenge. Adding a third `LicenseInformation` state changes the face of the app far more.
+Adding a working `TrialTimer` is only part of the challenge. Adding a third `LicenseState` state changes the face of the app far more.

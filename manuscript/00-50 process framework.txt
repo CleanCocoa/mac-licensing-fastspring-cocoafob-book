@@ -1,4 +1,4 @@
-## Licensing Is All About a Big State Change
+## Licensing Is All About a Big State Change {#statechange}
 
 The whole topic of protecting access to features of your application unless people pay for it can be boiled down to handling a transition of your app from "unactivated" state to "activated" state. 
 
@@ -12,16 +12,16 @@ The state the app is in is determined at least during app launch. Changes can ha
 
 With Swift, it's trivial to represent the state of an app that has to be activated at first launch as an enum with an associated value for the details:
 
-    enum LicenseInformation {
+    enum Licensing {
         case registered(License)
         case unregistered
     }
 
 It only gets a bit more complex if you want to support a time-based trial:
 
-    enum LicenseInformation {
+    enum Licensing {
         case registered(License)
-        case onTrial(TrialPeriod)
+        case trial(TrialPeriod)
         case trialUp
     }
 
@@ -35,13 +35,18 @@ The associated `License` type is based on license code and licensee name for the
 And the `TrialPeriod` type can be equally simple:
 
     struct TrialPeriod {
-        public let startDate: Date
-        public let endDate: Date
+        let startDate: Date
+        let endDate: Date
     }
 
 That's the foundation of everything we're going to do: to give the application a means to find out which state it's in at each moment, and to handle transitions. This is a first representation of the technical terms from the last section in code.
 
 You could capture different details in your `License`, like a company name, an expiration date, or whatever else you like. For the sake of this book, we'll stick to the very common combination of license code and licensee name.
+
+D> **Tyler Hall** researched the rates of piracy of his apps and found out 83% of the users of VirtualHostX were using a pirated copy. Piracy was strong for quite some time -- until he added server-side validation to unlock license codes. 
+D> I remember how badly gamers reacted and still react when single-player computer games required an internet connection on first launch. That was a lot of years ago. Nowadays you can assume permanent connectivity for most of your customers. Doesn't mean they'll be happy about it, because once your server is gone for good, they cannot unlock the product anymore.
+D> 
+D> In his [blog post on piracy](https://tyler.io/experimenting-with-piracy/), Tyler listed a few other measures against software piracy that did lower the number a bit, too, although not by much. Bugging the user with a personalized guilt-laden information dialog converted about 5%. Giving pirates a one-time discount to convert to real customers worked for about 11%. Remember what Craig Scott said about turning angry prospects into happy customers? It seems to work with people who want to use your app for longer than just the trial period, too. The deal has to be good from their point of view.
 
 Here's a rehash of the battle plan for the next chapters in case you missed it  in the intro:
 

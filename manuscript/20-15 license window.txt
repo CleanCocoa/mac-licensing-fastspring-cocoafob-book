@@ -2,15 +2,16 @@
 
 ![The "Enter a License" window of _New App_.](images/20-050-license-window.png)
 
-With the `LicenseVerifier` service object we are able to know if license information work. Your application will need to provide a form for the user to provide this information in the first place, though.
+With the `LicenseVerifier` service object we are able to know if license information is valid. Your application will need to provide a form for the user to provide this information in the first place, though.
 
-Most commonly, there'll be a "License Product ..." main menu item where users can enter and review their license information. Some applications utilize a preference pane for that purpose. It's up to you where you place it. For the _NewApp_ sample application, I chose a dedicated license window.
+Most commonly, there'll be a "License Product ..." main menu item where users can enter and review their license information. Some applications utilize a preference pane for that purpose. It's up to you where you place it. For the amazing _MyNewApp_ sample application of this book, I chose a dedicated license window from which you can take the main view as a preference pane, or copy it right in as a dialog or window sheet.
 
-Creating a window like the one pictured above is very easy in Xcode. You can even use Cocoa Bindings to populate the form fields with values from `NSUserDefaults` where the sample app stores license information.
+Creating a window like the one pictured above is very easy in Xcode's Interface Builder, so I won't bore you with the details of adding labels and text fields to a view. 
 
-Be wary about using Cocoa Bindings, though: changes to the text fields' contents are stored immediately. The user can change values later and even without pressing the button invalidate the license info. You have to check that upon launch at least.
+You could, in theory, use Cocoa Bindings to populate the form fields with values from `UserDefaults` where we store license information at the moment. Be wary about using Cocoa Bindings, though: changes to the text fields' contents are stored immediately while you type. You don't want accidental key presses to persist invalid license information. To get around this, check for license info validity upon launch at least. Even better, don't use Cocoa Bindings in your shipping application at all. Instead, rely on the traditional round-trip through view controllers. Only store valid license information by employing `RegisterApplication`.
 
-Even better, don't use Cocoa Bindings in a shipping application. Instead, use the traditional round-trip through view controllers. Store valid information only, and use an instance of `LicenseVerifier` to ensure that.
+You might have wonder why we didn't start writing the registration code into the "Register" button's action handler, directly into the view controller. That's because encapsulating this simple piece of logic telegraphs to any reader of your code that this is a cohesive sequence. To put it into a function with a name, or a type, makes the sequence a _thing_. It's not just a concept in your head, but a thing with a name in the realm of your code. All this is the foundation of object-oriented programming, of course: to encapsulate things that belong together in objects and then treat these as cohesive wholes. Here, having the service object ready makes form field validation a trivial matter. That's nice.
+
 
 ### Window and Event Handler Architecture
 
@@ -92,11 +93,11 @@ It is apparent that `RegisterApplication`, which implements the `HandlesRegister
                 return
             }
         
-            let licenseInformation = LicenseInformation.registered(
+            let LicenseState = LicenseState.registered(
                 License(name: name, key: licenseCode))
         
             licenseWriter.store(licenseCode: licenseCode, forName: name)
-            changeBroadcaster.broadcast(licenseInformation)
+            changeBroadcaster.broadcast(LicenseState)
         }
     
         func displayLicenseCodeError() {
@@ -110,7 +111,7 @@ Attempting to register and unlock the app fails if `LicenseVerifier` doesn't suc
 
 The `RegisterApplication` service object then creates the proper license information and stores it so the app stays unlocked on subsequent starts.
 
-The `LicenseChangeBroadcaster` wraps constructing a notification from the `LicenseInformation` enum and its associated `License` value object and sending it to a `NSNotificationCenter`.
+The `LicenseChangeBroadcaster` wraps constructing a notification from the `LicenseState` enum and its associated `License` value object and sending it to a `NSNotificationCenter`.
 
 The value objects we use behind the scenes are, simplified:
 
@@ -119,7 +120,7 @@ The value objects we use behind the scenes are, simplified:
         let licenseCode: String
     }
     
-    enum LicenseInformation {
+    enum LicenseState {
         case unregistered
         case registered(License)
     }
@@ -133,10 +134,10 @@ In the sample application, which does not allow using the main application inter
     func licenseDidChange(_ notification: Notification) {
     
         guard let userInfo = notification.userInfo, 
-            let licenseInformation = LicenseInformation.fromUserInfo(userInfo) 
+            let LicenseState = LicenseState.fromUserInfo(userInfo) 
             else { return }
     
-        switch licenseInformation {
+        switch LicenseState {
         case .registered(_):
             displayThankYouAlert()
             unlockApp()

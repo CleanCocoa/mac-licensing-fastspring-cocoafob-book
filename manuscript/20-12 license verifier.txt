@@ -1,11 +1,10 @@
+## Writing a License Verifier
 
-## License Verifier
+As I mentioned so many times it may have bored you to death already, the public key is used by your app to decrypt the license code and extract license information from it, while the private key is used to generate a license code online as an order fulfillment of your FastSpring product listing.
 
-As I mentioned already, the public key is used by your app to decrypt the license code and extract license information from it. 
+We will now take the public key that we generated and put it into the app. Not as a file, but as a hard coded string. Files in your app bundle can be replaced easily, for example with a public key that nasty folk have full control over and want to patch inside your app. That's less reliable with code signing, at least as long as end-users do not circumvent Gatekeeper, which pirates may as well do. So you better ensure the key is embedded in the app binary to raise the difficulty bar a fair bit.
 
-We will take the public key and put it into the app. Not as a file, but as a string -- hard coded. Files in your app bundle can be replaced easily, so you better ensure the key is embedded in the binary to raise the bar a bit.
-
-Recall the public key:
+Here's the public key again for reference:
 
 {linenos=off,lang="text"}
     -----BEGIN PUBLIC KEY-----
@@ -17,23 +16,25 @@ Recall the public key:
     UpIg
     -----END PUBLIC KEY-----
 
-It is said to increase the difficulty of obtaining the public key from your app's binary if you don't just put it in there as it is. Instead, use a mutable string and add arbitrary chunks of the key to fragment the information and obfuscate the key's representation in the binary.
+I'm not accustomed to hex-dumping app binaries and cannot tell what the Swift compiler will do, but it is said that finding the key inside your app binary will be harder if you obfuscate it a bit. Instead of one consecutive constant string value containing the whole key, we will split the string into parts and assemble a mutable string during runtime. The generated machine code is supposed to end up with multiple steps assembling the end result. I cannot vouch for this to be a real detriment, but it's so simple to pull off that I cannot find a reason not to do this.
 
-First, preserving newlines, the complete string will contain (line wraps are due to book page limits and indicated by the trailing `\`):
+As a first step, concatenate the whole key. Preserve newlines by adding `\n` at the end of the original lines, first, then concatenate the result. The result looks as follows. A single line of text cannot fit the page of this book; line breaks due to the limitations of the page layout will be indicated by a trailing `\`:
 
 {linenos=off,lang="text"}
-    MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n
+    -----BEGIN PUBLIC KEY-----\nMIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtVG14BUE1I5QaGesaf9PTC\nnmUlYMp4m7MrVC2/YybXEQlaILBZBmyw+A4Kps2k/T12qL8EUwIVAPxEzzlcqbED\nKaw6oJ9THk1i4LuTAkAGRPr6HheNNnH9GQZGjCuv6pLUOBo64QJ0WNEs2c9QOSBU\nHpWZUm8bGMQevt38PiSZZwU0hCAJ6pd09eeTP983A0MAAkB+yDfp+53KPSk5dHxh\noBm6kTBKsYkxonpPlBrFJTJeyvZInHIKrd0N8Dui3XKDtqrLWPIQcM0mWOjYHUlf\nUpIg\n-----END DSA PUBLIC KEY-----\n
 
-Note the trailing newline character.
+Note the strings trailing newline character. Keep it in your app, too.
 
-Instead of a mutable string, which is the way to go in Objective-C, I'll use an array. Just go nuts a bit when splitting the string into chunks. The obfuscation process could look like this:
+Then go nuts and add arbitrary line breaks in your text editor. Make sure not to split the escaped newline characters (`\n`). Apart from that, you can make lines as short and as long as you like. We will use the resulting jagged lines as individual strings that are later concatenated during runtime.
+
+In Objective-C, one would've used a `NSMutableString`, but with Swift we can use the simpler Swift arrays and join the elements at the end. The arbitrarily split-up string, wrapped in calls to `Array<String>.append`, could look like this:
 
     fileprivate func publicKey() -> String {
         
         var parts = [String]()
-        parts.append("-----BEGIN DSA PUBLIC KEY-----\n")
-        parts.append("MIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPXkgAPng5YtV")
-        parts.append("G14BUE1I5Q")
+        parts.append("-----BEGIN D")
+        parts.append("SA PUBLIC KEY-----\nMIHwMIGoBgcqhkjOOAQBMIGcAkEAoKLaPX")
+        parts.append("kgAPng5YtVG14BUE1I5Q")
         parts.append("aGesaf9PTC\nnmUlYMp4m7M")
         parts.append("rVC2/YybXE")
         parts.append("QlaILBZBmyw+A4Kps2k/T12q")
@@ -47,17 +48,27 @@ Instead of a mutable string, which is the way to go in Objective-C, I'll use an 
         parts.append("xh\noBm6kTBKsYk")
         parts.append("xonpPlBrFJTJeyvZInHIKrd0N8Du")
         parts.append("i3XKDtqrLWPIQcM0mWOj")
-        parts.append("YHUlf\nUpIg\n")
-        parts.append("-----END DSA PUBLIC KEY-----\n")
+        parts.append("YHUlf\nUpIg\n-----END D")
+        parts.append("SA PUBLIC KEY-----\n")
     
         let publicKey = parts.joined(separator: "")
         
         return publicKey
     }
 
-Now that we can hope the public key won't be found too easily by someone  trying to circumvent the licensing process, we can use the `CFobLicVerifier` to verify license information.
+So the idea is that the resulting `publicKey` string will be identical to the original, but the means of constructing it during runtime will make it harder to locate the place and figure out how all this happens.
 
+Now that we can hope the public key won't be found too easily by someone  trying to circumvent the licensing process, we can use CocoaFob's `LicenseVerifier` to verify license information.
+
+I> Back in the first edition of this book, the CocoaFob class was called `CFLicVerifier` and later `CocoaFobLicVerifier`, a hat-tip to the Objective-C naming convention. Since then, it has changed with the Swift naming conventions to simply `LicenseVerifier`.
+I> 
+I> This puts me in a conundrum: one services presented here was called `LicenseVerifier` as well. The names do clash now. You can disambiguate type names in Swift by using the module name as a prefix. If your app module is "MyNewApp, that makes both instances addressable by `CocoaFob.LicenseVerifier` and `MyNewApp.LicenseVerifier`, respectively. 
+I> 
+I> For backwards compatibility, I am going to stick to the original service names that I came up with in this book. In the few places where a type from the CocoaFob framework is referenced, like the `LicenseVerifier` that follows, I am going to prefix the type with the CocoaFob module name and never prefix my own types.
+
+    import CocoaFob
     public class LicenseVerifier {
+        // Change to reflect your app:
         static let appName = "MyNewApp"
         let appName: String
     
@@ -69,15 +80,16 @@ Now that we can hope the public key won't be found too easily by someone  trying
             self.appName = appName
         }
     
-        public func licenseCodeIsValid(licenseCode: String, 
-            forName name: String) -> Bool {
-        
-            // Same format as on FastSpring
+        public func isValid(
+            licenseCode: String, 
+            forName name: String) 
+            -> Bool {
+            // Use the same format as you do on FastSpring
             let registrationName = "\(appName),\(name)"
             let publicKey = self.publicKey()
         
             guard let verifier = verifier(publicKey: publicKey) else {
-                assertionFailure("CocoaFobLicenseVerifier cannot be constructed")
+                assertionFailure("CocoaFob.LicenseVerifier cannot be constructed")
                 return false
             }
         
@@ -85,75 +97,211 @@ Now that we can hope the public key won't be found too easily by someone  trying
         }
     
         fileprivate func verifier(publicKey: String) 
-            -> CocoaFobLicVerifier? {
-
-            return CocoaFobLicVerifier(publicKeyPEM: publicKey)
+            -> CocoaFob.LicenseVerifier?  {
+            return CocoaFob.LicenseVerifier(publicKeyPEM: publicKey)
         }
     
         fileprivate func publicKey() -> String {
-            // ... as above ...
+            // ... see above ...
         }
     }
 
-The implementation is pretty simple. The construction of a `CocoaFobLicVerifier` can fail when the public key does not satisfy the requirements and is broken. Apart from that, passing on the result of `verify(_:, forName:)` is straightforward.
+The implementation is pretty simple. The construction of a `CocoaFob.LicenseVerifier` can fail when the public key is broken. Apart from that, passing on the result its `verify(_:forName:)` call is straightforward. The decryption is handled by CocoaFob, and we only need to take care of the setup.
 
-So that is all you need to do:
+- `isValid(licenseCode:forName:)` essentially compares an expected result (`registrationName`) to the encrypted info in `licenseCode`. The API is so simple, it returns true or false, and then you work with that.
+- To assemble `registrationName`, you use the same license template that you set up in FastSpring's license code generator. That means here, we use a combination of the app name and the licensee name: `"\(appName),\(name)"`.
+- The licensee name `name` is passed in to the service during runtime and initially provided by the user.
+- The `appName` constant is hard-coded to match what we set up on FastSpring.
+- The public key is assembled and passed to `CocoaFob.LicenseVerifier` as we have discussed above.
+- The `licenseCode` is passed in to the service, also initially provided by the user string.
 
-* provide the public key,
-* take a licensee name string,
-* take a product name string,
-* combine both into a "registration name" according to the license template,
-* take a license code string,
-* pass the license code and registration name to `CocoaFobLicVerifier` to obtain the result.
+You may not have built a license information user interface component, yet, so imagine a form with two text fields: licensee name, and license code. Then there's a button, "Register", that performs the registration attempt.
 
-You can find all of the files necessary to use in the "License" group in the [sample projects](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob).
+Now imagine that it succeeds. The app should _remain_ unlocked on subsequent starts. You'll want to store the license information somewhere. I suggest you start with storing the info in `UserDefaults`, because the license information is known to the user anyway, so there's no point in hiding it in a less obvious place. That's why I said the license code an name are provided by the user "initially", only: later, we will read them from defaults and try to unlock the app automatically during launch.
 
-The types I use in these projects are:
+## Persisting License Information
+
+If you had a look at the sample projects already, the types I introduced there are:
 
 * `License`: representation of licensee name and license code.
-* `LicenseProvider`: reads the registration information for example from the app's `NSUserDefaults` dictionary.
-* `LicenseWriter`: counterpart to write the data.
-* `LicenseVerifier`: the object we have just discussed to verify the combination of licensee name, license code, application name, and public key. 
-* `LicenseInformation`: the enum which represents the state of the app as unregistered/registered in the first sample, and on-trial/trial-up/registered in the second. 
-* `LicenseInformationProvider`: exposes `currentLicenseInformation` as a means to determine which state the app is in given the data from `LicenseProvider` and the result from `LicenseVerifier`.
-* `LicenseChangeBroadcaster`: notifies objects of the app about state changes during launch to unlock the app or when the trial is up (only in the second sample project).
+* `LicenseProvider`: reads the license data from its storage, in this case from the app's `UserDefaults`.
+* `LicenseWriter`: writes the data to the defaults accordingly.
+* `LicenseVerifier`: the object we have just introduced that performs the actual verification.
+* `Licensing`: an enum which represents the state of the app being unregistered/registered. 
+* `LicensingProvider`: exposes the current `licensing` so the app can know what state it is in, given the data provided by `LicenseProvider` and the result from `LicenseVerifier`.
+* `LicenseChangeBroadcaster`: notifies objects of the app about licensing state changes to unlock and lock the app reactively. Will be used more in the next chapter's sample app, when a time-based trial can expire during runtime.
 
-All of them are very focused to accomplish a single task. `LicenseProvider` for example reads information from `NSUserDefaults` and constructs `License` value objects:
+Note each type is focused to accomplish a single task. `LicenseProvider` for example reads information from `UserDefaults` and constructs `License` value objects. The Swift community adopted and now actively promotes creating more types with less lines of code and, at best, a single responsibility or focus. I attribute this in part to the ease of defining new types anywhere with a single line of code plus curly braces, as opposed to the overhead of Objective-C's creation of both header and implementation files. 
 
-    public class LicenseProvider {
-        public init() { }
-    
-        // `UserDefaults.standardUserDefaults` is a factory that
-        // can return something else for unit tests.
-        lazy var userDefaults: Foundation.UserDefaults = 
-            UserDefaults.standardUserDefaults()
-    
-        public var currentLicense: License? {
-        
-            guard let name = userDefaults.stringForKey(
-                    "\(License.UserDefaultsKeys.name)"),
-                licenseCode = userDefaults.stringForKey(
-                    "\(License.UserDefaultsKeys.licenseCode)") else {
-                
-                return nil
+Let's go through the reading and writing. First, what is read and written will not be a dictionary with strings, but a custom type with meaning -- called a `License`. Here's a sample implementation of the `License` value type that encapsulates all the license information we need:
+
+{lang="swift"}
+    struct License {
+        let name: String
+        let licenseCode: String
+    }
+
+This essentially mimics the user input during the registration process: licensee name and license code are stored permanently, and that's all there is. 
+
+To persist it to `UserDefaults`, it makes sense to also expose the defaults keys as constants. This is better than using string literals everywhere because you only have a single point of change that affects all reading and writing of defaults values.
+
+{lang="swift"}
+    extension License {
+        struct DefaultsKey: RawRepresentable {
+            let rawValue: String
+            
+            init(rawValue: String) {
+                self.rawValue = rawValue
             }
-        
+            
+            static let name = DefaultsKey(rawValue: "licensee")
+            static let licenseCode = DefaultsKey(rawValue: "license_code")
+        }
+    }
+
+With the `License.DefaultsKey` type wrapping the string-based keys, we can also add a convenience API extension to `UserDefaults` that operates on these keys alone. This will help keep code on the call-site short, because you don't have to write `License.DefaultsKey.name.rawValue` to drill down to the string.
+
+{lang="swift"}
+    extension Foundation.UserDefaults {
+        func string(forLicenseKey licenseKey: License.DefaultsKey) -> String? {
+            return self.string(forKey: licenseKey.rawValue)
+        }
+    }
+
+With all these tools, the actual user defaults reader service object becomes trivially short, which is a good thing, because you don't have to think hard to understand what's going on:
+
+{lang="swift"}
+    class LicenseProvider {
+        init() { }
+    
+        // Testing seam
+        lazy var userDefaults: UserDefaults = .standard
+    
+        var license: License? {
+            guard let name = userDefaults.string(forLicenseKey: .name),
+                let licenseCode = userDefaults.string(forLicenseKey: .licenseCode)
+                else { return nil }
+                
             return License(name: name, licenseCode: licenseCode)
         }
     }
 
-    public struct License {
-        public let name: String
-        public let licenseCode: String
+With a service object that focuses on hydrating the `License` from its user defaults representation, we can write the `LicenseWriter` in a very similar fashion: add `UserDefaults` API extensions to simplify access to the license-based keys, then add a service that performs the writing.
+
+{lang="swift"}
+    class LicenseWriter {
+        init() { }
     
-        public init(name: String, licenseCode: String) {
+        // Testing seam
+        lazy var userDefaults: Foundation.UserDefaults = .standard
+    
+        func store(_ license: License) {
+            store(licenseCode: license.licenseCode, forName: license.name)
+        }
+
+        private func store(licenseCode: String, forName name: String) {
+            userDefaults.setValue(name, forLicenseKey: .name)
+            userDefaults.setValue(licenseCode, forLicenseKey: .licenseCode)
+        }
+    }
+
+    extension Foundation.UserDefaults {
+        func setValue(
+            _ value: String, 
+            forLicenseKey licenseKey: License.DefaultsKey) 
+        {
+            self.setValue(value, forKey: licenseKey.rawValue)
+        }
+    }
+
+Pair this with reading and verifying the `License` on app launch automatically, and you have a functional permanent unlocking of the app.
+
+We are going to call `LicenseWriter.store` only when the user input produces license information that passed through `LicenseVerifier` with success, and we ignore invalid input. We'll continue with this piece of business logic to wrap the registration process up. 
+
+
+## Encapsulate Verification and Persistence
+ 
+We will discuss the user interface code in a minute, where you will see how the registration process is initiated. First, we encapsulate the verification and persistence of licenses from in its own service type. The sequence of steps needed to perform the registration process is important, and putting it into its own service object emphasizes that the orchestration of verification and persistence is not to be left to a user interface component.
+
+The result is going to be called `RegisterApplication`. This is a service that performs side effects appropriate to registration attempts. The very important  and ultimately very simple license creation sequence can be expressed as a free function, but since that's pretty hard to mock during tests, we'll be using a `ValidLicenseFactory`. Although I dislike suffixes like "Factory" nearly as much as I dislike "Manager" and "Service" suffixes, this is the best class name I can come up with. A simple function could've been called `validLicense`, but that's not a good name for a service object. It would be a good name for a value type, `ValidLicense`, but that's already what we are expressing with the `License` type. Naming things is hard, and this is a good compromise in my book.
+
+
+{lang="swift"}
+    class ValidLicenseFactory {
+        let licenseVerifier: LicenseVerifier
+        
+        init(licenseVerifier: LicenseVerifier) {
+            self.licenseVerifier = licenseVerifier
+        }
+
+        func license(name: String, licenseCode: String) -> License? {
+            guard isValid(name: name, licenseCode: licenseCode) 
+                else { return nil }
+
+            return License(name: name, licenseCode: licenseCode)
+        }
+        
+        private func isValid(name: String, licenseCode: String) -> Bool {
+            return licenseVerifier.isValid(
+                licenseCode: licenseCode, 
+                forName: name)
+        }
+    }
+
+Now we get a `License` object only when the verification succeeds. Of course, since `License.init` is not private, we can still create objects of this type anywhere else. If you consider this to be a flaw in the design for your purpose, make the default initializer private and add a failable initializer that uses the verifier, like this:
+
+{lang="swift"}
+    struct License {
+        let name: String
+        let licenseCode: String
+        
+        fileprivate init(name: String, licenseCode: String) {
             self.name = name
             self.licenseCode = licenseCode
         }
-    
-        public enum UserDefaultsKeys: String {
-            case name = "licensee"
-            case licenseCode = "license_code"
-        }
     }
     
+    extension License {
+        init?(name: String, licenseCode: String, verifier: LicenseVerifier) {
+            guard licenseVerifier.isValid(
+                licenseCode: licenseCode, 
+                forName: name) else { return nil }
+            
+            self.init(name: name, licenseCode: licenseCode)
+        }
+    }
+
+This can make sense if you extract the whole licensing stuff into its own module to make use of proper information hiding. Then nobody on your team can cheat when it comes to `License` creation. Again, I think this is overkill for our purposes here.
+
+Next is the service object that carries out the actual command to persist the license information.
+
+{lang="swift"}
+    public class RegisterApplication: HandlesRegistering {
+        let licenseFactory: ValidLicenseFactory
+        let licenseWriter: LicenseWriter
+
+        public init(licenseFactory: ValidLicenseFactory,
+                    licenseWriter: LicenseWriter) {
+            self.licenseFactory = licenseFactory
+            self.licenseWriter = licenseWriter
+        }
+
+        public func register(name: String, licenseCode: String) {
+            guard let license = licenseFactory.license(
+                    name: name, 
+                    licenseCode: licenseCode) else {
+                displayLicenseCodeError()
+                return
+            }
+            
+            licenseWriter.store(license)
+        }
+
+        func displayLicenseCodeError() {
+            Alerts.invalidLicenseCodeAlert()?.runModal()
+        }
+    }
+
+Again, this is a very focused type declaration that doesn't do a lot. When you look at the actual implementation in the sample apps, you notice that I added more commands to the `register(name:licenseCode:)`. The method also broadcasts a license change via `NotificationCenter`, so you can write reactive components that lock and unlock functionality based on this notification.
+
+You may wonder why `RegisterApplication.register` takes name and license code as parameters, instead of the `License` object that we have created to combine both values into a single piece of information. It's misleading to create a `License` object directly from user input. Not every user input produces what we consider a `License`; most input may actually be garbage. We should not treat it with the same semantics as a valid license. Usage of the `License` type is thus reserved for valid license information. You will not ever see a `invalidLicense: License` declaration anywhere, and I encourage you to refrain from adding this to your app. Instead, declare this for example as a tuple, `invalidLicenseInformation: (name: String, licenseCode: String)`, or create a `LicenseInformation` type that is transformed into a valid `License` through the verification process. Even though the tuple or the `LicenseInformation` type contain essentially the same values as an object of type `License`, having both a not-yet-verified-or-invalid and a verified type name will tell your future self right away which objects react to successful registration and persistence of valid data, and which objects deal with new user input.
