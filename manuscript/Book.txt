@@ -25,7 +25,6 @@ book-list.txt
 20-12 license verifier.txt
 20-15 license window.txt
 20-17 license check startup.txt
-20-20 fastspring embedded store.txt
 
 30-00 trial.txt
 30-10 trial information i-o.txt
@@ -42,5 +41,6 @@ newsletter.txt
 90-30 email activation.txt
 90-40 cocoafob objc.txt
 90-50 web license generator.txt
+90-60 fastspring embedded store.txt
 90-99 faq.txt
 book-list.txt

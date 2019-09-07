@@ -1,0 +1,254 @@
+## Use an Embedded Web Store for Purchases (Classic Commerce)
+
+This section applies to the Classic Commerce backend, only. The new Contextual Commerce is powered by an HTTP API, but FastSpring currently provides no library to interface with the API from macOS apps. Mike Smith, CTO of FastSpring, told me they had plans for a native SDK of sorts back in 2016, but apparently there's no visible progress on this front. Keep in mind that at the time of me writing this revision, the online Store Builder JavaScript library's version number is 0.8.0, so the API is not even finalized. 
+
+They do provide a so-called Software-Development Kit (SDK) for Classic Commerce folks, though. I do want to eventually close the gap for Contextual Commerce for selfish reasons and create a simple Open Source library myself. Please don't hold your breath for this, though, but do get in touch if you want to collaborate!
+
+![The resulting Embedded Web Store within the app](images/90-601-web-store.png)
+
+The SDK basically provides wrappers for a web view that displays the online storefront with a different template. We're going to upload a different stylesheets so the embedded store looks less ugly. You could even customize it to even mimic the macOS user interface element, but that could become a cause of confusion. No matter how much you tweak web elements in CSS, web views just don't behave the exact same way as native UI elements do. You'll end up in the uncanny valley of macOS UI similitude. I suggest you work on a compact style that doesn't look too much like an unstyled HTML page, and leave it that way. Better have it look distinctively different than just deceptively close to a native UI.
+
+D> **Tyler Hall** creates VirtualHostX and he thinks the embedded store is a pretty awful web-view wrapper. It didn't meet his quality standards, so he dropped the embedded store completely when he switched from Stripe to FastSpring. He'd add an embedded store back anytime when it can be implemented with native Cocoa controls using a web API.
+
+All in all, to let users buy the app from within the app via the _Embedded Web Store_ is additional work. Why would you want to do it?
+
+* It is said that embedded stores increase conversion from trial users to paying customers. In my apps that do have the web store, I still make sales that way. But I cannot say how much more convenient it is, and how many prospects I'd lose if I scrapped the feature.
+* Buying a license from within the app can immediately unlock it. Your application obtains the license from the embedded store. That's a neat feature.
+
+So if you can pull this off, I'd suggest you tackle this not as a killer feature that has to be ready for your first release but as a nice-to-have addition. Something that you'd work on over the course of a weekend, for example.
+
+D> **Philip Goward of Smile**, the team behind TextExpander and PDFpen, stressed that buying a license within the app lowers the barrier to buy the app. Smile has lots of years of experience, so we better listen.
+D>
+D> The most interesting advice he gave me to share with you is this: display the store window on launch, even on first launch. It converts incredibly well.
+D> 
+D> I'll certainly have a look at the effect of this change in my own applications. Keep in mind though that having to click through too many dialog boxes on first launch can just as well ruin the initial user experience. If you have a user on-boarding window anyway, you could try adding this as the last optional step, though, and see how it converts. I have had customers who buy first, without any testing, then download the app afterwards; I would not dismiss this tactic as too unlikely.
+
+FastSpring's embedded store SDK mostly consists of callbacks made during the order process which are forwarded to delegates that you control. That's what we'll be dealing with here: web view callbacks and opening URLs in the view. 
+
+Please refer to [the docs][2019-09-07-docs] for a high level introduction to the process.
+
+
+### Enable the Embedded Store in SpringBoard
+
+Get the [FastSpring SDK frem GitHub][2019-09-07-github]. 
+
+The Embedded Web Store will need a different style than your regular web store. The SDK comes with a template already. You can customize it as you wish -- we will be going through the steps to upload the template and use it, but not tackle actual CSS style changes here.
+
+To upload store templates means you upload a Zip file with a file--folder-structure that matches FastSpring's expectation. The SDK contains a folder called "FsprgEmbeddedStoreStyle" for reference. Put the CSS, the XHTML, and the PayPal folder into a single Zip file. Alternatively, you can use the Zip I created for the sample apps of this book. It's part of the code repository.
+
+![Enable the web store](images/90-602-enable-web-store.png)
+
+![Create a new store style](images/90-603-create-style.png)
+
+First, we enable the embedded web store feature. Log into your SpringBoard. From there, apply the following configurations as depicted in the screenshots:
+
+* Go to _Store Settings_, then _Advanced_. Pick "Property List XML" to enable Web Store requests.
+* _Styles_: create a new style. Upload the Zip file you just prepared. 
+    * Choose _Edit Conditions_ for the style. Add an "Order Environment Condition" with the value "FS Embedded". This will enable the style for the embedded store only and leave your regular web storefront unchanged.
+    * _Activate_ the style afterwards.
+* _Store Testing_: select "Simulate Embedded" under _Optional Parameters_ and check out the differences. The embedded style looks much cleaner.
+
+![The default FastSpring style to the left, the embedded style to the right.](images/90-607-stores-comparison.png)
+
+Next, we'll add a test user to test purchases during development.
+
+The _Account_ Page is the calculator button to the right in your SpringBoard. There, navigate to _Users_ (in the sidebar). Add a new user with the "Limited API User" role. You'll receive a password via e-mail.
+
+Keep the e-mail you used for the user and its password handy as you'll likely need it a lot during initial testing.
+
+Now everything should be ready to roll as far as FastSpring in concerned. Up next is calling the storefront from your app.
+
+[2019-09-07-docs]: https://support.fastspring.com/entries/234307-Embedded-Web-Store-SDK
+[2019-09-07-github]: https://github.com/FastSpring/FsprgEmbeddedStoreMac#how-to-embed-it
+
+### Add the FastSpring SDK to your app
+
+![Disable ARC for the FastSpring implementation files](images/90-604-arc-disabled-fastspring-cocoafob.png)
+
+You can use CocoaPods or get the source from GitHub:
+
+* CocoaPods: <https://cocoapods.org/?q=fsprgembeddedstoremac>
+* GitHub: <https://github.com/FastSpring/FsprgEmbeddedStoreMac#how-to-embed-it>
+
+I use GitHub for the samples to keep the project set-up simple and not introduce another build tool.
+
+From `FsprgEmbeddedStoreMac/FsprgEmbeddedStore/`, add all the files except the "Test" folder to your project. That will be the following:
+
+* `FsprgEmbeddedStore.h`
+* `FsprgEmbeddedStoreController.h`
+* `FsprgEmbeddedStoreController.m`
+* `FsprgEmbeddedStoreDelegate.h`
+* `FsprgOrderDocumentRepresentation.h`
+* `FsprgOrderDocumentRepresentation.m`
+* `FsprgOrderView.h`
+* `FsprgOrderView.m`
+* `FsprgStoreParameters.h`
+* `FsprgStoreParameters.m`
+* `Model/FsprgFileDownload.h`
+* `Model/FsprgFileDownload.m`
+* `Model/FsprgFulfillment.h`
+* `Model/FsprgFulfillment.m`
+* `Model/FsprgLicense.h`
+* `Model/FsprgLicense.m`
+* `Model/FsprgOrder.h`
+* `Model/FsprgOrder.m`
+* `Model/FsprgOrderItem.h`
+* `Model/FsprgOrderItem.m`
+
+The Objective-C implementation does not support ARC, which was how memory management was simplified before Swift came along. We need to tell the compiler that ARC isn't supported. This applies to the implementation files only, not the header files. To disable ARC for the 9 `.m` implementation files, go to your project settings in Xcode, pick the app target, then the "Build Phases" tab. There, expand the "Compile Sources" group. You can filter filenames for "Fsprg". Add the `-fno-objc-arc` flag to all FastSpring-related `.m` files in the list as shown in the screenshot.
+
+In case your unit testing targets don't compile anymore because they cannot find the headers, you have to add the SDK's path to your project's header search paths. I ran into this with Swift-only projects where the FastSpring SDK introduced the first Objective-C files to the project. My Objective-C projects could find the headers from the get-go. To adjust the header search path, go to the test target settings and select the "Build Setting" pane. Use the search to get to "User Header Search Paths". In the test target's column, which is probably the second column you can edit, double-click the table cell and drag the `FsprgEmbeddedStore` folder in there from the sidebar or Finder. That's the folder we picked the files from. In a project setup similar to the example apps from this book, this resolves to:
+
+{linenos=off,lang="text"}
+    "$(SRCROOT)/../External/FsprgEmbeddedStoreMac/FsprgEmbeddedStore"
+
+The "up one level" (`../`) part is due to the sample app's directory hierarchy. In a single-project setting, you don't need to go up a level in the path tree and have `$(SRCROOT)/External/` as the base.
+
+Either way, make sure to select "recursive" when you see the popover after double-clicking the table cell so the compiler looks in sub-directories as well.
+
+Now both the app and test target should build again.
+
+### Implement the Embedded Web Store delegate protocol
+
+Nearly all of the work will be done in a class which implements `FsprgEmbeddedStoreDelegate`. This protocol has four required methods, only two of which are interesting for most of us:
+
+* `didReceiveOrder(order: FsprgOrder!)`: Here, we'll handle automatically unlocking the app after a purchase.
+* `viewWithFrame(frame: NSRect, forOrder order: FsprgOrder!) -> NSView!`: Return a custom view to display the order confirmation. This will usually be a thank-you text with the license details. Or you can go nuts with fancy images.
+* `didLoadStore(url: NSURL!)`
+* `didLoadPage(url: NSURL!, ofType pageType: FsprgPageType)`
+
+The sample applications ship with the `StoreController` class to implement the delegate. The whole store window is managed in a window controller that is loaded from a Nib. We won't be going through every line of code to pull this off; please have a look at the sample code to get a complete picture. Let's run through a couple of interesting customization points instead.
+
+I think it's a nice touch we are able to provide a custom `NSView` upon order completion. The default appearance will be sub-par because it displays the view on top of the web view, which comes with a white background by default. But you can still get pretty far in terms of customization.
+
+To keeping things clean, I prefer a custom view subclass to hold all the labels together:
+
+     class OrderConfirmationView: NSView {
+        @IBOutlet public var licenseCodeTextField: NSTextField!
+    
+        func displayLicenseCode(_ licenseCode: String) {
+            licenseCodeTextField.stringValue = licenseCode
+        }
+    }
+    
+It's easy to populate the text field from the `StoreController` when the custom view is requested:
+
+    func view(withFrame frame: NSRect, for order: FsprgOrder!) -> NSView! {
+        // The orderConfirmationView is provided by the Nib
+        guard let orderConfirmationView = orderConfirmationView,
+            let license = licenseFromOrder(order) 
+            else { return nil }
+
+        orderConfirmationView.display(licenseCode: license.licenseCode)
+        return orderConfirmationView
+    }
+
+The result looks like this:
+
+![Our simple view](images/90-605-thankyou.png)
+
+![Acorn's very sexy registration confirmation window. It's a good idea to go the extra mile and make this pretty](images/90-606-acorn.png)
+
+As I said, it's not very pretty. FastSpring's SDK doesn't use Auto Layout, so things look a little bit off by default. You'll need to tweak this to suit your needs.
+
+I cannot show you my custom views, because I don't use any. I prefer to leave this feature alone, return `nil` from `view(withFrame:for:)`. My apps close the store window and instead show a custom window in the `didReceive(_:)` order completion callback to celebrate the purchase. The image editor Acorn by Flying Meat, Inc. does a great job at this.
+
+FastSpring's Objective-C code produces a weird Swift callback name; the method declaration in Swift is `didReceive(_ order: FsprgOrder!)`, so the short signature would become `didReceive(_:)`. The argument label would be useful here, but since FastSpring didn't update the SDK for a while, we have to roll with this for now. 
+
+In this callback, you'll be able to obtain all license details from `order`. To unlock the app, we need the license code and the licensee's name to feed to the `LicenseVerifier`.
+
+I'm paranoid when it comes to web views. They are highly customizable, and the result depends on the correct setup both in the app and the SpringBoard. Your users could end up purchasing not the app they have started from, but something different from your web store if you configure it slightly wrong. Or they purchase multiple licenses for this app. We need to check and sanitize some of the order parameters and keep useful defensive programming practices in mind. 
+
+- `order.orderItems` is an array of `FsprgOrderItem`s.
+- Check each item's `productName`. Is it the same as your app's product name? If it matches, you've got a paying customer for this particular application. Otherwise ignore the input.
+- `FsprgOrderItem` also contains the `license() -> FsprgLicense` factory. We can obtain the licensee name via the `FsprgLicense.licenseName()` method, and the license code via `firstLicenseCode()`. This is similar to the way email templates were built. 
+
+Once we have all these values, we can build an instance of our own `License` object. The embedded store's job is done at this point and we can discard it; now follows the verification process. With a sigh of relief, let us leave the realm of web view callbacks and head back to the comfort of the app's native code and our well-known control flow.
+
+In the types bridged from FastSpring's Objective-C SDK, there are a lot of implicitly unwrapped optionals we need to avoid. It looks messier than it actually is, because the Objective-C code does in fact not fail as often as the many exclamation marks would indicate. Still, we don't want to crash with a runtime error after the purchase, so we defensively unwrap everything.
+
+    func didReceive(_ order: FsprgOrder!) {
+        // Thanks Obj-C bridging without nullability annotations:
+        // implicit unwrapped optionals are not safe
+        guard let order = order,
+            let license = license(fromOrder: order)
+            else { return }
+
+        storeDelegate?.didPurchase(license: license)
+    }
+
+Now let me walk you through the private `license(fromOrder:)` helper that unpacks a `License` that we're comfortable with from the `FsprgOrder` received by the web store.
+
+    fileprivate func license(fromOrder order: FsprgOrder) -> License? {
+        
+        guard let items = order.orderItems() as? [FsprgOrderItem],
+            let license: License = items
+                .filter(orderItemIsForThisApp)
+                .compactMap(license(fromOrderItem:))
+                .first else {
+
+            return nil
+        }
+        
+        return license
+    }
+    
+    fileprivate func orderItemIsForThisApp(_ orderItem: FsprgOrderItem) -> Bool {
+
+        guard let productName = orderItem.productName()
+            else { return false }
+
+        let appName = storeInfo.productName
+        return productName.hasPrefix(appName)
+    }
+
+    fileprivate func license(fromOrderItem orderItem: FsprgOrderItem) -> License? {
+
+        guard let orderLicense = orderItem.license(),
+            let name = orderLicense.licenseName(),
+            let licenseCode = orderLicense.firstLicenseCode()
+            else { return nil }
+
+        return License(name: name, licenseCode: licenseCode)
+    }
+
+
+`orderItems()` returns `[AnyObject]!`; we can try to cast the whole array or enumerate the items and cast each on its own. I think the direct array casting is clearer, although it would fail if FastSpring should ever change the SDK to return a different kind of collection with add objects sprinkled in that don't inherit from `FsprgOrderItem`.
+
+The desired result is a `license` constant of the type `License`. To get there from an `FsprgOrderItem`, we apply the following array transformations:
+
+1. `filter(orderItemIsForThisApp)`: Filter all order items for this which are about this app based on the `productName`.
+2. `compactMap(license(fromOrderItem:))`: From the filtered order items, create a `License` instance using the process explained above via `license(fromOrderItem:)`. This can fail and return `nil`. The use of `compactMap` keeps only non-nil results so we get `[License]` instead of `[License?]`.
+3. Finally, take the first element (if any) and pass it to the delegate.
+
+The delegate may now also present a window like my apps or Acorn does. Whatever happens, it's not the direct business of the object implementing `FsprgEmbeddedStoreDelegate`; best put it into another service object.
+
+The resulting license object is passed to a delegate in the `didReceive(_:)` implementation. That delegate is of our own type, `StoreDelegate`, and attempts to register the application in a similar way to the registration form. In the sample apps, I bundled this in objects of the `PurchaseLicense` type. `PurchaseLicense` is the high-level starting point for the embedded store display, wrapped in the `Store` type, and it is also the callback for completed orders. Thus it's both the beginning and end of the order process.
+
+    class PurchaseLicense {
+        let store: Store
+        let registerApplication: RegisterApplication
+    
+        init(store: Store, registerApplication: RegisterApplication) {
+            self.store = store
+            self.registerApplication = registerApplication
+        }
+    }
+
+    extension PurchaseLicense: HandlesPurchases {
+        /// Ultimately displays the embedded web store window.
+        func purchase() {
+            store.showStore()
+        }
+    }
+    
+    extension PurchaseLicense: StoreDelegate {
+        /// Successful web store purchase callback
+        func didPurchase(license: License) {
+            registerApplication.register(
+                name: license.name, 
+                licenseCode: license.licenseCode)
+        }
+    }
+
+And thus processing online orders right within the app is complete.
