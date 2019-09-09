@@ -1,63 +1,121 @@
-## Check for License During Application Launch
+### Check for License During Application Launch
 
-Obtaining the current state of the app depends on whether a valid license is present.
+So far, I've presented an approach to react to registration of the app during runtime. For pragmatic reasons, I put the license change observation code in `AppDelegate`, where I place original subscriptions in my greenfield app projects, too.
 
-I mentioned `LicenseProvider` already. It's responsible for reading a `License` from `NSUserDefaults`.
+With the code we've discussed, the sample app will not unlock itself upon launch. You don't want to have your users enter the license information every time they start the app. That's why we're storing the license info in `UserDefaults`. Now comes the part where this information is read and processed.
 
-If a `License` is present, this indicates that the application is not `.unregistered` anymore but `.registered(_)`.
+We had a look at `LicenseProvider` already. It's responsible for reading a `License` from `UserDefaults`. That's all it does. Another name for this type of service could be `UserDefaultsLicenseReader` to state the concrete implementation's purpose, with `LicenseReader` as a base protocol. Naming schemes like this make sense once you have alternate implementations, like `FileLicenseReader` or `HTTPLicenseReader`. For our sake, the more general `LicenseProvider` will do.
 
-Using `LicenseProvider`, we can add `LicenseStateProvider` which wraps the result in the `LicenseState` enum:
+During app launch, we can obtain an `Optional<License>` from `LicenseProvider`. If the result is `nil`, the app is still unregistered; if the result is non-null, this indicates that the application could transition from `.unregistered` to `.registered(_)`, given the license is valid.
 
-    public class LicenseStateProvider {
+The auto-unlocking sequence consists of these steps:
+
+1. Try to hydrate a `License` object from `UserDefaults` via `LicenseProvider`.
+2. Validate the `License` with the `LicenseVerifier`.
+3. Pass on valid `License` objects only to unlock functionality, either right then and now, or by broadcasting a notification.
+
+One thing we have to consider is invalid values in the defaults. If we don't screw things up, these values will not produce a `License` object. But this either indicates someone mangled with the user defaults, or the license verification mechanism did change. I want to make the sample app react to this odd case by displaying an alert later on. 
+
+A test for invalid license information is to see if the user defaults contain values but the creation of a proper `License` object fails. When you put this into the `LicenseProvider`, I think it also makes sense to change the Dependency Injection mechanism from method parameter injection to object property injection. I prefer to change the `license(validLicenseFactory:)` method to a `license` computed property in this case, too. The result:
+
+    class LicenseProvider {
+        init() { }
+
+        // Make dependendies configurable via lazily loaded properties.
+        // Initializer injection would work as well.
+        lazy var userDefaults = Foundation.UserDefaults.standard
+        lazy var validLicenseFactory = ValidLicenseFactory()
+
+        var licenseInformation: (name: String, licenseCode: String)? {
+            guard let name = userDefaults.string(forLicenseKey: .name),
+                let licenseCode = userDefaults.string(
+                    forLicenseKey: .licenseCode)
+                else { return nil }
+
+            return (name, licenseCode)
+        }
+
+        /// Returns a valid license, or nil.
+        var license: License? {
+            guard let (name, licenseCode) = self.licenseInformation 
+                else { return nil }
+            return validLicenseFactory.license(
+                name: name, 
+                licenseCode: licenseCode)
+        }
+
+        /// True iff there is license info stored in user defaults, but
+        /// no license can be created from that.
+        var hasInvalidLicenseInformation: Bool {
+            return self.licenseInformation != nil
+                && self.license == nil
+        }
+    }
+
+The `hasInvalidLicenseInformation` property could be moved to a different object, and use the license verifier directly; but for pragmatic reasons, I actually prefer to keep it here and rely on the factory doing its job.
+
+With this change, we have all the important pieces. Now we need to encapsulate the sequence itself. The result we want is a `Licensing` enum case, e.g. `.unregistered` or `.registered`. To match the name of `LicenseProvider`, I call this new service `LicensingProvider`:
+
+    class LicensingProvider {
         let licenseProvider: LicenseProvider
     
-        public init(licenseProvider: LicenseProvider) {
+        init(licenseProvider: LicenseProvider) {
             self.licenseProvider = licenseProvider
         }
+
+        fileprivate var license: License? {
+            return licenseProvider.license
+        }
+    
+        var licensing: Licensing {
+            guard let license = self.license else { return .unregistered }
+            return .registered(license)
+        }
+    }
+
+Once a `LicensingProvider` object is set up, its computed `licensing` property can be used throughout the application to obtain the current information. It's not caching the value, so the result will always be fresh. This enables us to write services that rely on a "pull" or "get" approach to change their state. Contrast it with the broadcasting approach on license changes. The notification broadcast enables a "push"-style or "reactive" approach to lock/unlock application functionality. When the state changes, interested objects will be notified immediately and synchronously. When you rely on the `LicensingProvider` instead, you have to read, aka "get" the `licensing` property value and lock/unlock accordingly. App components can display out-of-date information if they are not automatically notified about changes, so you need to poll for the latest info regularly. Because this is a very brittle approach, and because event-based or reactive approaches are so common in macOS development anyway, I cannot come up with a reason _not_ to rely on notifications. In a perfect world, the `LicensingProvider` is only used to provide the initial value during app launch. Afterwards, the app state is changed via notifications.
+
+Again, `AppDelegate` is a good place to start implementing the initial check during the launch:
+
+    class AppDelegate: NSApplicationDelegate {
+        func applicationDidFinishLaunching(_ aNotification: Notification) {
+            observeLicenseChanges()
+            // New: Unlock upon app launch
+            launchAppOrShowLicenseWindow()
+        }
         
-        public lazy var licenseVerifier: LicenseVerifier = LicenseVerifier()
+        // ...
         
-        public var currentLicenseState: LicenseState {
-            if let license = self.license(),
-                license.isValid(licenseVerifier) {
-                return .registered(license)
+        lazy var licenseProvider = LicenseProvider()
+        lazy var licensingProvider: LicensingProvider = 
+             LicensingProvider(licenseProvider: self.licenseProvider)
+        
+        fileprivate func launchAppOrShowLicenseWindow() {
+            switch currentLicensing {
+            case .unregistered:
+                if hasInvalidLicenseInformation {
+                    // Display "invalid license data" alert
+                }
+            
+                showRegisterApp()
+
+            case .registered(_):
+                unlockApp()
             }
+        }
         
-            return .unregistered
+        fileprivate var currentLicensing: Licensing {
+            return licensingProvider.licensing
         }
-    
-        func license() -> License? {
-            return licenseProvider.currentLicense
-        }
-    }
-
-Once `LicenseStateProvider` is set up, its `currentLicenseState` computed property can be used throughout the application to obtain the information needed. It's not caching the value, so the result will always be fresh.
-
-`AppDelegate` is a good place to start implementing the initial check upon launch:
-
-    var currentLicenseState: LicenseState {
-        return licenseInfoProvider.currentLicenseState
-    }
-    
-    func launchAppOrShowLicenseWindow() {
         
-        switch currentLicenseState {
-        case .unregistered:
-            if licenseIsInvalid() {
-                displayInvalidLicenseAlert()
-            }
-    
-            showRegisterApp()
-        case .registered(_):
-    
-            unlockApp()
+        fileprivate var hasInvalidLicenseInformation: Bool {
+            return licenseProvider.hasInvalidLicenseInformation
         }
+        // ...
     }
 
-Only unlock the app if `LicenseStateProvider` returns `.registered(_)` with a valid license.
+We can rely on `hasInvalidLicenseInformation` to figure out if the app ends up not transitioning to `.registered` due to an invalid license. I added two computed properties here that delegate to `LicenseProvider` and `LicensingProvider`. This is a convention I adopted some years ago: how the `AppDelegate` acquires the values is an implementation detail. Here, it relies on functionality provided by two collaborator objects. If the collaborators's method names change, I want to limit the impact of this change. So I wrap the call in a private property to encapsulate it, and thus expose an internal wrapper that is stable even though the collaborators change. I stress this decoupling on the level of the method (because as far as types are concerned, they are still coupled) by calling the property on `AppDelegate` `currentLicensing` which passes on the result of `LicensingProvider.licensing` (note the omission of "current").
 
-`LicenseStateProvider` should do the check so no invalid license information leak by obtaining `currentLicenseState`. Better keep the invariant protected. 
+Recall that `unlockApp` was used in wrote the notification callback already. It's meant to be a placeholder here. The sample app grants access to a button that is disabled as long as no valid license details are present.
 
-If you want to display there was a problem with the stored license, you have to do some extra work, though: check if `LicenseProvider` returns a `License` value even though the app is unregistered and display an alert.
-
-In your application, you should put the details into another object to keep your `AppDelegate` slim. I sometimes set up a few foundational objects in an object of type `AppDependencies`. Breaking up objects makes them easier to test and reason about.
+You can rely on `LicensingProvider` to do its job: there's no need to re-validate incoming `License` objects in the `AppDelegate` or any other object that implements feature locking/unlocking. 

@@ -177,14 +177,16 @@ With all these tools, the actual user defaults reader service object becomes tri
         // Testing seam
         lazy var userDefaults: UserDefaults = .standard
     
-        var license: License? {
+        var licenseInformation: (name: String, licenseCode: String)? {
             guard let name = userDefaults.string(forLicenseKey: .name),
                 let licenseCode = userDefaults.string(forLicenseKey: .licenseCode)
                 else { return nil }
                 
-            return License(name: name, licenseCode: licenseCode)
+            return (name, licenseCode)
         }
     }
+
+This service currently reads the license information, but does not construct a `License` object itself. We will extend `LicenseProvider` in the next section when we implement the verification.
 
 With a service object that focuses on hydrating the `License` from its user defaults representation, we can write the `LicenseWriter` in a very similar fashion: add `UserDefaults` API extensions to simplify access to the license-based keys, then add a service that performs the writing.
 
@@ -276,17 +278,17 @@ This can make sense if you extract the whole licensing stuff into its own module
 Next is the service object that carries out the actual command to persist the license information.
 
 {lang="swift"}
-    public class RegisterApplication: HandlesRegistering {
+    class RegisterApplication {
         let licenseFactory: ValidLicenseFactory
         let licenseWriter: LicenseWriter
 
-        public init(licenseFactory: ValidLicenseFactory,
-                    licenseWriter: LicenseWriter) {
+        init(licenseFactory: ValidLicenseFactory,
+             licenseWriter: LicenseWriter) {
             self.licenseFactory = licenseFactory
             self.licenseWriter = licenseWriter
         }
 
-        public func register(name: String, licenseCode: String) {
+        func register(name: String, licenseCode: String) {
             guard let license = licenseFactory.license(
                     name: name, 
                     licenseCode: licenseCode) else {
@@ -305,3 +307,31 @@ Next is the service object that carries out the actual command to persist the li
 Again, this is a very focused type declaration that doesn't do a lot. When you look at the actual implementation in the sample apps, you notice that I added more commands to the `register(name:licenseCode:)`. The method also broadcasts a license change via `NotificationCenter`, so you can write reactive components that lock and unlock functionality based on this notification.
 
 You may wonder why `RegisterApplication.register` takes name and license code as parameters, instead of the `License` object that we have created to combine both values into a single piece of information. It's misleading to create a `License` object directly from user input. Not every user input produces what we consider a `License`; most input may actually be garbage. We should not treat it with the same semantics as a valid license. Usage of the `License` type is thus reserved for valid license information. You will not ever see a `invalidLicense: License` declaration anywhere, and I encourage you to refrain from adding this to your app. Instead, declare this for example as a tuple, `invalidLicenseInformation: (name: String, licenseCode: String)`, or create a `LicenseInformation` type that is transformed into a valid `License` through the verification process. Even though the tuple or the `LicenseInformation` type contain essentially the same values as an object of type `License`, having both a not-yet-verified-or-invalid and a verified type name will tell your future self right away which objects react to successful registration and persistence of valid data, and which objects deal with new user input.
+
+The original `LicenseProvider` presented above was not able to create a `License` object from the `UserDefaults` data for the same reason we extracted the factory from `RegisterApplication`. Now that `ValidLicenseFactory` exists, we can use it in an extension to `LicenseProvider`:
+
+    extension LicenseProvider {
+        func license(validLicenseFactory: ValidLicenseFactory) -> License? {
+            guard let (name, licenseCode) = self.licenseInformation 
+                else { return nil }
+            return validLicenseFactory.license(
+                name: name, 
+                licenseCode: licenseCode)
+        }
+    }
+
+Now it's less of a pain to rehydrate a `License` from `UserDefaults`. Passing in the factory is useful to make the function testable; this is the core of Dependency Injection through method parameters. We can simplify the actual call by offering a default `validLicenseFactory` value, resulting in this adjustment:
+
+    extension ValidLicenseFactory {
+        convenience init() {
+            self.init(licenseVerifier: LicenseVerifier())
+    }
+    
+    extension LicenseProvider {
+        func license(
+            validLicenseFactory: ValidLicenseFactory = ValidLicenseFactory()
+            ) -> License? 
+        { ... }
+    }
+
+I> Please note that putting this in a type extension will not allow you to `override` the implementation in tests. So you will actually need to put the function implementation into the main type definition as I did in the sample apps.

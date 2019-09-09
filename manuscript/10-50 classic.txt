@@ -1,4 +1,4 @@
-## Setup Instructions for the Classic Store
+## Setup Instructions for the Classic Store {#classic-springboard}
 
 One particular feature of the Classic store is dearly missing: built-in support for discounts based on referrer.
 
