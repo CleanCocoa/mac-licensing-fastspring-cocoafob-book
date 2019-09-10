@@ -1,26 +1,76 @@
-# Sample App 2: Adding a Time-Based Trial
+# Sample App 2: How to Add a Time-Based Trial
 
-Licensing now just works. But having to buy an app without test-driving it is not very comfortable for your users. Especially if your application costs more than $10, which may be considered to be the threshold of impulse purchases, users will want to find out if your product really is for them.
+In the sample app we've developed in the previous chapter, registering and unregistering now is fully functional. You can put your app online, and nobody can access the license-protected features without having valid license information.
 
-That's where trials come into play. You offer new users a test drive for a limited time so they can decide if they want to keep using the product. Your trial period should be long enough to make your app part of your user's lives or they will shrug the purchase dialog off too easily.
+The thing is that test-driving apps is very important in practice when you target customers directly. It is less important if you target businesses, pitch their IT department, and have them install the app on devices on behalf of users. Business-to-customer indie shops will fare better with a demo to help prospects decide if they want to buy the app. You can also frame it in a less appealing way: when you already have a foot in the door and manage to make your app part of a users workflows, they are more inclined to become customers. For a price of US$2, your business model can be paid-up-front and appealing to impulse buyers. If your app costs US$50, people will be far less likely to buy without test-driving the app. I don't have numbers to back this claim. This advice is solely based on anecdotes. Search your feelings, and find out where the tipping point from "might buy" to "definitely not without testing" is. Not being able to test iOS apps was a serious source of complaints for ages. Mac developers could still provide a demo on their website for direct download, even though the Mac App Store didn't support trials or demos. Now, developers and Apple have adapted and turn to a freemium pricing model, with a free download and premium features behind an in-app purchase paywall.
 
-To add a time-based trial to your app, you have to change `LicenseState` a bit and add a third intermediate state:
+To help users decide if they want to buy, time-based trials are one battle-tested approach: You offer new users a test drive for a limited time so they can decide if they want to keep using the product. Your trial period should be long enough to make your app part of your user's lives or they will shrug the purchase dialog off too easily. For _The Archive_, a note-taking app, we've settled for a generous 60-day trial period to help newcomers implement the tool into their lives. For the _WordCounter_, a menu-bar app that tracks how many words you type, I figured 14 days would suffice to massage users into the beat of the app. Ask around and talk to your users to find out what works best for you.
 
-    enum LicenseState {
+To add a time-based trial to the sample app, we will end up with a couple of changes that all revolve around the primary state model, `Licensing`, to look more like this:
+
+    enum Licensing {
         case registered(License)
-        case onTrial(TrialPeriod)
-        case trialUp
+        case trial(TrialPeriod)
+        case trialExpired
     }
 
-I experimented with different `TrialPeriod` implementations.
-
-To use a start date and a duration value came natural, but it became unnecessarily clumsy to use. The duration has to be provided by the app in code anyway. And for most timer operations, you have to compute the end date of the trial period, too. So I suggest this instead, in the most basic form:
+Then I experimented with different `TrialPeriod` implementations and settled for a value type with both start and end date. To use a start date and a duration value came natural, but this became very clumsy to use in practice. To find out if the trial period is expired _right now_ requires a helper to get the current time, then add the duration to the start date and compare it to the current time. Since most timer-based operations, you have to compute the absolute end date, too, I suggest dropping the duration in favor of a fixed expiration date. `TrialPeriod`, in its most basic form, then looks like this:
 
     struct TrialPeriod {
         public let startDate: Date
         public let endDate: Date
     }
 
-From there on, this chapter will teach you how to change the existing application to take the trial into account.
+I asked around for feedback on this approach to modeling the licensing state and got a lot of great feedback and suggestions, some of which is reflected in the current names of the types. I actually favor a different base type:[^woolsweater]
 
-**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running)
+    enum Licensing {
+        case licensed(License)
+        case trial(TrialPeriod) 
+        // `TrialPeriod.isExpired == true` replaces .unregistered
+    }
+
+[^woolsweater]: Thanks a ton to Josh Caswell. He suggested many different type names that flow way better, and from which I picked a couple, and also suggested the pattern matching implementation I really like below.
+
+This variant communicates clearly that it's all about moving the app from trial to licensed state. The third state above makes it harder to infer the transition rules in regard to `.registered`. Instead of a third state, an expired trial is just a variant of the `.trial` case. The associated `TrialPeriod` object knows if the trial is expired. 
+
+With Swift's modern and very powerful pattern matching, you can then have very succinct `case` statements. This requires the addition of a pattern matching operator, `~=`, and an enum that represents the `isExpired` state of `TrialPeriod`. First, have a look at the resulting API:
+
+    func handleLicensingChange(licensing: Licensing) {
+        switch licensing {
+        case .trial(.valid):
+            // ... 
+        case .trial(.expired):
+            // ...
+        case .registered(let license):
+            // etc.
+        }
+    }
+
+This reads as if `TrialPeriod` itself was an enum. But it isn't. The `~=(pattern:value:)` operator definition below makes an inner enum available in `TrialPeriod`s place:
+
+    extension TrialPeriod {
+        // Enum that's used by the ~= operator
+        enum Validity { case valid, expired }
+    
+        var validity: Validity {
+            return self.isExpired ? .expired : .valid
+        }
+
+        // Current date falls outside the covered range
+        var isExpired: Bool {
+            return !(self.start...self.end ~= Date())
+        }
+    }
+    
+    func ~= (pattern: TrialPeriod.Validity, 
+             value: TrialPeriod) -> Bool {
+        return pattern == value.validity
+    }
+
+If you never worked with custom pattern matching, this might look very weird at first. Even though the `Licensing.trial` case does not have an associated enum value but a struct value object, the pattern matching operator allows us to write `.trial(.expired)` as a shortcut to reach into a `TrialPeriod`s `validity` property nevertheless.
+
+This is a very cool feat, but also very advanced Swift territory, so I ultimately dropped it from the sample code for this book. But if you understand the code and prefer it, you're welcome to change the implementation!
+
+From here on, this chapter will teach you how to adjust the existing sample application to take time-based trials into account.
+
+**You can find a fully functional sample app incorporating a trial mode in the book's code repository.** It's in the [`Trial-Expire-While-Running` folder.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/tree/master/Trial-Expire-While-Running) You can use it as a template to quick-start your development process and refer to this chapter for details where needed.

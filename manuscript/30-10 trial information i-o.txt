@@ -1,61 +1,78 @@
-## Trial Information I/O
+## Store and Read Trial Information
 
-You have to store the `TrialPeriod` somewhere. The sample app will put trial information into the `NSUserDefaults`.
-
-The user defaults is a pretty bad place for a shipping app if you worry about users trying to avoid to pay for your software since savvy users can manipulate the values via command line.
+You have to store the `TrialPeriod` somewhere. We will start by storing the trial dates in the `UserDefaults` next to the license information -- mostly so you can inspect the result easily from one place. Persisting a date for the sample app could produce these entries:
 
 {linenos=off}
     $ defaults read de.christiantietze.MyNewApp
     {
-        "trial_ending" = "2015-08-30 09:17:25 +0000";
-        "trial_starting" = "2015-08-25 09:17:25 +0000";
+        "trial_ending" = "2019-08-30 09:17:25 +0000";
+        "trial_starting" = "2019-08-25 09:17:25 +0000";
     }
 
-Better put it someplace safer if you're concerned about this. Another option that's probably overkill for most of us: require users to register on the web and store the trial duration on your server.
+If you want to make bypassing the time-based trial limitation harder than overwriting date information that's in plain sight, you have a couple of options. 
 
-Keep in mind though that it likely won't pay off to make it harder for cheap users to extend the trial or hack the license mechanism. Every hour you spend on copy protection against a handful of people is an hour you won't spend improving the app for paying customers.
+First, you may try to encode the expiration date and put it into `UserDefaults`. But if users simply delete the related defaults, the app will likely start a new trial period, just as if it was launched for the first time. 
 
-We used `NSUserDefaults` for storage of license information already. I wrote `TrialProvider` and `TrialWriter` in a similar way, mostly replacing the defaults keys.
+Then you might try to find a secret hiding spot instead, like a file stored somewhere. With Sandboxed applications, savvy users will know that the trial information is very likely contained in the app's Group Container. That's not a good hiding spot. 
 
-    public class TrialProvider {
-        public init() { }
-    
-        lazy var userDefaults: NSUserDefaults = 
-            UserDefaults.standardUserDefaults()
+Lastly, you might come to the conclusion that the `UserDefaults` are just as good a place to store the trial period unencoded as I do in the samples if your options are this limited, anyway. But you do have another option: you can use a different `UserDefaults` suite or domain. macOS apps don't have to use defaults with their bundle ID as the domain, like `de.christiantietze.MyNewApp` above. You can take advantage of this and store your trial info in a totally different defaults domain, like `com.google.project-infinity` or whatever.
 
-        public var currentTrialPeriod: TrialPeriod? {   
-            if let startDate = userDefaults.object(forKey: 
-                    "\(TrialPeriod.UserDefaultsKeys.startDate)") as? Date,
-                let endDate = userDefaults.object(forKey: 
-                    "\(TrialPeriod.UserDefaultsKeys.endDate)") as? Date {
-    
-                return TrialPeriod(startDate: startDate, endDate: endDate)
-            }
-        
-            return .None
-        }
-    }
-    
-    public class TrialWriter {
-        public init() { }
-    
-        lazy var userDefaults: NSUserDefaults = 
-            UserDefaults.standardUserDefaults()
-    
-        public func storeTrial(trialPeriod: TrialPeriod) {
-            userDefaults.set(trialPeriod.startDate, 
-                forKey: TrialPeriod.UserDefaultsKeys.startDate.rawValue)
-            userDefaults.set(trialPeriod.endDate, 
-                forKey: TrialPeriod.UserDefaultsKeys.endDate.rawValue)
-        }
-    }
+On top of these offline solutions, you can require users to register on the web and store the trial duration on your server. This essentially results in your server dishing out a time-limited license. That's exactly how devs model this feature: you get one free time-limited license from the start but can purchase unlimited licenses anytime. Both actions result in the user's account being associated with specific license information. We won't be looking at an online license verification and trial activation service in this edition of the book; that's way beyond the scope.
 
+Remember not to become paranoid, but do weigh the cost and benefits carefully. For an app for US$5, it won't pay off to make it harder for cheap users to extend the trial or hack the license mechanism. Every hour you spend on copy protection against a handful of people is an hour you won't spend improving the app for paying customers. The cost/benefit-analysis can easily change when you start to sell premium software for a couple hundred dollars. Just try not to punish the wrong people.
+
+Since we use the `UserDefaults` for license information storage already, I wrote `TrialProvider` and `TrialWriter` in a way that mimics the license counterparts. If you remember that code, this one's pretty close to a copy & paste job, changing some names and keys, really.
+
+{lang="swift"}
     extension TrialPeriod {
-        public enum UserDefaultsKeys: String, CustomStringConvertible {
-            case startDate = "trial_starting"
-            case endDate = "trial_ending"
+        struct DefaultsKey: RawRepresentable {
+            let rawValue: String
             
-            public var description: String { return rawValue }
+            init(rawValue: String) {
+                self.rawValue = rawValue
+            }
+            
+            static let startDate = DefaultsKey(rawValue: "trial_starting")
+            static let endDate = DefaultsKey(rawValue: "trial_ending")
         }
     }
     
+    // Convenience methods to store Date objects for TrialPeriod keys
+    extension Foundation.UserDefaults {
+        func date(forTrialKey trialKey: TrialPeriod.DefaultsKey) -> Date? {
+            return self.object(forKey: trialKey.rawValue) as? Date
+        }
+        
+        func set(_ date: Date, forTrialKey trialKey: TrialPeriod.DefaultsKey) {
+            self.set(date, forKey: trialKey.rawValue)
+        }
+    }
+    
+    class TrialProvider {
+        init() { }
+        
+        lazy var userDefaults: Foundation.UserDefaults = .standard
+        
+        var trialPeriod: TrialPeriod? {
+            guard let startDate = userDefaults.date(forTrialKey: .startDate),
+                let endDate = userDefaults.date(forTrialKey: .endDate)
+                else { return nil }
+                
+            return TrialPeriod(startDate: startDate, endDate: endDate)
+        }
+    }
+    
+    class TrialWriter {
+        init() { }
+        
+        lazy var userDefaults: Foundation.UserDefaults = .standard
+        
+        func store(trialPeriod: TrialPeriod) {
+            userDefaults.set(trialPeriod.startDate, forTrialKey: .startDate)
+            userDefaults.set(trialPeriod.endDate, forTrialKey: .endDate)
+        }
+    }
+
+This is the backbone of the infrastructure that makes time-based trial period persistence real. 
+
+You know the `TrialPeriod` model type already, and now you also some services to read from and write to `UserDefaults`. With these important prerequisites taken care of, we can focus on adding actual functionality or logic to the app to react to trial expiration dates, and lock and unlock access to features.
