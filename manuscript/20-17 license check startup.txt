@@ -119,3 +119,24 @@ We can rely on `hasInvalidLicenseInformation` to figure out if the app ends up n
 Recall that `unlockApp` was used in wrote the notification callback already. It's meant to be a placeholder here. The sample app grants access to a button that is disabled as long as no valid license details are present.
 
 You can rely on `LicensingProvider` to do its job: there's no need to re-validate incoming `License` objects in the `AppDelegate` or any other object that implements feature locking/unlocking. 
+
+### Unregister again to test the app
+
+Once you enter license information in your app, it's supposed to stay registered. I have yet to encounter a case where a user wants to _unregister_ an app. -- For offline license code verification, that is. If you limit a license to a number of seats and verify licenses via your web server, unregistering a machine again makes perfect sense, of course.
+
+So you might not want to add an "Unregister" button for your offline verified app and still want to verify that all your components lock and unlock properly when you change the registration state. You can add a secret UI component that only appears during development builds by wrapping the code in the `#if DEBUG` Swift compiler condition, or you access and delete the values from user defaults externally.
+
+This books sample app's bundle ID is `de.christiantietze.MyNewApp`. With the `defaults` command line tool you can simply delete the whole known defaults storage. Make sure the app is closed, so it cannot write its current state to disk, then enter the following in your Terminal (sans `$`):
+
+{linenos=off,lang="text"}
+    $ defaults delete de.christiantietze.MyNewApp
+
+Next time you start the app, it should behave as if it's the first time.
+
+You can also delete specific keys from the bundle domain only to preserve whatever else you put into the user defaults:
+
+{linenos=off,lang="text"}
+    $ defaults delete de.christiantietze.MyNewApp licensee
+    $ defaults delete de.christiantietze.MyNewApp license_code
+
+In my apps, I add shortcut buttons to the registration form during development builds to quickly register, unregister, and change the trial expiration state of the app. Which brings us to the next level: time-based trial modes.
