@@ -1,4 +1,4 @@
-### Check for License During Application Launch
+## Check for License During Application Launch
 
 So far, I've presented an approach to react to registration of the app during runtime. For pragmatic reasons, I put the license change observation code in `AppDelegate`, where I place original subscriptions in my greenfield app projects, too.
 
@@ -77,7 +77,7 @@ Once a `LicensingProvider` object is set up, its computed `licensing` property c
 
 Again, `AppDelegate` is a good place to start implementing the initial check during the launch:
 
-    class AppDelegate: NSApplicationDelegate {
+    class AppDelegate: NSObject, NSApplicationDelegate {
         func applicationDidFinishLaunching(_ aNotification: Notification) {
             observeLicenseChanges()
             // New: Unlock upon app launch
@@ -120,7 +120,7 @@ Recall that `unlockApp` was used in wrote the notification callback already. It'
 
 You can rely on `LicensingProvider` to do its job: there's no need to re-validate incoming `License` objects in the `AppDelegate` or any other object that implements feature locking/unlocking. 
 
-### Unregister again to test the app
+## Unregister again to test the app
 
 Once you enter license information in your app, it's supposed to stay registered. I have yet to encounter a case where a user wants to _unregister_ an app. -- For offline license code verification, that is. If you limit a license to a number of seats and verify licenses via your web server, unregistering a machine again makes perfect sense, of course.
 
