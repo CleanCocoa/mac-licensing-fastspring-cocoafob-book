@@ -1,11 +1,3 @@
 # Appendix
 
-There are some things which don't naturally fit into the other chapters of this little book, but which are interesting to make your app launch outside the Mac App Store a success.
-
-Next to some resources on the topic, there're chapters on bundle sales and in-app purchases you don't want to miss.
-
-Selling outside the Mac App Store has its flip-side: you don't have that central global warehouse at your disposal. But on the other hand you have the opportunity to team up with other indie devs and sell cool app bundles. You may even be as crazy as bundling apps, e-books, and other media!
-
-Good luck trying that on the App Store.
-
-We'll dig into bundles, in-app purchases, and other technical details in the following sections.
+There are some things which don't naturally fit into the other chapters of this little book. And some which would fit, but detract from the chapter's message. I collected relevant but optional information here, so you can focus on the core licensing functionality and store setup first and pick whatever else you're interested in afterwards.

@@ -1,6 +1,9 @@
 # What This Book Is About
 
-When you distribute outside the Mac App Store, you have to take care of app updates and copy protection yourself. This is extra work. To figure all that out takes quite some time. With the App Store, you only have to provide a working binary, that's it. Implement the features you want, no need to worry about the infrastructure.
+> Writing your own app store and licensor is a rite of passage. It's actually no fun whatsoever, but I wouldn't want to discourage you from a learning experience.  
+> ---Wil Shipley
+
+When you distribute outside the Mac App Store, you have to take care of app updates and copy protection yourself. To implement that is extra work, piled on top of all the tasks related to your app's real functionality. To figure out how to implement all that on your own takes quite some time, and I found that instructions on the internet were very sparse. With the Mac App Store, you only have to provide a working binary, upload it, pass the review, and that's it. You can focus on the features you want, no need to worry about the infrastructure.
 
 I wrote this book to save you days of work, even if you know what you're doing. This book could save you weeks if you had to start from scratch and did all the research, testing, and implementation on your own. I know because it took me ages to get confident in the process and figure things out for my first macOS app. You'll benefit from a fully functional Open Source framework that encapsulates everything I've learned and that works. This alone saves you the time to code and test all the things yourself. Then there's the time I spent on this book, of course, which is time you don't have to spend researching.
 
