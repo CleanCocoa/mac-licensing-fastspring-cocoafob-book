@@ -1,3 +1,3 @@
 # Appendix
 
-There are some things which don't naturally fit into the other chapters of this little book. And some which would fit, but detract from the chapter's message. I collected relevant but optional information here, so you can focus on the core licensing functionality and store setup first and pick whatever else you're interested in afterwards.
+There are some things which don't naturally fit into the other chapters of this little book. And some which would fit, but detract from the chapter's message. I collected relevant but optional information here, so you can focus on the core licensing functionality and store setup in the main chapters of the book, then pick whatever feature you're interested in afterwards.

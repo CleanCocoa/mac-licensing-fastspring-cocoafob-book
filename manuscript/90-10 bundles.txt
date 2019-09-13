@@ -2,23 +2,26 @@
 
 ## How to Sell Bundles on FastSpring {#sellbundles}
 
-FastSpring offers an amazing service to handle bundle payment processing. If your fellow developers are from different countries, FastSpring handling the payments can spare you a lot of the headache.
+Selling outside the Mac App Store offers the opportunity to team up with other indie devs and sell cool app bundles. You may even be as crazy as bundling apps, e-books, and other media together. One example is a business-to-business software tool bundled with an ebook and video-based learning material.
 
-The mechanism behind that is called [split pay][spay] and is used for affiliates, too, for example.
+FastSpring's backend handles bundle setup and payment processing just fine. The mechanism behind that is called ["split pay"][spay]. You ask the FastSpring staff to set up split pay for the bundle with the other devs, and they'll guide you through the process. The other developers are then linked to your account and receive payment from FastSpring directly, thus reducing your split. On one hand, this means less headache for you: you don't have to track payments and transfer money to your fellow bundle participants since FastSpring does it for you. This is especially useful if your fellow developers are paid in foreign currencies and live in countries with different VAT regulations. On the other hand, this ties them directly to your FastSpring account. They don't get access to anything of interest, but it's a more intimate setup in a way, so only FastSpring staff handles this manual process.
 
-Basically, all participants register at FastSpring and provide their bank account details. One becomes the host of the bundle. All participant's products have to find their way into the host's store -- including order fulfillment for license code generation. Then the host sets up a [product bundle][bundle] with all the bundle products and a bundle price. 
+Basically, all participants register with FastSpring and provide their bank account details. One participant declares herself host of the bundle. Each participants's products have to find their way into the host's store -- including order fulfillment for license code generation. It's like setting up your own app for sale, only with apps by other people. These are not sold directly and hidden from the store. Then the host sets up a [product bundle][bundle] with all the bundled products, sets a combined bundle price, and puts _that_ on the store. 
 
-![Creating a product bundle](images/90-100-add-product-bundle.png)
+![Adding an app to a product bundle in Classic Commerce with the No-Price option](images/90-100-add-product-bundle-classic.png)
 
-While the host adds each product to the bundle, it's important to set the products to "No-Price / Zero-priced option" so only the bundle price counts.
+- Classic Commerce: While the host adds each product to the bundle, it's important to set the products to "No-Price / Zero-priced option" during setup so only the bundle price counts.
+- Contextual Commerce: During bundle creation, you'll be prompted for a price. The original product price is ignored by default, so you don't have to do anything special.
 
-The bundle participants have to sign up at the host's store as [the docs][spay] indicate, via the store-specific payee URL: `https://www.fastspring.com/signup_payee.php?ci=<<COMPANY_ID>>`
+The bundle participants have to sign up at the host's store as [the docs][spay] indicate, via the store-specific payee URL: `https://www.fastspring.com/signup_payee.php?ci=COMPANY_ID`
+
+The `COMPANY_ID` is used for the login form in Classic Commerce, so you may know it from the top of your head already if you're on Classic; in Contextual Commerce, that field is optional. Either way, you can look up the value in your FastSpring account profile.
 
 Once the payee has been approved by FastSpring in a manual review process, you can set up split pay rules for them. Common parameters include: begin date, end date, split percent, then filtered by site, origin of the link, coupon used, product bought. The last option is what you're after: select the bundle from the list.
 
-Even though this is a process involving work by a support person, it'll be handled pretty fast. I even had support staff respond to requests on weekends, which frankly surprised me. But then again people say the overall quality of service in Germany is low compared to other countries.
+Even though this is a process involving work by a support person, it'll be handled pretty fast. I even had support staff respond to requests on weekends, which frankly surprised me. Then again, I'm from Germany, which is said to have abysmal service quality overall.
 
-Also consider setting up [notifications][notif] for each order. Ask bundle participants if they'd like to be notified instantly or if they preferred a list of customers at the end of the bundle sale.
+When the bundle is set up, consider setting up [notifications][notif] for order completion so all bundle participants have access to customer data. If you're the host, you can also assemble a list of customers at the end of the bundle sale or send monthly reports. I would rather have FastSpring deliver automatic emails than me producing reports to save time and avoid errors on my side altogether.
 
 
 [spay]: https://support.fastspring.com/entries/21140696-Setting-Up-Affiliates-and-Split-Pays
