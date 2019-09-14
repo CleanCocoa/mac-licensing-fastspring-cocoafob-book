@@ -8,7 +8,7 @@ But you can take it a step further, still, and provide an activation link in a c
 
 ### Pick a URL scheme
 
-![](images/90-200-urlscheme-form.png)
+![](images/90-700-urlscheme-form.png)
 
 To make a link into the app work, register a custom URL Scheme. You find the settings under your app target's settings at "Info".
 

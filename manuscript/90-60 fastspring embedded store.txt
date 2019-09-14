@@ -1,8 +1,10 @@
-## Use an Embedded Web Store for Purchases (Classic Commerce)
+## Use an Embedded Web Store for Purchases (Classic Commerce) {#embeddedstore}
 
-This section applies to the Classic Commerce backend, only. The new Contextual Commerce is powered by an HTTP API, but FastSpring currently provides no library to interface with the API from macOS apps. Mike Smith, CTO of FastSpring, told me they had plans for a native SDK of sorts back in 2016, but apparently there's no visible progress on this front. Keep in mind that at the time of me writing this revision, the online Store Builder JavaScript library's version number is 0.8.0, so the API is not even finalized. 
+This section applies to the Classic Commerce backend, only. The new Contextual Commerce is powered by an HTTP API, but FastSpring currently provides no library to interface with the API from macOS apps. Mike Smith, CTO of FastSpring, told me they had plans for a native SDK of sorts back in 2016, but apparently there's no visible progress on this front. Keep in mind that at the time of me writing this revision, the online Store Builder JavaScript library's version number is 0.8.0, so the Contextual Commerce API is not even finalized.
 
-They do provide a so-called Software-Development Kit (SDK) for Classic Commerce folks, though. I do want to eventually close the gap for Contextual Commerce for selfish reasons and create a simple Open Source library myself. Please don't hold your breath for this, though, but do get in touch if you want to collaborate!
+FastSpring do provide a so-called Software-Development Kit (SDK) for Classic Commerce folks. I do want to eventually close the gap for Contextual Commerce for totally selfish reasons, too, and create a simple Open Source library myself. Please don't hold your breath for this, though. Get in touch if you want to collaborate!
+
+If you started with Contextual Commerce, you can open a support ticket and ask the FastSpring staff to add a Classic Commerce store for you. You'll have to duplicate the product details, that's it. Refer to [the section](#classic-springboard) in the FastSpring setup chapter about the process for Classic.
 
 ![The resulting Embedded Web Store within the app](images/90-601-web-store.png)
 

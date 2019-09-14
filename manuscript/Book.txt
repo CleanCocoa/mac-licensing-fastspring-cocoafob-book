@@ -37,10 +37,10 @@ book-list.txt
 90-00 appendix.txt
 newsletter.txt
 90-10 bundles.txt
-90-20 in-app purchases.txt
-90-30 email activation.txt
-90-40 cocoafob objc.txt
-90-50 web license generator.txt
+90-20 web license generator.txt
+90-30 in-app purchases.txt
 90-60 fastspring embedded store.txt
+90-70 email activation.txt
+90-80 cocoafob objc.txt
 90-99 faq.txt
 book-list.txt
