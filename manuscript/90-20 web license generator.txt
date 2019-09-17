@@ -29,6 +29,42 @@ Have a look at `license_generator.php`: the private and public keys are used the
 
 The license template is represented in the `$stringData` variable that is constructed at the top of `make_license`'s method body. Adjust that statement to read `$stringData = $product_code.",".$name;`, or whatever template you are using.
 
+If you were to remove all the unnecessary parts, the whole license generator can be represented in a simple function:
+
+{lang="php"}
+    include('base32.php');
+    
+    function generate_license(
+        $private_key, 
+        $product_code, 
+        $name)
+    {
+        ## ADJUST TEMPLATE ###################
+        $stringData = $product_code.",".$name;
+        ######################################
+        
+        $binary_signature = "";
+        openssl_sign(
+            $stringData, 
+            $binary_signature, 
+            $private_key, 
+            OPENSSL_ALGO_DSS1);
+        $encoded = base32_encode($binary_signature);
+        
+        // Replace O with 8 and I with 9
+        $replacement = str_replace("I", "9", $encoded);
+        $replacement = str_replace("O", "8", $replacement);
+        
+        // Remove padding
+        $padding = trim(str_replace("=", "", $replacement));
+        $dashed = rtrim(chunk_split($padding, 5, "-"));
+        $theKey = substr($dashed, 0 , strlen($dashed) -1);
+        
+        return $theKey;
+    }
+
+That's all there is to generating CocoaFob license codes! You might use this function instead, if you want.
+
 ### Use the license generator in your endpoint
 
 This is the data you have access to from the license generator request performed by FastSpring, represented as a PHP variable dump:
