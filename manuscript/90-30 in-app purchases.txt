@@ -30,19 +30,17 @@ All in all, the process of implementing in-app purchases can be implemented in a
 
 I like to think that this is a morally sound compromise: Do online activation by default so users only have to authenticate on each device once and have access to all the features they have purchased. Then also offer offline license code activation as a fallback upon request. This ensures longevity of the product way beyond your company's lifetime.
 
-Remember how the CocoaFob licensing template was just a combination of product name and licensee name? You can encode arbitrary information in that string to represent purchased features. You can put a bitmask in there, where `111111` unlocks all 6 available IAP features, `100101` unlocks only 3 of 6, and so on. With that, one license code can encode multiple IAP's and you don't need to distribute one code per feature. To figure out which IAP's are available still requires some kind of online record on your side so you can toggle a single flag and generate a license code that takes all the previous purchases into account.
+Remember how the CocoaFob licensing template was just a concatenation of product name and licensee name? You can encode arbitrary information in that string to represent purchased features. You can put information about in-app purchases in there, too, or the date of purchase, or anything else, really. 
 
-There's no way FastSpring can produce license codes with these information, though. You'll have to implement this on your server.
+My suggestion is you encode all the purchased IAP features into a single license code by using a simple bit-mask. For example, if you have 6 IAP's in your app, a bit-mask of `000000` means "only the main app", `111111` means "all IAP's enabled". A single number with the bits `111111` is 63 in decimal. If Jane Doe purchases the app with all additional features, the string I expect to be encoded by CocoaFob into a personalized license code is `"mynewapp,63,Jane Doe"`. Her brother John, who bought the core app only, will get a license code based on the string `"mynewapp,0,John Doe"`. If you add features, the bit-mask grows, and thus the number changes. With that, you do not need to produce one license code per feature, and users don't have to enter 6 license codes to unlock 6 features.
 
-We're not going through the implementation details. Here's a TL;DR version of the changes you'd have to make to your license generator:
+To allow customers to purchase IAP's at any date, and not only during the initial purchase, you will have to store customer records in some kind of database. Without a permanent record, you cannot _add_ features access rights. FastSpring stores order details for your own record, but you cannot access a history of my purchases in your store and compute a license code based on that. You'll have to implement all of this on your server:
 
-- Switch your app's license generator from the built-in CocoaFob to a self-hosted solution.
-- Create a server endpoint, for example by uploading a PHP file to `/license/generator.php` on your web site. Copy the FastSpring authentication code snippet into this server script to enable the generator only for FastSpring-originated callbacks.
-- For every incoming license request, create a user record based on the email, or alter an existing record to toggle the IAP's flag.
-- Upload the CocoaFob PHP scripts to generate license codes from the GitHub repository: <https://github.com/glebd/cocoafob/tree/master/php>
-- With the resulting data from your records represented by a variable like `$featureBitmask`, fill a license template of `"{$productName},{$featureBitmask},{$licenseeName}"`, pass it to CocoaFob, and `echo`/`print` the resulting license code. FastSpring will consider the HTTP response contents to be the license code or license codes, one per line.
+- Switch your app's license generator from the built-in CocoaFob to a self-hosted solution as explained in the previous section.
+- For every incoming license request, create a user record based on the email if it doesn't exist, or alter an existing record to toggle the flag corresponding to the IAP.
+- With the resulting database record you can construct the bit-mask as `$iapBitmask` and change the CocoaFob license template to `"{$productName},{$iapBitmask},{$licenseName}"`.
 
-This is the data you have access to in the license generator request performed by FastSpring, represented as a PHP variable dump:
+Here's the data you have access to from a self-hosted license generator request again, when the request is performed by FastSpring:
 
 {linenos=off}
     Array
@@ -57,4 +55,6 @@ This is the data you have access to in the license generator request performed b
         [security_request_hash] => xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     )
 
-With `$_REQUEST['email']`, `name`, and `internalProductName` you can achieve everything I just outlined as soon as you add a persistent storage for purchase details and thus customer feature access. A SQLite database will do the job just fine, and the dreaded server endpoint will turn out to be a PHP script with way less than 100 lines of code, the CocoaFob files not counting. The database implementation and bitmask computation is left as an exercise to the reader.
+With `$_REQUEST['email']`, `$_REQUEST['name']`, and `$_REQUEST['internalProductName']` you can achieve everything I just outlined. `internalProductName` would correspond to the in-app purchase product name. To store customer data, a SQLite database will do the job just fine if your host doesn't offer MySQL. The database implementation and computation of the bit-mask is left as an exercise to the reader. If you got this far, this is not much work anymore.
+
+Finally, your app needs to treat the decoded information from license codes differently. The decoding step stays the same since it applies the public key to the license code only. But your `LicenseVerifier` implementation needs to know that the template is different and properly ignore the middle portion, the bit-mask, when it unlocks the base application. Plus you need to write logic to unlock features based on the bit-mask, for example by attaching more information to the `licenseDidChange` notification.

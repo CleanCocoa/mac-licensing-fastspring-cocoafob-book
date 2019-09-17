@@ -1,7 +1,151 @@
-## Hosting Your Own License Generator {#custom-web-generator}
+## Host Your Own License Generator {#custom-web-generator}
 
-If you participate in a bundle sale, you cannot rely on the fulfillment actions offered by FastSpring. To generate licenses for buyers, you'll have to roll your own license generator script.
+If you participate in a bundle sale that you don't host yourself, you cannot rely on the fulfillment actions offered by FastSpring. That means you need to generate licenses for bundle customers using your own license generator script. Here's how.
 
-Here's how.
+With all the work you have to go through to implement a license generator on your server, why not switch your FastSpring setup over to your self-hosted service, too? Granted, there's no upside to doing so if you're doing offline license activation and the CocoaFob algorithm works well for you. That's why I'll treat this as a guided exercise to better grasp what's involved in deploying your own licensing server. In the next sections, we'll have a look at in-app purchases and come back to the topic of customizing license generators, so having the background knowledge will come in handy.
 
-(Placeholder)
+This step is not mandatory at all, but I encourage you to experiment with FastSpring's license generator requests to understand what's going on. This way, you can eventually replace CocoaFob with your own license generator scheme, one that's shorter or encodes more information.
+
+You can host the CocoaFob license generator on any server that runs PHP. The GitHub repository sports license verification and generator scripts. Upload these to your server so you can access them from your generator script. You can find the PHP scripts here: <https://github.com/glebd/cocoafob/tree/master/php>
+
+Let's say your license generator will be available at `https://api.example.com/license/generator/`. For the sake of this section, I'll assume we'll be looking at a file in `/license/generator/index.php` as the implementation of the endpoint to accept requests.
+
+### Upload and configure CocoaFob's PHP implementation
+
+Most of CocoaFob's PHP files are example endpoints or dependencies. We will need these:
+
+- `License/base32.php`, a Base32 encoding implementation;
+- `License/license_generator.php`, a template for the license generator.
+
+You can put those two PHP files in the same sub-directory as your endpoint, at `/license/generator`, and then create `.htaccess` rules to prevent direct access to them from the web. Or you put the CocoaFob files into a directory outside your htdocs and include them from there. The latter is recommended, but not possible on all hosting services.
+
+You will need to upload the same private key you used for FastSpring to your web server, too. Before you do anything else, make sure you'll prevent access to this file. You don't want to have it surface on the web _at all_. Put it outside your public htdocs and restrict access. If your hosting provider does not allow this, ask them to make an exception. If everything else fails, `chmod` the file permissions and put it next to the PHP scripts. 
+
+A comment in the CocoaFob PHP file actually suggests to use a database instead to store and fetch the keys. If your web hosting service provides database access, this is actually a very good idea. You can encrypt databases easily and you cannot screw access up like you can screw up file read permissions.
+
+Provided you have a way to obtain the private key as a string, by reading it from disk or database or from wherever, we can now tweak the license generator.
+
+Have a look at `license_generator.php`: the private and public keys are used there in the constructor. We will not need the public key, so you can delete the statement that loads the public key, the field on the `License_Generator` class, and the `verify_license` method. You'll be left with the `make_license` method implementation and the private key field. Change `make_license` to suit your license template. The default encodes product name, license name, and email. I usually drop the email parameter here, and if you followed along with the FastSpring setup, you'll only be needing the product name and license name, too. 
+
+The license template is represented in the `$stringData` variable that is constructed at the top of `make_license`'s method body. Adjust that statement to read `$stringData = $product_code.",".$name;`, or whatever template you are using.
+
+### Use the license generator in your endpoint
+
+This is the data you have access to from the license generator request performed by FastSpring, represented as a PHP variable dump:
+
+{linenos=off}
+    Array
+    (
+        [company] => Licensee's Company
+        [email] => licensee.email@example.com
+        [internalProductName] => mynewapp_featureXYZ
+        [name] => LICENSEE NAME
+        [quantity] => 1
+        [reference] => FASTSPRING_ORDER_REFERENCE_NO
+        [subscriptionReference] => FASTSPRING_SUBSCRIPTION_REFERENCE_NO
+        [security_request_hash] => xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    )
+
+You could use `internalProductName` to customize the license generator setup if needed. So far, I have only hard-coded the product name as a parameter for CocoaFob's license generator and never used that request parameter.
+
+If you want to keep a record of your customers, for example for subscriptions, online license activation, or other shenanigans, you'll want to create a database record with the `email` plus the order `reference` or `subscriptionReference` request parameters.
+
+To set up the license generator for offline activation in the app, we are going to use the `name` parameter for the license name, and `quantity` to compute enough codes for the order.
+
+![Switching to a self-hosted license generator](images/90-300-web-license.png)
+
+When you switch to a self-hosted license generator in FastSprings product fulfillments, they provide a template with these instructions:
+
+> Sort all parameters passed from our system to your system by parameter name (ordinal value sorting). Concatenate the value of each parameter into a single string. Ignore the parameter named "security_request_hash" when generating this string. Append the private key value to the end of the string and generate an MD5 hex digest on the final combined string. The resulting MD5 digest should be identical to the value passed in the parameter named "security_request_hash".
+
+`security_request_hash` is passed in as a request parameter to your license generator to verify the integrity of the data. Computing this parameter is simple and can be done by malicious parties, too. But to pass the check, they would also need to know a private key. FastSpring shows the expected private key on the generator setup page. The private key is not part of the request. It's used by FastSpring and you to compute the hash only. That is enough to secure a request.
+
+Here's the template sans instructions:
+
+{lang="php"}
+    <?php
+    ksort($_REQUEST);
+    $hashparam = 'security_request_hash';
+    $data = '';
+    $privatekey = 'PASTE FASTSPRING SECURITY TAB PRIVATE KEY HERE';
+    
+    /* USE urldecode($val) IF YOUR SERVER DOES NOT AUTOMATICALLY */
+    foreach ($_REQUEST as $key => $val) {
+      if ($key != $hashparam) { $data .= stripslashes($val); }
+    }
+    
+    if (md5($data . $privatekey) != $_REQUEST[$hashparam]){
+      return;  /* FAILED CHECK */
+    }
+    
+    /* SUCCESS - YOUR SCRIPT GOES HERE */
+
+The success case should result in passing one license code per line in the HTTP response body, via `echo`ing or `print`ing the codes.
+
+You can add this code to the top of your endpoint implementation at `/license/generator/index.php` already.
+
+With the request integrity validated, what else goes into the `index.php` file to use the generator? A modified version of an actual PHP script I used during a bundle sale a couple of years ago looks like the following:
+
+{lang="php"}
+    <?php
+    // ... request integrity check here ...
+    
+    include_once('path/to/cocoafob/license_generator.php');
+    $name = $_REQUEST["name"];
+    $product = "mynewapp"; // Replace with your CocoaFob app name
+    $generator = new License_Generator;
+    
+    $quantity = intval($_REQUEST["quantity"]);
+    if ($quantity == 0) {
+        $quantity = 1;
+    }
+
+    for ($i = 0; $i < $quantity; $i++) {
+        $code = $generator->make_license($product, $name);
+        echo $code."\n";
+    }
+
+This calls the license generator multiple times if the customer orders multiple licenses.
+
+When you have uploaded and customized the `index.php` properly, you can run interactive test requests from the configuration page of the self-hosted license generator of FastSpring's product fulfillments. This is pretty simple, yet super useful to verify your setup is working without having to place test orders all the time.
+
+
+### Using a license generator for bundle sales
+
+In the previous section, we've looked at our options to host product bundle sales on our own. Chances are you want to participate in bundle sales organized by other parties, like BundleHunt, MacHeist, HumbleBundle, and what have you. To work with these, you might need to change your generator setup a fair bit.
+
+For example, in one bundle sale, I didn't have access to the customer's full name. The bundle organizers didn't collect user information apart from email and credit card, so I had not much choice: either use email instead of full name, or drop personalized licenses in favor of non-personalized license codes altogether. I didn't want to support both personalized and non-personalized license information at the time, so I rephrased the registration label in my app from reading "Name" to "Registered to" and went with the email-based approach. So far, nobody complained about this, so I like to think it worked out well.
+
+Also, FastSpring's hash-and-key-based request verification could be too complicated. For another bundle sale, we set up HTTP BASIC AUTH instead, so the script didn't check the request again. For another sale, I shared a random string as the authentication token which they needed to pass as a request parameter. This doesn't provide much in terms of protecting integrity of the request, but it does prevent HTTP requests from the browser to end up dishing out license codes. You could guess the endpoint's URL, and maybe the `email` parameter, too, but the actual random string? Not very likely. Ask for your options, and prefer HTTP BASIC AUTH over shared secret strings that are part of the request. FastSpring's approach above is pretty clever, so you might want to pitch that, too.
+
+Here, I want to share a customized endpoint implementation with you that I used in one of the bundle sales, and that relies on a secret authentication token.
+
+{lang="php"}
+    <?php
+    function isEmpty($var) {
+      return !isset($var) || strlen(trim($var)) == 0;
+    }
+
+    $expected_password = 'top secret passphrase';
+    if (isEmpty($_GET["auth"]) || $_GET["auth"] !== $expected_password) {
+      http_response_code(401);
+      exit();
+    }
+
+    $name = $_GET["email"]; // Not license name but email
+    if (isEmpty($name)) {
+      http_response_code(400);
+      exit();
+    }
+    
+    include_once('path/to/cocoafob/license_generator.php');
+    $generator = new License_Generator;
+    $product = "mynewapp";
+    $code = $generator->make_license($product, $name);
+    
+    echo $code;
+
+
+Lines 5--9 implement the very simple authentication check with a shared secret string. Lines 11--15 check if the required request parameter for the personalization is provided.
+
+And that's all you need to do already. If you're paranoid, you can remove the string literal to define `$expected_password` and read the passphrase from a file outside your public htdocs. I don't see much benefit in that since this approach is comparatively weak, though.
