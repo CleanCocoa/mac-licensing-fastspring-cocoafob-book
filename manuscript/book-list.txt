@@ -1,9 +1,9 @@
 {icon=book}
 G> ## My Other Books
 G>
-G> "Clean Cocoa" is my mission: showing you the best coding practices to create great apps for macOS and iOS.
+G> "Clean Cocoa" is my mission: to show you best coding practices to create great apps for macOS and iOS with maintainable code.
 G>
-G> To that end, I've written the following other books which you might want to check out:
+G> To that end, I've written the following other books you should check out:
 G>
 G> * [Exploring Mac App Development Strategies](https://leanpub.com/develop-mac-apps-clean-architecture-swift)
 G> * [Creating Multi-Process Mac Applications](https://leanpub.com/create-multi-process-mac-apps)
