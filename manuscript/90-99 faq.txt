@@ -6,32 +6,43 @@
 
 Absolutely. It's possible to get Xcode and start developing apps for Mac and iOS instantly. But you won't be able to sign your apps. If you don't code-sign the app, most consumer Macs will not be able to run it out of the box.
 
-The service blocking unsigned apps by default called "Gatekeeper" is supposed to be responsible for keeping the Mac secure. Mac App Store applications are code-signed and run in a sandbox environment so they can do no harm. The apps you're going to sell outside the Mac App Store are signed with a different certificate issued by Apple and they don't have to run in a sandbox. They are potentially more harmful. Unsigned apps are treated like security risks nowadays.
+Mac App Store applications are code-signed and run in a sandboxed environment so they can do no harm. The apps you're going to sell outside the Mac App Store are signed with a different certificate issued by Apple, and nowadays you are supposed to notarize them, too. Your app doesn't have to run in a sandbox, though it probably should, but that's about all of the difference. 
 
-So get the certificates once you're ready to ship if you don't want to spend money up front.
+Unsigned apps are treated as security risks, so you need to code-sign and notarize your apps in order to qualify the test by Gatekeeper.
+
+You can postpone purchasing your Developer Program until your app is ready. But eventually, you are going to need a valid ID.
 
 ### How can I deliver updates?
 
-The Mac App Store takes care of delivering new builds of your application. You have to do this on your own, though.
+The Mac App Store takes care of delivering new builds of your application. Distributing outside the App Store, you have to provide updates on your own, though.
 
-The [Sparkle Updater](https://sparkle-project.org) is your go-to solution. To implement it, please refer to the project documentation.
+The Sparkle Updater project is your go-to solution: <https://sparkle-project.org>
+
+It's open source, and it's used by virtually everybody. I don't think there even is any competition. Check it out, and make sure to also check out the work-in-progress (as of late 2019) XPC branch that is compatible with Sandboxed apps.
 
 In short, you'll need:
 
-* a SSL-backed server where you put the Zip files of new versions
-* a SSL-backed server where you publish the update feed (can be the same one)
-* a new pair of public/private keys to sign your updates just in case
+* a new pair of public/private keys to sign your updates,
+* an HTTPS URL for a `.zip` file of each new version,
+* an HTTPS URL for an RSS feed that describes the expected update's contents,
+* the `Sparkle.framework` to consume the update feed and download the updates when their signing matches expectations.
 
-Using Sparkle is easy once the infrastructure is set up. With Mac OS 10.11 "El Capitan" SSL connections are a must. You can opt-out of the so-called "Application Transport Security" service on a per-app basis, but I don't recommend doing so. SSL certificates are free or very cheap nowadays. 
+You don't need to set up a dedicated server. You can host your Sparkle update feed and updates on Amazon S3 if you add CloudFront, which offers SSL/TLS encryption. You could host updates on GitHub Pages. Wherever you can upload files and get an `https://` URL, you're set!
 
-### Does FastSpring cost me anything if I don't have any sales?
+To implement Sparkle and see how you can customize the process, please refer to the project documentation.
 
-Nope. That's the beauty of this approach for the fearful among us: you don't buy into a service that bills you monthly if you expect to not generate more income. 
+Using Sparkle is very easy once you have uploaded the files. Since macOS 10.11 "El Capitan", SSL/TLS connections are required. (You can opt-out of the so-called "Application Transport Security" service on a per-app basis, but I don't recommend doing so.) SSL certificates can be obtained for free via the _Let's Encrypt_ project, or at a very low cost if your host doesn't support _Let's Encrypt_. SSL should not be a hurdle anymore.
 
-Honestly, you should work on your mindset soon to survive the tough ride ahead. Fear is not the best of all motivators.
+One thing you should keep in mind is that your app will ship with the URL hard-coded, probably as part of its `Info.plist`. Once the app is downloaded, that's where the app will look for updates. By default, Sparkle doesn't even complain when the server is unavailable, keeping users in the dark. If you ever change domains, you need to change the update feed's URL, too -- and ship this change as an update to existing customers. I guess you already see where this is going. Old app versions will continue to request updates from the outdated URL, and the outdated URL needs to remain functional or at least be forwarded to the new one in order to ship updates. You cannot ship emergency updates to change the feed URL _after_ your old server becomes unavailable. You have to do that beforehand. A custom domain name pays off: I ship all my app updates via `updates.christiantietze.de`, which is unlikely to change as long as I don't change my real name. Even if I switch hosting providers, the URLs can be stable. You may also want to add a fallback check to prompt users to manually check for updates in case the server becomes unavailable after a while. I have regretted not having shipped a "please check the website for updates" prompt time and again over the years when I screwed up part of the Sparkle implementation with a sloppy update, so I strongly recommend you have a look at Sparkle's delegate methods to deal with these kind of events.
 
-DevMate (<https://devmate.com/>), for example, changed their pricing recently to make it easier for solo indie devs to try their service. They used to bill 1 cent per active user once you reached 10,000 active users in total, even if you didn't sell anything from that point onward. Now their pricing is a lot more friendly toward small indie developer studios. DevMate handles payments through FastSpring, by the way. Once you start using FastSpring, you can transition to DevMate anytime.
+### Does FastSpring cost anything if I don't generate sales?
 
-FastSpring takes a fee for every transaction. No transaction, no cost. That's it.
+Nope. FastSpring takes a fee for every transaction. No transaction, no cost. That's it.
+
+That's part of the beauty of this approach for the fearful among us: you don't sign-up for a service that bills you monthly. You only have to pay when you make a sale. I think this is a great starting point for indies -- far better than a recurring base fee if you expect to not generate much income for a while, as your reserves will not wind down.
+
+I've been there: If you're afraid the bills by a payment processor could outweigh the income you generate, you have lots of work ahead of you to make a profitable business. This mindset isn't a good fit to survive the tough ride ahead of you. Fear of loss is not the best of all motivators. I can say this anxiety eventually went away for good in my case.
+
+Before shutting down, DevMate changed their pricing in 2015/2016 to make it easier for solo indie devs to try out their service. Initially, they used to bill 1 cent per active user per month once you exceeded the limit of 10,000 active users in total -- even if you didn't sell anything from that point onward. That means you generate non-recurring income but would end up with recurring cost. This pricing model only works if you offer subscription or consumable in-app purchases to generate income continuously. After the change, their pricing became a lot more appealing for small indie developers, dropping the recurring fees. I figured that was a smart move, but apparently that didn't help DevMate's service to thrive.
 
 {pagebreak}
