@@ -1,4 +1,4 @@
-## Test the Checkout Process
+## Test the Checkout Process {#checkout-test}
 
 You have a product listing, and the web storefronts are all set. It's time to perform manual integration testing of the whole flow!
 

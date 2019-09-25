@@ -39,107 +39,199 @@ The following URL should activate the sample app for John Appleseed (newlines ad
     &licenseCode=GAWQE-F9AVT-7EYL9-K8EWK-SLPLJ-RBYTQ-FSS76-CUH98
     -A9KCN-TQP93-ZPLPS-SGDYF-L2A39-NSVLA-NE799-A
 
-The name parameter is base64-encoded so we don't run into problems with special characters, accents, whitespace, and what not. FastSpring supports that and I think this makes it easier to deal with data in URL query strings.
+The `name` parameter is base64-encoded so we don't run into problems with special characters, accents, whitespace, and what not. FastSpring supports that and I think this makes it easier to deal with data in URL query strings.
 
-### Handle activation within the app
+You can decode base64-encoded Strings with this little helper that we're going to use in a minute:
 
-In the code, I make the following changes:
-
-* Add `URLQueryRegistration` type. Instances take a `URL` (former `NSURL`), extract the query portion, and delegate parsing to `URLQueryLicenseParser`. The result is passed on to an object which conforms to `HandlesRegistering`. This will be the `RegisterApplication` service which we already use for manual registering.
-* `URLQueryLicenseParser` splits the whole query string which begins right after the `?` in the URL into key--value-pairs suited for a dictionary. It then decodes the name and returns a well-known `License` value object.
-* Add URL scheme registration and handling of the event to `AppDelegate`.
-
-The code to get from URL to license is nothing special.
-
-    enum URLComponents: String {
-        case host = "activate"
-        case licensee = "name"
-        case licenseCode = "licenseCode"
+    extension String {
+        init?(base64EncodedString string: String) {
+            guard let decodedData = Data(base64Encoded: string, options: [])
+                else { return nil }
+            self.init(data: decodedData, encoding: .utf8)
+        }
     }
-    
-    public class URLQueryRegistration {
-    
+
+In the app's code, I make the following changes:
+
+* Add the `URLQueryRegistration` type as the entry point for the app to handle activation URL scheme events. Instances take a `URL`, extract the query portion, and delegate parsing to `URLQueryLicenseParser`. The result is passed on to an object which conforms to `HandlesRegistering` -- this will ultimately be the `RegisterApplication` service which we already use for manual registering.
+* Add the `URLQueryLicenseParser` helper parses the query string, that is the part of a URL that begins right after the `?`. It then decodes the name and returns a by now well-known `(name: String, licenseCode: String)` license information tuple that will be used to register the app.
+* Finally, implement URL scheme setup in `AppDelegate`.
+
+### Decode license information from URL query parameters
+
+First, let's specify the parts of the URL we're interested in as global constants:
+
+    struct URLSchemeComponent: RawRepresentable {
+        var rawValue: String
+        init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        static let host = URLSchemeComponent(rawValue: "activate")
+        static let licensee = URLSchemeComponent(rawValue: "name")
+        static let licenseCode = URLSchemeComponent(rawValue: "licenseCode")
+    }
+
+The service object that performs the registration and get from a URL to license information should feel pretty familiar to you by now. It's similar to the UI event handling code.
+
+    class URLQueryRegistration {
         let registrationHandler: HandlesRegistering
     
-        public init(registrationHandler: HandlesRegistering) {
+        init(registrationHandler: HandlesRegistering) {
             self.registrationHandler = registrationHandler
         }
     
-        public lazy var queryParser: URLQueryLicenseParser 
-            = URLQueryLicenseParser()
+        lazy var queryParser = URLQueryLicenseParser()
     
-        public func register(fromUrl url: URL) {
-            guard let query = query(url: url),
-                let license = queryParser.parse(query: query) else {
-                return
-            }
+        func register(fromURL url: URL) {
+            guard let query = query(fromURL: url),
+                let licenseInfo = queryParser.parse(query: query)
+                else { return }
         
             registrationHandler.register(
-                name: license.name, 
-                licenseCode: license.licenseCode)
+                name: licenseInfo.name, 
+                licenseCode: licenseInfo.licenseCode)
         }
-    
-        fileprivate func query(url: URL) -> String? {
         
-            if let host = url.host, 
-                let query = url.query, 
-                host == URLComponents.host {
-                return query
+        private func query(fromURL url: URL) -> String? {
+            guard let host = url.host,
+                host == URLSchemeComponent.host.rawValue
+                let query = url.query,
+                else { return nil }
+                
+            return query
+        }
+    }
+
+The flow of events in `register(fromURL:)` is similar to manual registration in the user interface. Here, `query(fromURL:)` effectively filters for the proper URL scheme event that is identified by the host URL component, then returns the query part that is supposed to encode the license information. The query string is passed to the parser for extraction of name and license code, if possible; and the result is then used to attempt a registration.
+
+The `URLQueryLicenseParser` needs to verify the integrity of query keys and values and thus turns out a bit longer than you might expect. The code is still so simple it's boring, sorry, but here you are:
+
+    class URLQueryLicenseParser {
+        init() { }
+
+        func parse(query: String) 
+            -> (name: String, licenseCode: String)? 
+        {
+            let queryDictionary = dictionary(fromQuery: query)
+            guard let encodedName = queryDictionary[.licensee],
+                let name = String(base64EncodedString: encodedName),
+                let licenseCode = queryDictionary[.licenseCode]
+                else { return nil }
+            return (name, licenseCode)
+        }
+
+        fileprivate func dictionary(
+                fromQuery query: String) 
+                -> [URLSchemeComponent : String] {
+            let parameters = query.components(separatedBy: "&")
+            return parameters.mapDictionary() { param in
+                guard let queryKey = self.queryKey(fromParameter: param),
+                    let queryValue = self.queryValue(fromParameter: param)
+                    else { return nil }
+                return (queryKey, queryValue)
             }
-        
-            return .none
+        }
+
+        fileprivate func queryKey(
+                fromParameter parameter: String) 
+                -> URLSchemeComponent? {
+            // Of the `key=value` parameter string, take the `key` only:
+            return parameter
+                .components(separatedBy: "=")
+                .first
+                .map(URLSchemeComponent.init(rawValue:))
+        }
+
+        fileprivate func queryValue(
+                fromParameter parameter: String) 
+                -> String? {
+            return unescape(queryValue: 
+                escapedQueryValue(fromParameter: parameter))
+        }
+
+        fileprivate func unescape(queryValue: String) -> String? {
+            return queryValue
+                .replacingOccurrences(of: "+", with: " ")
+                .removingPercentEncoding
+        }
+
+        fileprivate func escapedQueryValue(
+                fromParameter parameter: String) 
+                -> String {
+            // Queries are of the form `key=value`, and we want to drop the `key=` part.
+            // But base64-encoded Strings often end with `=`, so we also want to
+            // keep all the other equals signs by joining things back.
+            return parameter.components(separatedBy: "=")
+                .dropFirst()
+                .joined(separator: "=")
         }
     }
 
-The `URLQueryLicenseParser` is a bit longer because you have to extract parts of the string and escape and unescape stuff here and there. It's still boring. Instead of printing all the code here, I suggest you take a look at the demo code directly and play with it. Or have a look [at the code online.](https://github.com/CleanCocoa/mac-licensing-fastspring-cocoafob/blob/master/Trial-Expire-While-Running/MyNewApp/URLQueryLicenseParser.swift)
+And here's a breakdown of what's happening:
 
-Let's have a look at the lower-level handling of incoming URL requests and then handing off the real work to `URLQueryRegistration` in `AppDelegate`:
+- The `dictionary(fromQuery:)` helper transforms the whole query string of `key=value` information into a dictionary of `[URLSchemeComponent : String]`.
+- `queryKey(fromParameter:)` and `queryValue(fromParameter:)` do the grunt work to create the dictionary here. I call each `key=value` part of the query a "parameter" here for lack of a better word.
+- Values are assumed to be base64-encoded, and they are decoded into plain UTF-8 strings in the remaining private methods.
+- If the result contains both `URLSchemeComponent`s for licensee name and license key, the resulting license information is returned by the parser.
 
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        prepareTrialOnFirstLaunch()
-        startTrialTimer()
-    
-        registerForURLScheme() // <- New!
-        observeLicenseChanges()
-        prepareLicenseWindowController()
-        launchAppOrShowLicenseWindow()
-    }
-    
-    func registerForURLScheme() {
-    
-        NSAppleEventManager.shared()
-            .setEventHandler(
-                self,
-                andSelector: #selector(AppDelegate
-                    .handle(getUrlEvent:withReplyEvent:)),
-                forEventClass: AEEventClass(kInternetEventClass),
-                andEventID: AEEventID(kAEGetURL))
-    }
+All of this could be implemented in a free function, since the parser has no data of its own. But then testing would get harder again, so we stick to objects.
 
-    func handle(getUrlEvent event: NSAppleEventDescriptor, 
-        withReplyEvent: NSAppleEventDescriptor) {
-    
-        if let urlString = event.paramDescriptor(
-            forKeyword: AEKeyword(keyDirectObject))?.stringValue,
-            let url = URL(string: urlString) {
-        
-            // If you support multiple actions, here'd be the place to
-            // delegate to a router object instead.
-        
-            URLQueryRegistration(registrationHandler: registerApplication)
-                .register(fromUrl: url)
+### Handle activation within the app
+
+Finally, let's have a look at the handling of incoming URL events and implement the handing-off of the real work to `URLQueryRegistration` within `AppDelegate`.
+
+Incoming URL request handlers are implemented by setting an "event handler" on `NSAppleEventManager`. To make this work, you surprisingly don't have to conform to any protocol. Instead, your event handler method has to match a the method signature of `(NSAppleEventDescriptor, NSAppleEventDescriptor) -> Void`.
+
+Registration of the URL scheme event handler should happen during `NSApplicationDelegate.applicationWillFinishLaunching` -- note it's "_will_ finish launching", not "did finish launching". This is important because your app can be launched by the OS for URL-based events. If you don't register the URL handler as early as possible, the app will still launch but not process the request. That's effectively a bug.
+
+    @NSApplicationMain
+    class AppDelegate: NSObject, NSApplicationDelegate {
+        func applicationWillFinishLaunching(_ notification: Notification) {
+            registerForURLScheme()
         }
+        
+        func applicationDidFinishLaunching(_ aNotification: Notification) {
+            // Remains unchanged ...
+        }
+        
+        func registerForURLScheme() {
+            NSAppleEventManager.shared()
+                .setEventHandler(
+                    self,
+                    andSelector: #selector(
+                        AppDelegate.handle(event:replyEvent:)),
+                    forEventClass: AEEventClass(kInternetEventClass),
+                    andEventID: AEEventID(kAEGetURL))
+        }
+
+        @objc func handleURL(
+                event: NSAppleEventDescriptor, 
+                replyEvent: NSAppleEventDescriptor) {
+            guard let urlString = event.paramDescriptor(
+                    forKeyword: AEKeyword(keyDirectObject))?.stringValue,
+                 let url = URL(string: urlString)
+                 else { return }
+            
+             // If you support multiple actions, here'd be the place to
+             // delegate to a router object instead.
+
+             URLQueryRegistration(registrationHandler: registerApplication)
+                 .register(fromURL: url)
+         }
+         
+         // ...
     }
 
-I find `NSAppleEventManager`-related code to look quite messy. The so-called "keywords" used by `NSAppleEventDescriptor` are global constants which don't adhere to any naming convention Apple uses otherwise, like enums. The event manager's parameter values are sometimes prefixed with `AE`, sometimes not.
+Well, I find `NSAppleEventManager`-related code really messy. The so-called "keywords" used by `NSAppleEventDescriptor` are global constants which don't adhere to any naming convention Apple uses anywhere else in Swift. Even lots of Core Animation constants have Swift counterparts, but this apparently doesn't. The event manager's parameter values are sometimes prefixed with `AE`, for example during registration, but sometimes not, for example `keyDirectObject`. Go figure.
 
-Because there's no real application and thus no real infrastructure set up in the sample projects, I put this into `AppDelegate`, too. In a shipping application, you should put event handling someplace else. Registering the handler in `AppDelegate` can work just fine, though.
+In the applications I ship, I put the whole event handling in another object to keep the `AppDelegate` simple. Since the `AppDelegate` provides callbacks for the app's main control flow, it's a good place to start experimenting with a feature like URL scheme-based event handler. You should eventually extract the implementation into another service object, though.
 
-Now we need FastSpring to generate the links.
+With the project registering the URL scheme, and the `AppDelegate` responding to and then forwarding incoming events, all that's missing is to send links to customers!
 
-### Send the activation link with the automatic order confirmation e-mail
+### Send the activation link with the automatic order confirmation e-mail in FastSpring
 
-If you followed along, your product has a fulfillment action that sends the license information to your customers already. You can [add the email now](#email) if you haven't already.
+If you followed along during the FastSpring setup steps, your product has a fulfillment action that sends the license information to your customers already. You can [add the email now](#email) if you haven't already.
 
 The activation link uses the new URL scheme of your app and query parameters for the licensee's name and the license code. The basic form is this: `mynewapp://activate?name=NAME&licenseCode=CODE`. We'll use proper email template variables instead of the placeholders in a second.
 
@@ -159,12 +251,16 @@ Set the the e-mail body to something along these lines to get an activation link
     License Name: #{orderItem.fulfillment.license.licenseName}
     License Key: #{orderItem.fulfillment.license.licenses.list}
     
-    To activate the app automatically, run it and simply click this link: mynewapp://activate?name=#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}&licenseCode=#{orderItem.fulfillment.license.outcome.licenses[0]}
+    To activate the app automatically, run it and simply click 
+    this link: 
+    mynewapp://activate?name=#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}&licenseCode=#{orderItem.fulfillment.license.outcome.licenses[0]}
     
     Thanks again for your support. Please drop me a line if you have any questions.
     
     -- <<Your Name Here>>
 
-(Since long lines cannot be properly preserved in print, you can find a plain text template on the website and in the code repository below "FastSpring assets" to copy & paste into the form.)
+The code doesn't fit the constraints of a book page, so the line wrapping is a bit off here. You can find a plain text template on the book website and in the code repository below the "FastSpring assets" directory to copy & paste into the form.
 
-Save the email fulfillment. If you have a real or test purchase stored in the system, you can preview the email and see what happens when you click the link!
+Save the email fulfillment. If you have any purchase stored in the system, either a real purchase or a test purchase, you can preview the email based on data from your order history immediately. If you haven't, complete a test purchase from the FastSpring backend first with the faux credit card information that we discussed [earlier](#checkout-test). Try the preview and see if the link looks alright.
+
+Run your application with the URL scheme registration code at least once for macOS to know that your app is able to handle the URL scheme event. Then see what happens when you click the link: your app should come to front and change registration details appropriately.
