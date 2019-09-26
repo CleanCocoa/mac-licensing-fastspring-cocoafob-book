@@ -22,7 +22,7 @@ It only gets a bit more complex if you want to support a time-based trial:
     enum Licensing {
         case registered(License)
         case trial(TrialPeriod)
-        case trialUp
+        case trialExpired
     }
 
 The associated `License` type is based on license code and licensee name for the sample apps of this book:
