@@ -1,6 +1,6 @@
 ## Project Organization
 
-![Files of the second sample app](images/10-050-code-org.png)
+![Files of the second sample app](images/10-710-code-org.png)
 
 As the project navigator reveals, I structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
 
