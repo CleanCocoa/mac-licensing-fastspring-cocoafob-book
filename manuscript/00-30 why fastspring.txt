@@ -1,0 +1,100 @@
+## Why FastSpring?
+
+I> I'm not at all affiliated with FastSpring. I don't get any commission if you sign up with them. I love their service and got in touch when I was finishing the book -- and they in turn loved this book. So we collaborate on spreading the word. Not because they pay me (they don't) but because I trust their service and found lots of other developers who really like what FastSpring offers. They're a great choice to get started taking control of your indie app business.
+I> 
+I> Still, please exercise reasonable caution when I talk about FastSpring. I got in touch with a lot of the people behind the curtains at FastSpring when I wrote this book. This creates a stronger bond, and of course decreases my will to leave. When I gave a webinar for them about this book's topic in spring 2017, it felt like I was introduced to the whole family. I do my best to be helpful to you, dear reader, first and foremost, and to be far more than a evangelist could ever be.
+
+In 2013, I picked FastSpring to sell my apps. This was mostly because of social proof. Lots of indie teams I respected were used FastSpring since before the Mac App Store even existed. I asked around, gave it a spin and immediately liked how things worked.[^socproof] And I still love their service.
+
+[^socproof]: You can read about a small [survey from 2009](https://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where FastSpring scored quite high.
+
+FastSpring isn't the only service on the market. You have lots of options to handle digital purchases nowadays. To give you some perspective, I want to discuss some of the options on the market to at least handle payments, which after all is the backbone of any business:
+
+- Paddle (<https://paddle.com>), an integrated solution to sell app licenses and offer software-as-a-service (SaaS);
+- Cryptolens (<https://cryptolens.io/>), a licensing-as-a-service provider targeted at software developers;
+- FastSpring, Avangate, e-sellerate, and kagi are general-purpose e-commerce solutions and less specialized for app development than Paddle;
+- gumroad (<https://gumroad.com>) and itch.io are platforms to sell and purchase electronic downloads like games, ebooks, and apps, but without any copy protection;
+- PayPal and Stripe, which only handle payment.
+
+Let's take a moment to discuss these popular e-commerce solutions and payment processors and get a better perspective of the options available to you. We'll start at the bottom of the list with the least sophisticated approach, and work our way up.
+
+### Payment Processors
+
+PayPal and Stripe will handle purchases, and that's it. 
+
+You have to figure out VAT (value-added tax) yourself and handle that in customer recipes. This is not fun, it's a messy process because the European Union has so many different regulations already. Also, there's no store-front, so you'd have to cook this up on your own. The time needed to make any store front from scratch, on top of handling payments in detail, isn't worth the comparatively low transaction fees. I wouldn't recommend starting on this tier of services.
+
+D> **Pieter Omvlee** revealed that **Bohemian Coding**, creators of the infamous Sketch design tool, initially sold via PayPal around 8 years ago. Bohemian Coding moved to FastSpring because of the better features, namely handling VAT automatically. Even though Sketch was sold exclusively on the Mac App Store when Apple opened its doors, after re-introducing FastSpring for volume licenses it turns out their own FastSpring-based store performs better than the Mac App Store.
+
+### Gumroad, itch.io, and other payment processors with a shared platform
+
+Gumroad is a bit more sophisticated than mere payment processors and better suited to indie developers who just want to make a couple of bucks on the side. People sell anything on Gumroad that is an electronic download, including ebooks, computer games and apps, assets and 3D modelling rigs, and videos. You can even notify customers about updates. Their fee is currently 8.5% + $0.30 per sale by default. When you pay for their Premium plan, the fee is reduced to 3.5% + $0.30, which pays off for two dozen sales at an average app price already.[^gumroadfee]
+
+[^gumroadfee]: If you sell 24 licenses at $10 each per month, your regular cost is `24 * ($10 * 8% + $0.30) = $26.40` for the $240 you make. With Premium at $10/month, your service fee is `24 * ($10 * 3.5% + $0.30) + $10 = $25.60`.
+
+Gumroad offers a simple store widget you can embed on your page for instant checkouts. They also offer a shopping cart on their platform, so customers can buy different things from different vendors at once. And their payment processing includes VAT-compliant checkout via credit card and PayPal. I cannot stress the importance of not having to handle this on your own enough.
+
+If you don't care about personalized license keys and copy protection, Gumroad is an excellent choice to get started selling zip files of your app.
+
+Customers on Gumroad buy your stuff, but makers are at least half of their target audience. Without makers, there'd be no offerings on their platform. Compared to payment processors, where every party is equally important and everyone at large is negligible for their success, Gumroad will be more likely to talk to you when issues arise. See the sidebar about Tayler Hall's experience to see why it's important to be of importance.
+
+D> **Tyler Hall** started his business by selling VirtualHostX via PayPal from 2007--2009, too. But he switched once a friend of his was locked out of PayPal due to "suspicious" activity. Imagine your sales going strong, then suddenly your payment processor blocks your account. That equals sudden death (or at least a severe and prolonged coma) for your business.
+D>
+D> Account terminations happen all over the internet. There are many recorded incidents of people using amazon to sell books or being an affiliate. Then there was this weird story in late 2016 about an app named "Dash" which was removed from the Mac App Store when the developer's account was terminated, apparently without prior notice to the developer, Kapeli. The point is: you can't do a thing when that happens to you.[^dash]
+Apple, PayPal, and amazon are huge, so false positive charges and account terminations are inevitable. Apple also needs to be proactive to protect their customers -- which is not you, the developer, but the end user browsing the App Store. To be selling on your own turns the whole matter around and puts it back on its feet: To an e-commerce provider, you are the store owner and you are their customer. They do business with you. The end user is your responsibility, not theirs. That is a huge difference.
+
+  [^dash]: In 2016, Dash, the popular documentation browser for Mac, was removed from the App Stores because the developer's account was cancelled. This can happen quickly and the lack of control from your side is threatening. (Read more on my website: <https://christiantietze.de/posts/2016/10/dash-removed-from-app-stores/>) It turned out Apple _did_ have a point, but everyone could have handled the issue a lot better. In hindsight, the developer said, "I was lucky to have setup a direct way of distributing Dash a while ago and as a result I’ve been mostly unaffected by the removal from the App Store." ([Source](https://blog.kapeli.com/100-days-without-the-app-store))
+
+Itch.io is similar in features, but positions itself differently. It started as a way for indie game developers to have their own little early access program and sell work-in-progress outside big platforms like Steam and GOG. You can now purchase many different kinds of digital goods on itch.io, including non-game software like developer tools. The audience browsing around the site will probably be gamers, but that doesn't have to affect you as a seller.
+
+Both Gumroad and Itch.io offer dedicated product pages. Gumroad's are more like small widgets; itch.io's are self-contained web sites you can customize to your will.
+
+Itch.io propagate "pay what you want" (with an optional minimum price) for buyers, and "open revenue sharing" for sellers, with VAT handling as an optional offer. This means you decide how many percent per sale you want to give to itch.io (0--100%), and customers can decide how much they want to pay you. Their whole community is build around this model:
+
+> You might be saying "well that sounds pretty risky, what if everyone sets it to 0?" We think that's a risk we're willing to take in the spirit of encouraging the generous and supportive community that's already developed around itch.io.  
+> ---itch.io announcement via <https://itchio.tumblr.com/post/112709605589/>
+
+The community is also very forgiving: Some folks there deploy updates to their game DLC via Google Drive. If that's your cup of indie, you might feel right at home there!
+
+### Licensing as a service
+
+In recent years, a new kind of web service emerged: one targeted at software developers to manage customer licenses.
+
+There are different services on the market. DevMate, which sadly has shut down as of 2019, was one of these. Another one I stumbled upon is Cryptolens. Their client-side API looks refreshingly simple. Services like Cryptolens take care of update deployment (to paying customers), payment processing, and elaborate licensing tiers including in-app purchases. Cryptolens comes at a monthly service cost with the first non-free tier starting at $10/month for 10 or more  customers and goes up to $350/month for over 1000 customers.
+
+A monthly cost doesn't make sense for single payment purchases: once you sell 1000 licenses, you'll burn through your cash very quickly. Subscription pricing can offset the recurring cost of such a license-as-a-service provider way better.
+
+Neither I nor any Mac developer I know have tried licensing-as-a-service like this, so the best advise I can give here is to screen a couple of providers for their service fees and see if your pricing model matches theirs.
+
+### E-commerce platforms with custom stores
+
+Like FastSpring, Kagi and e-sellerate are apt to create a real custom e-stores. They're the closest competitors to FastSpring as far as I'm concerned. All of them take care of handling VAT during checkout for you, which otherwise is a mess for customers from the European Union. 
+
+What sets FastSpring apart from these direct competitors?
+
+Here's a subjective argument pro FastSpring: FastSpring is known for their great customer service. For example, they offer you to take care of the initial store design _for free._ They are super responsive all day, every day. A few people I interviewed procatively pointed out they were happy with the quick and helpful responses -- even though I didn't ask about any of this in the beginning. That's my experience, too: you can rely on them getting back to you in no time.
+
+If you live outside the U.S., rest assured that FastSpring pays on time, twice a month, every month. I'm located in Germany, so I expected trouble when receiving payments from a California-based company -- but FastSpring handles payments to bank accounts in the European Union perfectly. I don't lose revenue due to currency conversion, either, since they don't increase their fees when you live outside the U.S. This isn't common practice.
+
+From a customer's perspective, purchasing your software is simple and attractive, too. You'll see screenshots later in the book. FastSpring improved their web store designs for app developers in recent years and now provide a user experience comparable to you hosting the store on your own. It's seamless. On top of this, FastSpring's [list of payment methods](https://www.fastspring.com/payment-methods-and-security) is huge. As I said above, credit cards aren't common in Germany, so people will be happy to be able to resort to PayPal or wire transfer if you enable these options. Wire transfer takes a couple of days, but it's useful to have.
+
+
+D> **Ironic Software** use Kagi and FastSpring next to each other: having two stores (plus the Mac App Store) surprisingly results in more sales for them. FastSpring is Ironic's Tom Andersen's favorite, though, because the backend is so nice to use.
+
+### Paddle
+
+Lastly, Paddle is a different kind of competitor. Paddle's service is centered around developer integration from the start. 
+
+FastSpring is a general e-commerce service provider which happens to provide integration with license generation scripts and your wesite and app via a general-purpose API. FastSpring is aware of software developer's needs, but not everything they do revolves around folks like you and me. 
+
+Paddle offers a simple SDK to set up trials, in-app purchases, and license verification. It's like everything we'll discuss in this book, only without you having to do a thing.
+
+Their service seemed to fit perfectly, so I gave it a spin in 2013. I tried the SDK in my first shipping app and learned a lot along the way -- but I didn't feel comfortable because of the lack of _control._ I couldn't reliably find out how their stuff is working. There was no way to issue test purchases from within the app to see if the right events are raised. So in the end I didn't use Paddle at all.
+
+FastSpring offers a test store front on the web and from within the app if you do in-app purchases. That's very convenient to see if your checkout works and if your app transitions from "locked" to "paid". 
+
+Although the amount of control FastSpring offers will make your job as a developer harder at first, once you nailed it and connect the dots it's dead simple to use.
+
+I know people who are very happy with Paddle. By all means, try it out yourself! If you're happy with what they offer, that's great!
+
+I'll be waiting here for you in case you want to take a bit more control over the process without any of the headache of figuring things out on your own.

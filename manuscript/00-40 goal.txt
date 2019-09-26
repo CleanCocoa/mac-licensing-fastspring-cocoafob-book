@@ -1,0 +1,5 @@
+## Goal of this Book
+
+The ultimate goal of this book is to **get all the obstacles out of your way so you can start using FastSpring in your app today.** This is no hyperbole. Depending on your reading speed, you can start this book in the morning and have working license verification implemented by the end of the day.
+
+You don't have to poke around to find any edge cases. Let this book and the sample code take care of the implementation details and pitfalls so you can focus on developing your product and selling it online _and make you some of that sweet, sweet money._ :)

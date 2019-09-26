@@ -1,12 +1,10 @@
-# Pro and Cons of the Mac App Store
+## Pros and Cons of the Mac App Store
 
-So you consider releasing a macOS app outside the Mac App Store.
+So you consider releasing a macOS app outside the Mac App Store. There are various reasons to not put an app in the Mac App Store. It used to be a pretty ugly warehouse, for example. I think the App Store looks way better since macOS&nbsp;10.13 Mojave. But even with a new, stronger editorial voice in the App Store you may find some things borderline unbearable. Let's have a look at some important points real quick, and also consider the upsides of the Mac App Store with honesty, to evaluate the reasons before we dive into the implementation. 
 
-Fantastic! 
+<!--ct: Why before How-->
 
-Before I tell you about the book, let's talk about a few high-level things first. There are various reasons to not put your app in the Mac App Store. I think the App Store looks way better since macOS&nbsp;10.13 Mojave. But even with a new, stronger editorial voice in the App Store you may find some things borderline unbearable. Let's have a look at some important points real quick, and also consider the upsides of the Mac App Store with honesty.
-
-## Sales-Related Arguments
+### Sales-Related Arguments
 
 **You will earn more per sale.** Most online store fronts will take a cut between 6 and 10% only, as opposed to the 30% Apple takes _after taxes_.[^vat] Two companies left the App Store in 2016 and shared their numbers. They report a slight decline in units sold but a growth in total revenue because of Apple's absurd 30% commission.[^30p]
 
@@ -14,7 +12,7 @@ Before I tell you about the book, let's talk about a few high-level things first
 
 **You can issue discounts.** Student discounts, bulk sale discounts, non-profit discounts, time-limited price drops, bundle sales -- you name it.
 
-## Control-Related Arguments
+### Control-Related Arguments
 
 **You can develop pro features.** You won't be be hampered by the severe Sandboxing restrictions that prevent some productivity apps to even pass the review. Think _Timing 2_, _Little Snitch_, or my own _WordCounter_. The App Store will impose strict limitations, like not having access to assistive devices, observing keyboard inputs, or registering audio drivers.
 
@@ -22,7 +20,7 @@ Before I tell you about the book, let's talk about a few high-level things first
 
 **You can add copy protection to you app.** No security measure is 100% perfect and it doesn't pay off to invest too much time in securing your application against cracking, but still: stuff you buy on the Mac App Store is usually [not even secured against copying with Apple-ID authorization.](https://www.macworld.com/article/1157018/appstore_licensing.html)
 
-## Business-Related Arguments
+### Business-Related Arguments
 
 **You will know your customers and get in touch with them.** This saved my back in the past when my app wouldn't update automatically and I wanted to tell my customers how to get the latest version. I could just email them and apologize. Same holds true for special offers or upselling existing customers. Also, people occasionally get in touch and tell you how amazing the app is in response to your automated order confirmation mails.
 
@@ -38,7 +36,7 @@ D> The same mindset can apply to deal with so-called "entitled" prospects. Peopl
 
  [^30p]: Rogue Amoeba published ["Making More Outside The App Store"](https://weblog.rogueamoeba.com/2017/02/10/piezos-life-outside-the-app-store/) in February 2017; Kapeli published [100 Days Without the App Store](https://blog.kapeli.com/100-days-without-the-app-store) in late January 2017.
 
-## Upsides of the Mac App Store to Consider
+### Upsides of the Mac App Store to Consider
 
 Selling on the Mac App Store offers benefits for you, too, which you shouldn't carelessly dismiss:
 
@@ -48,9 +46,9 @@ Selling on the Mac App Store offers benefits for you, too, which you shouldn't c
 
 **Apple provides all the infrastructure.** You do not have to worry about your web server serving downloads reliably and fast around the world. Payments are processed by Apple. Updates are distributed by Apple. The App Store is a place for the app description, screenshots, and promotional video -- this could, in some cases, make crafting a landing page or full-blown website obsolete.
 
-## In a Nutshell
+### In a Nutshell
 
-Distributing via the App Store is just so convenient. Everyone can see your product and download and update from one central place. This may be less important for "pro" apps and more important for mainstream tools or games. Your Grandmother can be comfortable downloading apps on the App Store, but would she jump through the hoops of entering Credit Card information in an online store?
+Distributing via the App Store is convenient. Everyone can see your product and download and update from one central place. This may be less important for "pro" apps and more important for mainstream tools or games. Your Grandmother can comfortably download apps from the App Store once you set up Family Sharing, but she would not jump through the hoops of entering Credit Card information in an online store.
 
 On the flip side, you lose more money with each transaction, you're bound to the strict App Store Sandboxing policies, you cannot create special offers -- and if Apple disables your account, your business is effectively closed. This doesn't happen often, but it can happen, as we'll discuss in a sidebar in a later chapter. <!--ct: TODO 20190725183301 sidebar link to PayPal account closing-->
 

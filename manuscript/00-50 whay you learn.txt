@@ -1,0 +1,34 @@
+## What You'll Learn
+
+From a high-level perspective, you'll learn how to run your own app shop. I won't teach you how to provide the best email support, ever. But apart from support and setting up a website, you'll be pretty much set up to get rolling.
+
+From a technical perspective, you'll learn how to perform the following tasks:
+
+* Set up a product for sale with FastSpring, including license code generation and sending order confirmation e-mails with activation links.
+* Guard your app against software piracy to some extent, requiring license code and name to let users pass.
+* Add a time-based trial to your application. _You can copy this well-tested code right into your existing app!_
+* Implement an activation handler in your app which verifies the license information before unlocking the app. _This, too, can be copied right into your existing app!_
+
+As a bonus, you'll learn a few things about Mac software architecture through well-written, fully functional sample applications which are thoroughly tested. There are more than 200 test cases included in the Open Source code repository alone, plus all the manual field testing of me and my clients!
+
+I'll show you all these things in detail so you can be certain that everything is taken care of:
+
+- how to set up FastSpring as the store where people buy your software,
+- add automatic license key generation to the checkout process,
+- implement license code verification in you app,
+- create a time-based trial,
+- offer in-app purchases,
+- set up app updates,
+- and how to figure out a price and prepare the release.
+
+This book is designed to make your job an independent software developer as simple as possible. When I wrote this book, I had in mind how hard selling my first Mac app was, so I try to tackle the usual worries in the process. If you're experienced with releasing apps on the App Store already, you'll find ample advice on how to transition away from the Mac App Store.
+
+After reading this book, you'll be able to quickly add license code verification to an existing app and only let users  who pay continue with your app. If you want, you can even offer a store front from right within your application using FastSpring's _Embedded Store SDK_ which may increase the conversion from demo users to paid customers. All of this is designed to work as a drop-in: you add the files to your project and don't have to worry about the details.
+
+Then there's the part about implementing time-based trials in your app. Time-based trials are the de facto standard to limit functionality of what was used to be called "shareware" in the 1990s. Keeping track of time is another functionality you would have to add to your app but which I have taken care of. It integrates into the existing license mechanism nicely.
+
+Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start but potentially running forever. Users have to pay to unlock the full potential of the app. We won't cover that in much detail because it'll turn out that this is essentially an in-app purchase. Since you will learn how to add in-app purchases to unlock features, you can create feature-based trials, too.
+
+All in all, you only have to take the well-factored sample code of this book and copy the parts you want to use into your own project to get started. If your app is already functional, it may take you no more than an hour to put your app under copy protection and add a time-based trial -- depending on your existing code, of course.
+
+The sample code will be written in the latest stable version of Swift. I'll update the book regularly, so check back for a new e-book version download when you notice Swift has changed.
