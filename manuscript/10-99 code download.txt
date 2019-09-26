@@ -20,7 +20,7 @@ Once your product is set up with FastSpring, you need to add the details to `Fas
 
 ## Project Organization
 
-![Files of the second sample app](images/00-050-code-org.png)
+![Files of the second sample app](images/10-050-code-org.png)
 
 As the project navigator reveals, I structure the Swift code into well-encapsulated components. They are thoroughly unit tested as well.
 

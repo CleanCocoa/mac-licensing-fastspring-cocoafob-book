@@ -2,7 +2,7 @@
 
 Let's make sure you got access to the Contextual store, first. It's pretty easy to discern Classic from Contextual by their URL and looks. When you get your login link, you can infer the backend you got access to by the URL and the looks of the login form.
 
-![Classic vs Contextual: login forms and URLs compared](images/10-011-login-combo.png)
+![Classic vs Contextual: login forms and URLs compared](images/20-011-login-combo.png)
 
 Sign in to your [Contextual Dashboard](https://dashboard.fastspring.com/). After signing in, you have to set up your app for sale. In the process, I'll help you find your way around in the FastSpring backend. 
 
@@ -14,7 +14,7 @@ This is our action plan:
 
 I'll be saying "product listing" and "app" interchangeably here. Keep in mind that you can sell all kinds of goods on FastSpring. It can be any digital good, like software, music, e-books, service subscriptions -- you name it. FastSpring even allows to configure production and shipment of CDs, for example. Or you can create a jewelry store. Naturally, FastSpring's wording is very general to fit all users. So don't look for the words "application" or "software" when you navigate around on FastSprings dashboard or in the docs, they use the more general term "product" everywhere.
 
-![The empty dashboard after logging in for the first time. Imagine one day logging in and the sales numbers being surprisingly high in the top-left tile.](images/10-050-dashboard.png)
+![The empty dashboard after logging in for the first time. Imagine one day logging in and the sales numbers being surprisingly high in the top-left tile.](images/20-050-dashboard.png)
 
 Most navigational tasks in the backend are split up in two tiers: the topmost navigation bar, which is static, and a page sub-menu just below it. In the Dashboard right after logging in, the sub-menu is empty save for the page title, "Dashboard". You'll want to keep an eye on this part of the navigation since it will present options, save and cancel buttons, and sometimes "go back" navigation action.
 
@@ -24,7 +24,7 @@ Click the "Products" main menu item to go to the listing of all your products in
 
 The sub-menu now displays different tabs, "Products" (active), "Bundles", and "Subscriptions", which show your product listings by the respective type. To the right, it has a "Create Product" button. Click that.
 
-![Product creation dialog.](images/10-051-create-product.png)
+![Product creation dialog.](images/20-051-create-product.png)
 
 We are going to call the app **"My New App"** in this book. That's the "Product Title" displayed to the customer. You may customize the app's product path for store URLs or leave the default.
 
@@ -32,7 +32,7 @@ Make sure to add a price. (I'll use USD&nbsp;50.) The default reference currency
 
 Hit the "Create" button and have a look at the product detail page you are redirected to.
 
-![Empty product detail page right after creation](images/10-100-app-created.png)
+![Empty product detail page right after creation](images/20-100-app-created.png)
 
 The sub-menu now displays the product path ("my-new-app") and a backward navigation button.
 

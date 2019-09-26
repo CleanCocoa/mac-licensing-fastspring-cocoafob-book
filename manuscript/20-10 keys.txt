@@ -82,7 +82,7 @@ Before we continue with the customization options, I want to lay out just how im
 
 ### What happens if you lose the private and/or public key?
 
-![Multiple public keys can be created from a single private key](images/10-110-public-from-private-key.png)
+![Multiple public keys can be created from a single private key](images/20-120-public-from-private-key.png)
 
 In general, you can create multiple public keys from the same private key, but it doesn't work the other way around. You cannot replace the private key and keep the old public key intact. The encryption result of the new private key will be incompatible with the old public key. That means losing the public key is not much of a problem, but losing the private key forces you to replace it and update all public keys, because the old ones are incompatible.
 
@@ -94,11 +94,11 @@ When you lose your private key, you'll be in more trouble. To generate a new pri
 
 <!--ct: TODO experiment with on-page image positions-->
 
-{id="10-111-single-key-license"}
-![License codes, encrypted from a shared private key, can be decrypted by multiple public keys](images/10-111-single-key-license.png)
+{id="20-111-single-key-license"}
+![License codes, encrypted from a shared private key, can be decrypted by multiple public keys](images/20-111-single-key-license.png)
 
-{id="10-112-incompatible"}
-![New public keys derived from a new private key are incompatible with encrypted messages from the old private key](images/10-112-incompatible.png)
+{id="20-112-incompatible"}
+![New public keys derived from a new private key are incompatible with encrypted messages from the old private key](images/20-112-incompatible.png)
 
 Once you replace the private key in the CocoaFob license generator, for example, and ship an update to your app with a new public key, existing customers will all be affected. None of the existing licenses will work anymore. Also, older versions of your app with the outdated key will not accept the new license code. If you don't mitigate the problem, it's a confusing situation, to say the least.
 

@@ -2,7 +2,7 @@
 
 When you finally hit "Create" and finish setup of the CocoaFob license generator, your basic order fulfillment is complete, but FastSpring were hiding an important detail from us that we're going to look up next: the template used by the actual license code generator.
 
-![CocoaFob configuration finished](images/10-200-license-form-filled.png)
+![CocoaFob configuration finished](images/20-200-license-form-filled.png)
 
 The "License Source Template" or simply "license template" is crucial as it determines which input string is used by the generator, and what you should expect during license code verification in your app. The default is a combination of product name and licensee name. 
 
@@ -38,7 +38,7 @@ Remember to hit the "Save" action button in the sub-menu when you make changes!
 
 So far, we were looking at the "General" options tab for the CocoaFob license generator. Apart from customizing the product name, license template, and private key, you can also have a look at "Advanced" options.
 
-![Advanced options of the CocoaFob license generator configuration](images/10-201-cocoafob-adv.png)
+![Advanced options of the CocoaFob license generator configuration](images/20-201-cocoafob-adv.png)
 
 First, there's the "License Name" dropdown. You can set it to any one of the following:
 

@@ -18,7 +18,7 @@ With the product now set to "Public", select "Checkout Links" from the product p
 
 I> You can find the faux credit card information in multiple places. If you start from the product page and click the "Checkout Links" action, a brief summary of the test credit card info for your store will be displayed in the popup. The web storefronts, though, don't show the credit card info when you hit the "Links" action. You need to click on "Test" instead, which will open the "Making Test Purchases" popup as you may recall from back when we went through all the available actions. Copy the CVV Code part for later.
 
-![The product page of My New App the way it looks for U.S. customers. (Storefront homepages display the order details only after at least one product is in the cart.)](images/10-401-product-checkout.png)
+![The product page of My New App the way it looks for U.S. customers. (Storefront homepages display the order details only after at least one product is in the cart.)](images/20-401-product-checkout.png)
 
 Follow the link to the test store. FastSpring will open a new browser tab. The tab's URL starts with your account's store name, followed by the `test` subdomain, followed by  `onfastspring.com`, then the product path: `https://STORENAME.test.onfastspring.com/my-new-app`. For live store links, the `test` subdomain part would be left out. It's handy to know how links for storefronts are created in case you want to link to a live product page directly one day, so I like how expressive and thus easy to remember the URL is.
 
@@ -28,7 +28,7 @@ Enter your customer details in the order form. That'll be the email address if y
 
 To perform a test payment, pick "Credit / Debit Card", fill out the missing form fields and provide the faux credit card info. That'll take care of not actually billing you and still exercises all fulfillment steps.
 
-![The order completion page with post order instructions](images/10-402-order-complete.png)
+![The order completion page with post order instructions](images/20-402-order-complete.png)
 
 When you placed the order, check the confirmation page:
 

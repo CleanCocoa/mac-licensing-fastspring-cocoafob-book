@@ -1,6 +1,6 @@
 ## User Interface to Enter License Information
 
-![The "Enter a License" window of _New App_.](images/20-050-license-window.png)
+![The "Enter a License" window of _New App_.](images/30-050-license-window.png)
 
 With the `LicenseVerifier` service object we can test if license information is valid, and `RegisterApplication` executes the appropriate command. Your application will need to provide a form for the user to provide this information. This section focuses on how to wire UI components to do the job.
 
@@ -18,7 +18,7 @@ When you set the interface up, you could, in theory, use Cocoa Bindings to popul
 
 ### Window and event handler architecture
 
-![Class diagram of UI Components and their event handlers](images/20-200-licensewindowcontroller.png)
+![Class diagram of UI Components and their event handlers](images/30-200-licensewindowcontroller.png)
 
 I tried to both maximize reusability and show useful macOS architectural patterns at the same time here. The basic message is: 
 

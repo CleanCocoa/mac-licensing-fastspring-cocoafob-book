@@ -1,6 +1,6 @@
 ## Configure License Code Generation via CocoaFob
 
-![Choose CocoaFob-based license generation from the fulfillment options](images/10-101-generate-license.png)
+![Choose CocoaFob-based license generation from the fulfillment options](images/20-101-generate-license.png)
 
 In case you haven't followed the fulfillment details so far, click on the "Add Fulfillment Action" button in the top group of your app product listing screen. There, pick "Generate a License", and then choose "CocoaFob" from the list of license generators.[^objcfob] Hit the "Next" button to set up the generator.
 
@@ -8,7 +8,7 @@ In case you haven't followed the fulfillment details so far, click on the "Add F
 
 In the setup form, pick a "Product Name" for CocoaFob to use for the license generator when encoding the license details into a license code. This could be the same as the product path in FastSpring, e.g. "my-new-app", a numeric product identifier, or any other unique string. 
 
-![The license generation setup form](images/10-102-license-form.png)
+![The license generation setup form](images/20-102-license-form.png)
 
 You will be using the same string in your app later to decode a license code and then verify its contents. For example, if I decode a license in my Mac app TableFlip and the resulting product name turns out to be "duke-nukem-forever" or something, I don't want the license to pass even though I was able to decode it successfully. Don't worry, though, this example is totally made up. In practice, a mixup like this shouldn't be possible because the keys used during license code creation will be different for each app and the decoding step should fail. You cannot unlock app A with a code for app B since the apps supposedly use different keys during the encoding step.
 

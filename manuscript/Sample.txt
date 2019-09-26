@@ -1,22 +1,22 @@
 00-00 flap.txt
-00-10 pros and cons.txts
-00-20 about.txt
-00-50 process framework.txt
+00-10 about.txt
+00-20 pros and cons.txt
+10-50 process framework.txt
 newsletter.txt
 book-list.txt
 
-10-00 fastspring.txt
-10-07 set up cocoafob.txt
+20-00 fastspring.txt
+20-07 set up cocoafob.txt
 sample-notice.txt
 
-20-00 verify app license.txt
-20-10 cocoafob.txt
-20-15 license window.txt
+30-00 verify app license.txt
+30-10 cocoafob.txt
+30-15 license window.txt
 sample-notice.txt
 
-30-00 trial.txt
-30-10 trial information i-o.txt
-30-20 time.txt
+40-00 trial.txt
+40-10 trial information i-o.txt
+40-20 time.txt
 sample-notice.txt
 
 90-00 appendix.txt

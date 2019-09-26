@@ -38,7 +38,7 @@ From the project root of your project, these are the commands you'd have to ente
 
 In the dark ages, you had to add a couple of files from the Swift source code folder manually to your project, thus exposing the license verification code to the whole app. Nowadays, all the cool kids use proper Swift modules for their libraries, and so shall we.
 
-![The CocoaFob project is part of the app project, and the resulting Framework is embedded and linked against from the app target](images/20-109-embed-cocoafob.png)
+![The CocoaFob project is part of the app project, and the resulting Framework is embedded and linked against from the app target](images/30-109-embed-cocoafob.png)
 
 The Swift&nbsp;5 version of the framework is located in the `External/cocoafob/swift5/` subfolder. There is an Xcode project that you can use to build the framework, and then embed the build product in your app.
 

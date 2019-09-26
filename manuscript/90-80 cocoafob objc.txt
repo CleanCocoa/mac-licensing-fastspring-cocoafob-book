@@ -27,7 +27,7 @@ Drag & drop them into your project in Xcode. Since these are Objective-C files, 
 
 In order to compile that code from an age before Automatic Reference Counting was the standard, a few files have to have ARC disabled.
 
-![Disable ARC with this flag.](images/20-100-disable-arc.png)
+![Disable ARC with this flag.](images/90-800-disable-arc.png)
 
 In your app target's settings, go to "Build Phases", select "Compile Sources", and disable ARC on `NSString+PECrypt.m` and `NSString-Base64Extensions.m`. To do so, double click in the "Compiler Flags" column to the right and enter `-fno-objc-arc` as the compiler flag.
 

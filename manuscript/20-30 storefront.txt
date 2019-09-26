@@ -49,7 +49,7 @@ The homepage settings are the most interesting, I think. The settings are separa
 
 [^coupon]: Ah, coupons ... With the Classic Commerce stores, you were able to pass coupon codes as URL query parameters in your direct links. That was a nice feature and worked especially great for sharing in messages, on Twitter, during marketing campaigns on other people's blogs, and everywhere else where you don't have control over the HTML code to execute arbitrary JavaScript. I have no clue why they scrapped this simple feature. It's not like they're technically incapable to process query parameters now. I regularly contact support to request they add it back in, and I suggest you do the same if you like to see this coming back.
 
-![An exclusive look at the first page of my own storefront's settings](images/10-301-storefront-settings.png)
+![An exclusive look at the first page of my own storefront's settings](images/20-301-storefront-settings.png)
 
 I skipped the "Settings" action first, because when you click on it, you'll go to a whole different customization page. It has its own navigation menu, after all. You can customize the theme of the store thoroughly. 
 
@@ -82,7 +82,7 @@ If you do happen to have a website and want to minimize page transitions and cli
 
 Popup storefronts are displayed inside your existing webpage like a so-called image lightbox. The popup creates an overlay that dims the main content of your website, then displays an order form in a small window with high contrast. The popup storefront is useful for single-product checkouts, and it truly excels at that. I absolutely love this kind of widget-based order process. As far as I noticed, Gumroad and Paddle pioneered this user interface pattern, and I'm glad FastSpring picked up shortly after.
 
-![Three of my product pages before and after invoking the popup store from their "Buy" buttons.](images/10-302-popup.png)
+![Three of my product pages before and after invoking the popup store from their "Buy" buttons.](images/20-302-popup.png)
 
 To create a popup storefront, head to "Storefronts" in the main menu, then select "Popup Storefront" from the sub-menu, then hit the "Create Popup Storefront" to the far right in the sub-menu. 
 
