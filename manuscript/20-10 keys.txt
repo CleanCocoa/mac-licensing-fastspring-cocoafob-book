@@ -82,7 +82,7 @@ Before we continue with the customization options, I want to lay out just how im
 
 ### What happens if you lose the private and/or public key?
 
-![Multiple public keys can be created from a single private key](images/20-120-public-from-private-key.png)
+![Multiple public keys can be created from a single private key](images/20-110-public-from-private-key.png)
 
 In general, you can create multiple public keys from the same private key, but it doesn't work the other way around. You cannot replace the private key and keep the old public key intact. The encryption result of the new private key will be incompatible with the old public key. That means losing the public key is not much of a problem, but losing the private key forces you to replace it and update all public keys, because the old ones are incompatible.
 

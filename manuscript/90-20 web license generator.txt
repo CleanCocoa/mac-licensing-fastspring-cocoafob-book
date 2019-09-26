@@ -88,7 +88,7 @@ If you want to keep a record of your customers, for example for subscriptions, o
 
 To set up the license generator for offline activation in the app, we are going to use the `name` parameter for the license name, and `quantity` to compute enough codes for the order.
 
-![Switching to a self-hosted license generator](images/90-300-web-license.png)
+![Switching to a self-hosted license generator](images/90-200-web-license.png)
 
 When you switch to a self-hosted license generator in FastSprings product fulfillments, they provide a template with these instructions:
 
