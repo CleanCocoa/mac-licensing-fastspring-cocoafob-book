@@ -1,5 +1,7 @@
 # Sample App 1: How to Verify License Codes in Your App {#chapter2}
 
+![Project organization of the demo project](images/30-000-code-org.png)
+
 According to the license template I recommended earlier, `#{product},#{name}` produces a license code that is just an encrypted form of, for example, "`MyNewApp,Christian Tietze`".
 
 A license code is invalid when checked against that template if it satisfies at least one of the following criteria:
