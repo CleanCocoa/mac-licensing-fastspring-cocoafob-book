@@ -1,6 +1,6 @@
 {pagebreak}
 
-## App Activation Link in Your Order Confirmation via E-Mail {#activationlink}
+## App Activation Links in Your Order Confirmation via E-Mail {#activationlink}
 
 The embedded store integration I have shown you takes care of automatically activating an application.
 

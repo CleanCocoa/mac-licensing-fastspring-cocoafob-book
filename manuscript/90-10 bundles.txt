@@ -1,6 +1,6 @@
 {pagebreak}
 
-## How to Sell Bundles on FastSpring {#sellbundles}
+## Bundle Sales on FastSpring {#sellbundles}
 
 Selling outside the Mac App Store offers the opportunity to team up with other indie devs and sell cool app bundles. You may even be as crazy as bundling apps, e-books, and other media together. One example is a business-to-business software tool bundled with an ebook and video-based learning material.
 

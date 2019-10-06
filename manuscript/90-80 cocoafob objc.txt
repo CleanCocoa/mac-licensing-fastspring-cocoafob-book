@@ -1,4 +1,4 @@
-## Embedding CocoaFob with Objective-C {#cocoafob-objc}
+## CocoaFob and Objective-C {#cocoafob-objc}
 
 For purely historical reasons, here's how to set up the license verifier with Swift 1.2 or Objective-C.
 

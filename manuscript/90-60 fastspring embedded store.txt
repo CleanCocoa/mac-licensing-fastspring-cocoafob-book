@@ -1,4 +1,4 @@
-## Use an Embedded Web Store for Purchases (Classic Commerce) {#embeddedstore}
+## Embedded Web Store for Purchases Within the App (Classic Commerce) {#embeddedstore}
 
 This section applies to the Classic Commerce backend, only. The new Contextual Commerce is powered by an HTTP API, but FastSpring currently provides no library to interface with the API from macOS apps. Mike Smith, CTO of FastSpring, told me they had plans for a native SDK of sorts back in 2016, but apparently there's no visible progress on this front. Keep in mind that at the time of me writing this revision, the online Store Builder JavaScript library's version number is 0.8.0, so the Contextual Commerce API is not even finalized.
 
