@@ -3,12 +3,14 @@
 00-10 about.txt
 00-40 goal.txt
 00-90 structure.txt
-
-10-50 process framework.txt
 newsletter.txt
 book-list.txt
 
+10-30 terms.txt
+10-50 process framework.txt
+
 20-00 fastspring.txt
+20-05 set up app.txt
 20-07 set up cocoafob.txt
 sample-notice.txt
 
@@ -23,6 +25,8 @@ sample-notice.txt
 sample-notice.txt
 
 90-00 appendix.txt
+90-20 web license generator.txt
 sample-notice.txt
+
 newpage.txt
 book-list.txt

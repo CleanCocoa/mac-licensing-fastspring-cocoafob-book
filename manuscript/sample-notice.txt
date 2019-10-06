@@ -1,11 +1,13 @@
-I> ## Book Sample Information
+I> ## Heads Up: This Is an Excerpt for the Book Sample!
 I> 
-I> Only a selection of the full e-book are available in this chapter. For the book sample, I picked the most interesting things so you get a feeling what is covered in the book. Keep in mind that some parts might not make sense on their own because context is missing from the samples.
+I> Only a selection of the full e-book are available in this chapter. For the book sample, I picked some of the most interesting things so you get a feeling what is covered in the book. Keep in mind that some parts might not make sense on their own because context is missing from the samples.
 I>
 I> In the full book, you'll learn how to:
 I> 
-I> * use the embedded in-app store of FastSpring to buy license codes,
+I> * fully customize your FastSpring store,
 I> * offer additional in-app purchases,
 I> * support app activation via e-mail,
+I> * use your web server for license activation,
+I> * use the embedded in-app store of FastSpring to buy license codes,
 I> * and much more!
 I> 
