@@ -1,15 +1,16 @@
+
 ## Structure of the Book
 
 The process I'll show you isn't complicated, but I separated the implementation into multiple steps so you can learn how to scale everything. Here's a quick synopsis of the upcoming chapters.
 
-**Chapter 1** establishes a few technical terms used throughout this book and prepares you for the implementation ahead.
+**"Copy Protection with License Codes"** establishes a few technical terms used throughout this book and prepares you for the implementation ahead.
 
-**Chapter 2** is about getting comfortable with FastSpring. You'll set up your web store and add your product in such a way that people could start buying it. Having this part of the process ready helps when you test if the application code does its job.
+**Set Up Your App for Sale on FastSpring** is about getting comfortable with FastSpring. You'll set up your web store and add your product in such a way that people could start buying it. Having this part of the process ready helps when you test if the application code does its job.
 
 The implementation in your app is split up in two parts explained in the next two chapters, so you can take whatever you need and leave the rest. They are very practical and there's an accompanying example app for each chapter for quick reference.
 
-**Chapter 3** will teach you how to add the code for app activation. When you have done this, you can verify that the FastSpring code generator works as expected. You can upload the resulting app for sale already, but people would have to buy a license up front, much like paid-up-front downloads in the App Store. But that's not very attractive, so ...
+**Sample App 1** will teach you how to add the code for app activation. When you have done this, you can verify that the FastSpring code generator works as expected. You can upload the resulting app for sale already, but people would have to buy a license up front, much like paid-up-front downloads in the App Store. But that's not very attractive, so ...
 
-**Chapter 4** will show the process of implementing a time-based trial mode in your application to enable users to test-drive your app for a while. This chapter is technical, and we'll discuss different trial options. The trial mode is purely your app's responsibility and will not affect your setup with FastSpring.
+**Sample App 2** will show the process of implementing a time-based trial mode in your application to enable users to test-drive your app for a while. This chapter is technical, and we'll discuss different trial options. The trial mode is purely your app's responsibility and will not affect your setup with FastSpring.
 
-**The Appendix** is a collection of self-contained sections that explain how to implement more than the basic features.
+The **Appendix** is a collection of self-contained sections that explain how to implement optional and advanced features.

@@ -3,10 +3,7 @@ frontmatter.txt
 
 mainmatter.txt
 00-10 about.txt
-00-20 pros and cons.txt
-00-30 why fastspring.txt
 00-40 goal.txt
-00-50 whay you learn.txt
 00-90 structure.txt
 newsletter.txt
 
