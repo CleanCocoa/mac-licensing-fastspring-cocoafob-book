@@ -6,6 +6,8 @@ The thing is that test-driving apps is very important in practice when you targe
 
 To help users decide if they want to buy, time-based trials are one battle-tested approach: You offer new users a test drive for a limited time so they can decide if they want to keep using the product. Your trial period should be long enough to make your app part of your user's lives or they will shrug the purchase dialog off too easily. For _The Archive_, a note-taking app, we've settled for a generous 60-day trial period to help newcomers implement the tool into their lives. For the _WordCounter_, a menu-bar app that tracks how many words you type, I figured 14 days would suffice to massage users into the beat of the app. Ask around and talk to your users to find out what works best for you.
 
+Time-based trials are the de facto standard to limit functionality of what was used to be called "shareware" in the 1990s. Next to time-based trials, it's also popular to offer feature-limited trials. There, you offer a demo version with limited capability from the start but potentially running forever. Users have to pay to unlock the full potential of the app. We won't cover that here, because it'll turn out that this is essentially an in-app purchase. When you learn how to implement in-app purchases to unlock features in the appendix, you can create feature-based trials, too.
+
 To add a time-based trial to the sample app, we will end up with a couple of changes that all revolve around the primary state model, `Licensing`, to look more like this:
 
     enum Licensing {
@@ -14,7 +16,7 @@ To add a time-based trial to the sample app, we will end up with a couple of cha
         case trialExpired
     }
 
-Then I experimented with different `TrialPeriod` implementations and settled for a value type with both start and end date. To use a start date and a duration value came natural, but this became very clumsy to use in practice. To find out if the trial period is expired _right now_ requires a helper to get the current time, then add the duration to the start date and compare it to the current time. Since most timer-based operations, you have to compute the absolute end date, too, I suggest dropping the duration in favor of a fixed expiration date. `TrialPeriod`, in its most basic form, then looks like this:
+After I experimented with different `TrialPeriod` implementations, I settled for a value type with both start and end date. To use a start date and a duration instead of an end date came natural, but this was very clumsy to use in practice. To find out if the trial period is expired _right now_ requires a helper to get the current time, then add the duration to the start date and compare it to the current time. Since most timer-based operations, you have to compute the absolute end date, too, I suggest dropping the duration in favor of a fixed expiration date. `TrialPeriod`, in its most basic form, then looks like this:
 
     struct TrialPeriod {
         public let startDate: Date
