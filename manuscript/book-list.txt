@@ -1,9 +1,11 @@
 {icon=book}
 G> ## My Other Books
 G>
-G> "Clean Cocoa" is my mission: to show you best coding practices to create great apps for macOS and iOS with maintainable code.
+G> _Clean Cocoa_ is my mission: uncovering best coding practices so you can create great apps for macOS and iOS with beautiful, maintainable, and testable  code.
 G>
-G> To that end, I've written the following other books you should check out:
+G> Check out my other books online: <https://christiantietze.de/books/>
 G>
-G> * [Exploring Mac App Development Strategies](https://leanpub.com/develop-mac-apps-clean-architecture-swift)
-G> * [Creating Multi-Process Mac Applications](https://leanpub.com/create-multi-process-mac-apps)
+G> Available titles as of this release:
+G>
+G> - **Exploring Mac App Development Strategies**, where I show how a modularized and scalable app can be built even when you decide to use Core Data for persistence, which is usually entangled everywhere.
+G> - In **Creating Multi-Process Mac Applications** I show how an app can utilize and communicate with XPC services effectively to perform tasks in the background and sync data between different processes.
