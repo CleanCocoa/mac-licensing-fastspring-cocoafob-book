@@ -2,7 +2,7 @@
 
 The whole topic of protecting access to features of your application unless people pay for it can be boiled down to handling a transition of your app from "unactivated" state to "activated" state. 
 
-If you want, you could have a global variable in your code called `appIsUnlocked` and set it to `true` upon activation. We'll be using a more sophisticated approach, but in the end, a single boolean value is a very god representation already.
+If you want, you could have a global variable in your code called `appIsUnlocked` and set it to `true` upon activation. We'll be using a more sophisticated approach, but in the end, a single boolean value is a very good representation already.
 
 To manage the state change in a clean way, and since it's a very important part to get right, it pays off to implement all this as expressively as possible. You don't want to guess when and why your app is locking and unlocking itself in two years from now. We'll try our best to avoid creating tomorrow's legacy code when we implement the activation process.
 
