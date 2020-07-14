@@ -23,7 +23,7 @@ Public Key
 : OpenSSL-generated random number used for 3rd parties to verify the data comes from you. Used for e-mail to tell recipients it was really you who sent the mail. Used for license code verification in our case.
 
 Private Key
-: OpenSSL-generated random number you have to, well, keep private. It's needed to create and sign the license key data. Should be kept private because you can infer the public key from it.[^ortiz] However, we're going to need to give it to FastSpring for them to generate license codes. So please don't re-use this private key for anything else. We'll discuss the details in the upcomingchapter.
+: OpenSSL-generated random number you have to, well, keep private. It's needed to create and sign the license key data. Should be kept private because you can infer the public key from it.[^ortiz] However, we're going to need to give it to FastSpring for them to generate license codes. So please don't re-use this private key for anything else. We'll discuss the details in the upcoming chapter.
 
 [^ortiz]: Thanks to Jorge D. Ortiz Fuentes (<https://powwau.com/en/>) for corrections of the key descriptions (and a lot more). For encryption/decryption of information, both keys can be used for both actions. But always keep the private key secure.
 

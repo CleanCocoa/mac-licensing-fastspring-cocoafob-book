@@ -120,7 +120,7 @@ Recall that `unlockApp` was used in wrote the notification callback already. It'
 
 You can rely on `LicensingProvider` to do its job: there's no need to re-validate incoming `License` objects in the `AppDelegate` or any other object that implements feature locking/unlocking. 
 
-## Unregister again to test the app
+## Unregister Again to Test the App
 
 Once you enter license information in your app, it's supposed to stay registered. I have yet to encounter a case where a user wants to _unregister_ an app. -- For offline license code verification, that is. If you limit a license to a number of seats and verify licenses via your web server, unregistering a machine again makes perfect sense, of course.
 

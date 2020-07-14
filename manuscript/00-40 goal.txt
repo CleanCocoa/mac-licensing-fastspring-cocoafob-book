@@ -1,6 +1,6 @@
 ## Goal of this Book
 
-You'll learn everything you need to run your own app store. <!--sf: Eine Wiederholung von oben. Kann nervig sein, muss abe rnicht --> Apart from support and creating beautiful landing pages on the, you'll be pretty much set up to sell you software immediately.
+You'll learn everything you need to run your own app store. You'll be pretty much set up to sell you software immediately: a web presence is all you need in addition.
 
 The ultimate goal of this book is to get all the obstacles out of your way so you can start using FastSpring in your app today. Depending on your reading speed, you can start this book in the morning and have working license verification implemented by the end of the day. All you need is in this book.
 
@@ -8,7 +8,7 @@ The ultimate goal of this book is to get all the obstacles out of your way so yo
 
 FastSpring isn't the only service on the market to sell apps. You have lots of options to handle digital purchases nowadays, depending on what you need. Opposed to simpler approaches involving PayPal, Stripe, or gumroad, FastSpring does offer much more flexibility. You can generate license codes to protect your app, and if you want to add in-app purchases or subscriptions, you can interact with their API to retrieve customer information. All the while, they handle value-added tax (VAT) for you and have a low flat service fee of 8.9% per purchase. Their service is comfortable to use and powerful at the same time. 
 
-In 2013, I picked FastSpring to sell my apps, mostly because of social proof. Lots of indie teams I respected were used FastSpring since before the Mac App Store even existed. I asked around, gave it a spin and immediately liked how things worked.[^socproof] And I still love their service. I bet you'll like them as well.
+In 2013, I picked FastSpring to sell my apps, mostly because of social proof. Lots of indie teams I respected were using FastSpring since before the Mac App Store even existed. I asked around, gave it a spin and immediately liked how things worked.[^socproof] And I still love their service. I bet you'll like them as well.
 
  [^socproof]: You can read about a small [survey from 2009](https://successfulsoftware.net/2009/10/12/a-survey-of-ecommerce-providers-for-software-vendors/) where FastSpring scored quite high.
 
@@ -25,7 +25,7 @@ I'll show you all these things in detail so you can be certain that everything i
 
 - how to set up FastSpring as the store where people buy your software,
 - add automatic license key generation to the checkout process,
-- implement license code verification in you app,
+- implement license code verification in your app,
 - create a time-based trial,
 - offer in-app purchases,
 - set up app updates,
