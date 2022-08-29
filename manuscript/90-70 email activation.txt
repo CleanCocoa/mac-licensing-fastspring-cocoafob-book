@@ -85,29 +85,29 @@ The service object that performs the registration and get from a URL to license 
 
     class URLQueryRegistration {
         let registrationHandler: HandlesRegistering
-    
+
         init(registrationHandler: HandlesRegistering) {
             self.registrationHandler = registrationHandler
         }
-    
+
         lazy var queryParser = URLQueryLicenseParser()
-    
+
         func register(fromURL url: URL) {
             guard let query = query(fromURL: url),
                 let licenseInfo = queryParser.parse(query: query)
                 else { return }
-        
+
             registrationHandler.register(
-                name: licenseInfo.name, 
+                name: licenseInfo.name,
                 licenseCode: licenseInfo.licenseCode)
         }
-        
+
         private func query(fromURL url: URL) -> String? {
             guard let host = url.host,
                 host == URLSchemeComponent.host.rawValue
                 let query = url.query,
                 else { return nil }
-                
+
             return query
         }
     }
@@ -119,8 +119,8 @@ The `URLQueryLicenseParser` needs to verify the integrity of query keys and valu
     class URLQueryLicenseParser {
         init() { }
 
-        func parse(query: String) 
-            -> (name: String, licenseCode: String)? 
+        func parse(query: String)
+            -> (name: String, licenseCode: String)?
         {
             let queryDictionary = dictionary(fromQuery: query)
             guard let encodedName = queryDictionary[.licensee],
@@ -131,7 +131,7 @@ The `URLQueryLicenseParser` needs to verify the integrity of query keys and valu
         }
 
         fileprivate func dictionary(
-                fromQuery query: String) 
+                fromQuery query: String)
                 -> [URLSchemeComponent : String] {
             let parameters = query.components(separatedBy: "&")
             return parameters.mapDictionary() { param in
@@ -143,7 +143,7 @@ The `URLQueryLicenseParser` needs to verify the integrity of query keys and valu
         }
 
         fileprivate func queryKey(
-                fromParameter parameter: String) 
+                fromParameter parameter: String)
                 -> URLSchemeComponent? {
             // Of the `key=value` parameter string, take the `key` only:
             return parameter
@@ -153,9 +153,9 @@ The `URLQueryLicenseParser` needs to verify the integrity of query keys and valu
         }
 
         fileprivate func queryValue(
-                fromParameter parameter: String) 
+                fromParameter parameter: String)
                 -> String? {
-            return unescape(queryValue: 
+            return unescape(queryValue:
                 escapedQueryValue(fromParameter: parameter))
         }
 
@@ -166,7 +166,7 @@ The `URLQueryLicenseParser` needs to verify the integrity of query keys and valu
         }
 
         fileprivate func escapedQueryValue(
-                fromParameter parameter: String) 
+                fromParameter parameter: String)
                 -> String {
             // Queries are of the form `key=value`, and we want to drop the `key=` part.
             // But base64-encoded Strings often end with `=`, so we also want to
@@ -199,11 +199,11 @@ Registration of the URL scheme event handler should happen during `NSApplication
         func applicationWillFinishLaunching(_ notification: Notification) {
             registerForURLScheme()
         }
-        
+
         func applicationDidFinishLaunching(_ aNotification: Notification) {
             // Remains unchanged ...
         }
-        
+
         func registerForURLScheme() {
             NSAppleEventManager.shared()
                 .setEventHandler(
@@ -215,20 +215,20 @@ Registration of the URL scheme event handler should happen during `NSApplication
         }
 
         @objc func handleURL(
-                event: NSAppleEventDescriptor, 
+                event: NSAppleEventDescriptor,
                 replyEvent: NSAppleEventDescriptor) {
             guard let urlString = event.paramDescriptor(
                     forKeyword: AEKeyword(keyDirectObject))?.stringValue,
                  let url = URL(string: urlString)
                  else { return }
-            
+
              // If you support multiple actions, here'd be the place to
              // delegate to a router object instead.
 
              URLQueryRegistration(registrationHandler: registerApplication)
                  .register(fromURL: url)
          }
-         
+
          // ...
     }
 
@@ -252,20 +252,20 @@ Set the the e-mail body to something along these lines to get an activation link
 
 {linenos=off,lang="text"}
     #{order.customer.fullName},
-    
+
     Thanks so for buying #{orderItem.display}!
-    
+
     Here you find your license information for later reference:
-    
+
     License Name: #{orderItem.fulfillment.license.licenseName}
     License Key: #{orderItem.fulfillment.license.licenses.list}
-    
-    To activate the app automatically, run it and simply click 
-    this link: 
+
+    To activate the app automatically, run it and simply click
+    this link:
     mynewapp://activate?name=#{util.string.base64(orderItem.fulfillment.license.outcome.licenseName)}&licenseCode=#{orderItem.fulfillment.license.outcome.licenses[0]}
-    
+
     Thanks again for your support. Please drop me a line if you have any questions.
-    
+
     -- <<Your Name Here>>
 
 The code doesn't fit the constraints of a book page, so the line wrapping is a bit off here. You can find a plain text template on the book website and in the code repository below the "FastSpring assets" directory to copy & paste into the form.
