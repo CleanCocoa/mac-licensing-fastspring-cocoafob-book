@@ -1,9 +1,15 @@
 # Make Money Outside the Mac App Store
 ## How to Sell Your macOS App with FastSpring, Secure It With License Codes Against Piracy, and Offer Time-Based Trial Downloads
 
-This is the manuscript of the book "[Make Money Outside the Mac App Store (With FastSpring)][book]".
+This is the Markdown manuscript of the book "[Make Money Outside the Mac App Store (With FastSpring)][book]".
+
+- Check out [my FastSpring page](https://christiantietze.de/fastspring) for additional resources
+- [Buy the book from me](https://christiantietze.de/books/make-money-outside-mac-app-store-fastspring/)
+- [Buy the book from LeanPub][book]
 
 [book]: https://leanpub.com/sell-mac-app-fastspring-cocoafob-license-trial
+
+<https://christiantietze.de>⁩
 
 ## License
 
