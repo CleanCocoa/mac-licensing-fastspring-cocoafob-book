@@ -21,14 +21,23 @@ A URL is composed of multiple parts. We may easily recognize the host, path, and
     mynewapp://activate?licenseCode=...
     mynewapp://license/activate?licenseCode=...
 
-Substitute `...` with the actual code. I favor the third option, because there, you have the following components:
+Substitute `...` with the actual code.
+
+I favor the last option, `mynewapp://license/activate?licenseCode=...`, because there, you have the following components:
 
 * `mynewapp` as `URL.scheme`
 * `license` as `URL.host`
 * `/activate` as `URL.path`
 * `licenseCode=...` as `URL.query`
 
-Although that's the variant which stays truest to thinking in terms of HTTP resources, it's overly complicated if your app doesn't support anything else.
+This can either be too complicated, or just a good fit. It's made up of parts that you may know from HTTP APIs. As URL schemes go, it does scale well, because you can easily add more "actions". Meanwhile, it can feel overly complicated if your app doesn't support any other URL scheme actions.
+
+To make use of the URL namespace for extensions, consider:
+
+- `://license/remove` where `URL.path` is "remove" and denotes another action on a license resource;
+- `://settings/set` where resource and action are different.
+
+I actually enjoy using secret settings in my own apps to help fix problems and offer customization to pro users without implementing an ever-growing preference pane.
 
 We could stick with the very basic first form. CocoaFob license codes don't contain special characters. We're safe to assume they qualify as URL path components according to the specs. We need the licensee's name, too, though. That's why query parameters are better suited from a pragmatical point of view.
 
